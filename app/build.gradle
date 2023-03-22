@@ -4,6 +4,8 @@ plugins {
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'androidx.navigation.safeargs'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -49,4 +51,10 @@ dependencies {
     androidTestImplementation Espresso.espressoCore
     implementation AndroidX.navigationFragmentKtx
     implementation AndroidX.navigationUiKtx
+    implementation Hilt.hilt
+    kapt Hilt.hiltCompiler
+}
+
+kapt {
+    correctErrorTypes true
 }
