@@ -45,12 +45,12 @@ dependencies {
     implementation ConstraintLayout.constraintLayout
     implementation Firebase.crashlyticsKtx
     implementation Firebase.analyticsKtx
-    implementation AndroidX.lifecycleVmKtx
+    implementation ViewModel.lifecycleVmKtx
     testImplementation Junit.junit4
     androidTestImplementation JunitTest.junitTest
     androidTestImplementation Espresso.espressoCore
-    implementation AndroidX.navigationFragmentKtx
-    implementation AndroidX.navigationUiKtx
+    implementation NavigationComponent.navigationFragmentKtx
+    implementation NavigationComponent.navigationUiKtx
     implementation Hilt.hilt
     kapt Hilt.hiltCompiler
 }

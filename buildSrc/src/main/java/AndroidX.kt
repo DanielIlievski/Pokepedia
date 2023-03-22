@@ -4,10 +4,4 @@ object AndroidX {
 
     private const val appCompatVersion = "1.6.1"
     const val appCompat = "androidx.appcompat:appcompat:$appCompatVersion"
-
-    const val lifecycleVmKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${ViewModel.lifecycleViewModelKtxVersion}"
-
-    const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:${NavigationComponent.navigationComponentVersion}"
-    const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:${NavigationComponent.navigationComponentVersion}"
-    const val navigationSafeArgsPlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:${NavigationComponent.navigationComponentVersion}"
 }

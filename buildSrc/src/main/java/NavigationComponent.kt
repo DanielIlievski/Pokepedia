@@ -1,3 +1,5 @@
 object NavigationComponent {
-    const val navigationComponentVersion = "2.5.3"
+    private const val navigationComponentVersion = "2.5.3"
+    const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:${navigationComponentVersion}"
+    const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:${navigationComponentVersion}"
 }
