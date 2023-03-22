@@ -7,4 +7,7 @@ object AndroidX {
 
     private const val lifecycleVmKtxVersion = "2.6.0"
     const val lifecycleVmKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVmKtxVersion"
+
+    const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:${NavigationComponent.navigationComponentVersion}"
+    const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:${NavigationComponent.navigationComponentVersion}"
 }

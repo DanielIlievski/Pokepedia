@@ -46,4 +46,6 @@ dependencies {
     testImplementation Junit.junit4
     androidTestImplementation JunitTest.junitTest
     androidTestImplementation Espresso.espressoCore
+    implementation AndroidX.navigationFragmentKtx
+    implementation AndroidX.navigationUiKtx
 }
