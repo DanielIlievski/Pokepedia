@@ -1,23 +1,19 @@
 package com.echo.pokepedia.ui
 
 import android.animation.AnimatorInflater
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.splashscreen.SplashScreenViewProvider
 import com.echo.pokepedia.R
+import com.echo.pokepedia.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
+
+    private lateinit var binding: ActivityMainBinding
 
     private var keepSplashScreenOn = true
 
@@ -38,6 +34,7 @@ class MainActivity : BaseActivity() {
 
             }, 1000)
 
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }
