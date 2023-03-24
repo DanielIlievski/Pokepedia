@@ -53,6 +53,7 @@ dependencies {
     implementation NavigationComponent.navigationUiKtx
     implementation Hilt.hilt
     kapt Hilt.hiltCompiler
+    implementation SplashScreen.splashScreen
 }
 
 kapt {
