@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Pokepedia</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pokepedia">Pokepedia</string>
+    <string name="skip">Skip</string>
+    <string name="done">Done</string>
 </resources>
