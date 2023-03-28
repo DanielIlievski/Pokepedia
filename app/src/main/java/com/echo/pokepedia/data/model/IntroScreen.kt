@@ -3,25 +3,25 @@ package com.echo.pokepedia.data.model
 import com.echo.pokepedia.R
 
 data class IntroScreen(
-    val title: String,
-    val description: String,
+    val title: Int,
+    val description: Int,
     val buttonIcon: Int
 )
 
 fun getIntroScreens(): List<IntroScreen> = listOf(
     IntroScreen(
-        "Welcome",
-        "Welcome to Pokepedia, your ultimate Pokemon reference guide with a complete Pokedex",
+        R.string.intro_screen_title_1,
+        R.string.intro_screen_description_1,
         R.drawable.ic_next
     ),
     IntroScreen(
-        "Filter",
-        "Filter by type, generation, or ability to easily find the Pokemon you need and become a master of the Pokemon world",
+        R.string.intro_screen_title_2,
+        R.string.intro_screen_description_2,
         R.drawable.ic_next
     ),
     IntroScreen(
-        "Create a team",
-        "Create custom teams and add favorite Pokemon for easy access with Pokepedia",
+        R.string.intro_screen_title_3,
+        R.string.intro_screen_description_3,
         R.drawable.ic_done
     ),
 )

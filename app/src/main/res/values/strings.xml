@@ -4,4 +4,11 @@
     <string name="pokepedia">Pokepedia</string>
     <string name="skip">Skip</string>
     <string name="done">Done</string>
+    // IntroScreen.kt
+    <string name="intro_screen_title_1">Welcome</string>
+    <string name="intro_screen_description_1">Welcome to Pokepedia, your ultimate Pokemon reference guide with a complete Pokedex</string>
+    <string name="intro_screen_title_2">Filter</string>
+    <string name="intro_screen_description_2">Filter by type, generation, or ability to easily find the Pokemon you need and become a master of the Pokemon world</string>
+    <string name="intro_screen_title_3">Create a team</string>
+    <string name="intro_screen_description_3">Create custom teams and add favorite Pokemon for easy access with Pokepedia</string>
 </resources>

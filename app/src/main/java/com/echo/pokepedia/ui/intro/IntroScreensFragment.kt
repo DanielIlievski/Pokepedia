@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class IntroScreensFragment : BaseFragment() {
 
+    // region fragment variables
     private var _binding: FragmentIntroScreensBinding? = null
     private val binding get() = _binding!!
 
@@ -27,7 +28,9 @@ class IntroScreensFragment : BaseFragment() {
     private val introScreensAdapter = IntroScreensAdapter()
 
     private lateinit var settingsDataStore: SettingsDataStore
+    //endregion
 
+    // region fragment methods
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,47 +43,37 @@ class IntroScreensFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setViewPagerAdapter()
-
-        setDotsIndicator()
-
-        onButtonClick()
-
-        observeIsLastScreen()
-
-        onPageChangedListener()
-
         setPreferencesDataStore()
 
+        initObservers()
+
+        initUI()
+
+        initListeners()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+    //endregion
+
+    private fun initObservers() {
+        observeIsLastScreen()
         observeIsOnboardingAvailable()
     }
 
-    private fun setViewPagerAdapter() {
-        binding.viewPager.adapter = introScreensAdapter
+    private fun initUI() {
+        setViewPagerAdapter()
+        setDotsIndicator()
     }
 
-    private fun setDotsIndicator() {
-        val dotsIndicator = binding.viewPagerDotsIndicator
-        dotsIndicator.attachTo(binding.viewPager)
+    private fun initListeners() {
+        onButtonClickListener()
+        onPageChangedListener()
     }
 
-    private fun onButtonClick() {
-        with(binding) {
-            buttonViewPager.setOnClickListener {
-                editIsOnBoardingAvailable()
-                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginFragment()
-                findNavController().navigate(action)
-            }
-        }
-    }
-
-    private fun editIsOnBoardingAvailable() {
-        val isOnboardingAvailable = false
-        lifecycleScope.launch {
-            settingsDataStore.saveOnboardingToPreferencesStore(isOnboardingAvailable, requireContext())
-        }
-    }
-
+    // region initObservers
     private fun observeIsLastScreen() {
         viewModel.isLastScreen.observe(viewLifecycleOwner) { isLastScreen ->
             if (isLastScreen) {
@@ -89,7 +82,6 @@ class IntroScreensFragment : BaseFragment() {
                 setButtonStyleAndTextOnOtherScreen()
             }
         }
-
     }
 
     private fun setButtonStyleAndTextOnLastScreen() {
@@ -108,6 +100,45 @@ class IntroScreensFragment : BaseFragment() {
         }
     }
 
+    private fun observeIsOnboardingAvailable() {
+        settingsDataStore.onboardingPreferencesFlow.asLiveData().observe(viewLifecycleOwner) {isOnboardingAvailable ->
+            if (!isOnboardingAvailable) {
+                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginFragment()
+                findNavController().navigate(action)
+            }
+        }
+    }
+    // endregion
+
+    // region initUI
+    private fun setViewPagerAdapter() {
+        binding.viewPager.adapter = introScreensAdapter
+    }
+
+    private fun setDotsIndicator() {
+        val dotsIndicator = binding.viewPagerDotsIndicator
+        dotsIndicator.attachTo(binding.viewPager)
+    }
+    // endregion
+
+    // region initListeners
+    private fun onButtonClickListener() {
+        with(binding) {
+            buttonViewPager.setOnClickListener {
+                editIsOnBoardingAvailable()
+                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginFragment()
+                findNavController().navigate(action)
+            }
+        }
+    }
+
+    private fun editIsOnBoardingAvailable() {
+        val isOnboardingAvailable = false
+        lifecycleScope.launch {
+            settingsDataStore.saveOnboardingToPreferencesStore(isOnboardingAvailable, requireContext())
+        }
+    }
+
     private fun onPageChangedListener() {
         binding.viewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -120,23 +151,11 @@ class IntroScreensFragment : BaseFragment() {
             }
         })
     }
+    // endregion
 
+    // region PreferencesDataStore
     private fun setPreferencesDataStore() {
         settingsDataStore = SettingsDataStore(requireContext())
     }
-
-    private fun observeIsOnboardingAvailable() {
-        settingsDataStore.onboardingPreferencesFlow.asLiveData().observe(viewLifecycleOwner) {isOnboardingAvailable ->
-            if (!isOnboardingAvailable) {
-                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginFragment()
-                findNavController().navigate(action)
-            }
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
+    // endregion
 }

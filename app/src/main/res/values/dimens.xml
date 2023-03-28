@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- region size -->
+    <dimen name="size_normal">8dp</dimen>
+    <dimen name="size_xnormal">10dp</dimen>
+    <dimen name="size_xxnormal">12dp</dimen>
+    <dimen name="size_medium">14dp</dimen>
+    <dimen name="size_xmedium">16dp</dimen>
+    <dimen name="size_xxmedium">18dp</dimen>
+    <dimen name="size_large">20dp</dimen>
+    <dimen name="size_xlarge">24dp</dimen>
+    <dimen name="size_xxlarge">28dp</dimen>
+    <dimen name="size_huge">32dp</dimen>
+    <!-- endregion -->
+
+    <!-- region text size -->
+    <dimen name="text_size_tiny">8sp</dimen>
+    <dimen name="text_size_xxsmall">10sp</dimen>
+    <dimen name="text_size_xsmall">12sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_normal">16sp</dimen>
+    <dimen name="text_size_xnormal">18sp</dimen>
+    <dimen name="text_size_medium">20sp</dimen>
+    <dimen name="text_size_xmedium">24sp</dimen>
+    <dimen name="text_size_large">28sp</dimen>
+    <dimen name="text_size_xlarge">32sp</dimen>
+    <!-- endregion -->
+
+    <!-- region margin & padding -->
+    <dimen name="margin_padding_xxtiny">6dp</dimen>
+    <dimen name="margin_padding_xtiny">6dp</dimen>
+    <dimen name="margin_padding_tiny">8dp</dimen>
+    <dimen name="margin_paddingxx_small">10dp</dimen>
+    <dimen name="margin_padding_xsmall">12dp</dimen>
+    <dimen name="margin_padding_small">14dp</dimen>
+    <dimen name="margin_padding_normal">16dp</dimen>
+    <dimen name="margin_padding_xnormal">18dp</dimen>
+    <dimen name="margin_padding_xxnormal">20dp</dimen>
+    <dimen name="margin_padding_medium">24dp</dimen>
+    <dimen name="margin_padding_xmedium">28dp</dimen>
+    <dimen name="margin_padding_xxmedium">32dp</dimen>
+    <dimen name="margin_padding_large">36dp</dimen>
+    <dimen name="margin_padding_xlarge">40dp</dimen>
+    <dimen name="margin_padding_xxlarge">50dp</dimen>
+    <!-- endregion -->
+    
+    <dimen name="margin_item_view_pager">470dp</dimen>
+    <dimen name="margin_fragment_intro_screens">120dp</dimen>
+
+    <dimen name="width_image_normal">300dp</dimen>
+    <dimen name="height_image_normal">300dp</dimen>
+</resources>

@@ -1,5 +1,6 @@
 package com.echo.pokepedia.ui.intro
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,11 +14,12 @@ class IntroScreensAdapter() : RecyclerView.Adapter<IntroScreensAdapter.ViewPager
 
     class ViewPagerViewHolder(private val binding: ItemViewPagerBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
+        private val context: Context = binding.root.context
         fun bind(screen: IntroScreen) {
             with(binding) {
-                titleViewPager.text = screen.title
-                descriptionViewPager.text = screen.description
+                titleViewPager.text = context.getString(screen.title)
+                descriptionViewPager.text = context.getString(screen.description)
+
             }
         }
     }
