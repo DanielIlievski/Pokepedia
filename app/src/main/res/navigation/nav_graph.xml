@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/viewPagerFragment"
-        android:name="com.echo.pokepedia.ui.intro.ViewPagerFragment"
+        android:name="com.echo.pokepedia.ui.intro.IntroScreensFragment"
         android:label="fragment_view_pager"
-        tools:layout="@layout/fragment_view_pager" >
+        tools:layout="@layout/fragment_intro_screens" >
 
         <action
             android:id="@+id/viewPagerFragment_to_loginFragment"

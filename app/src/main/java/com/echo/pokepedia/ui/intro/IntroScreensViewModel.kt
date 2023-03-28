@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewPagerViewModel @Inject constructor() : ViewModel() {
+class IntroScreensViewModel @Inject constructor() : ViewModel() {
 
     private val _isLastScreen = MutableLiveData(false)
     val isLastScreen: LiveData<Boolean> get() = _isLastScreen

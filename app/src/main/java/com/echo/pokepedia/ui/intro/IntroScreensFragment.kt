@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -13,19 +12,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.preferences.SettingsDataStore
-import com.echo.pokepedia.databinding.FragmentViewPagerBinding
+import com.echo.pokepedia.databinding.FragmentIntroScreensBinding
 import com.echo.pokepedia.ui.BaseFragment
 import kotlinx.coroutines.launch
 
 
-class ViewPagerFragment : BaseFragment() {
+class IntroScreensFragment : BaseFragment() {
 
-    private var _binding: FragmentViewPagerBinding? = null
+    private var _binding: FragmentIntroScreensBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ViewPagerViewModel by viewModels()
+    private val viewModel: IntroScreensViewModel by viewModels()
 
-    private val viewPagerAdapter = ViewPagerAdapter()
+    private val introScreensAdapter = IntroScreensAdapter()
 
     private lateinit var settingsDataStore: SettingsDataStore
 
@@ -33,7 +32,7 @@ class ViewPagerFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentViewPagerBinding.inflate(inflater, container, false)
+        _binding = FragmentIntroScreensBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -57,7 +56,7 @@ class ViewPagerFragment : BaseFragment() {
     }
 
     private fun setViewPagerAdapter() {
-        binding.viewPager.adapter = viewPagerAdapter
+        binding.viewPager.adapter = introScreensAdapter
     }
 
     private fun setDotsIndicator() {
@@ -69,7 +68,7 @@ class ViewPagerFragment : BaseFragment() {
         with(binding) {
             buttonViewPager.setOnClickListener {
                 editIsOnBoardingAvailable()
-                val action = ViewPagerFragmentDirections.viewPagerFragmentToLoginFragment()
+                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginFragment()
                 findNavController().navigate(action)
             }
         }
@@ -113,7 +112,7 @@ class ViewPagerFragment : BaseFragment() {
         binding.viewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                if (position == viewPagerAdapter.itemCount - 1) {
+                if (position == introScreensAdapter.itemCount - 1) {
                     viewModel.setIsLastScreen(true)
                 } else {
                     viewModel.setIsLastScreen(false)
@@ -129,7 +128,7 @@ class ViewPagerFragment : BaseFragment() {
     private fun observeIsOnboardingAvailable() {
         settingsDataStore.onboardingPreferencesFlow.asLiveData().observe(viewLifecycleOwner) {isOnboardingAvailable ->
             if (!isOnboardingAvailable) {
-                val action = ViewPagerFragmentDirections.viewPagerFragmentToLoginFragment()
+                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginFragment()
                 findNavController().navigate(action)
             }
         }

@@ -7,7 +7,7 @@ import com.echo.pokepedia.data.model.IntroScreen
 import com.echo.pokepedia.data.model.getIntroScreens
 import com.echo.pokepedia.databinding.ItemViewPagerBinding
 
-class ViewPagerAdapter() : RecyclerView.Adapter<ViewPagerAdapter.ViewPagerViewHolder>() {
+class IntroScreensAdapter() : RecyclerView.Adapter<IntroScreensAdapter.ViewPagerViewHolder>() {
 
     private val introScreens = getIntroScreens()
 
