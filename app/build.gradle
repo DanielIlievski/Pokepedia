@@ -46,17 +46,31 @@ dependencies {
     implementation AndroidX.appCompat
     implementation Google.material
     implementation ConstraintLayout.constraintLayout
+    // Firebase
     implementation Firebase.crashlyticsKtx
     implementation Firebase.analyticsKtx
+    // ViewModel
     implementation ViewModel.lifecycleVmKtx
+    // Tests
     testImplementation Junit.junit4
     androidTestImplementation JunitTest.junitTest
     androidTestImplementation Espresso.espressoCore
+    // Navigation Component
     implementation NavigationComponent.navigationFragmentKtx
     implementation NavigationComponent.navigationUiKtx
+    // Hilt
     implementation Hilt.hilt
     kapt Hilt.hiltCompiler
+    // Splash Screen
     implementation SplashScreen.splashScreen
+    // ViewPager2
+    implementation ViewPager2.viewPager2
+    // Dots indicator
+    implementation ViewPagerDotsIndicator.dotsIndicator
+    // Preferences DataStore
+    implementation PreferencesDataStore.preferencesDataStore
+    // Live Data
+    implementation LiveData.lifecycleLdKtx
 }
 
 kapt {

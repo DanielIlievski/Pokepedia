@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.intro.IntroScreensFragment">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true" />
+
+    <ImageView
+        android:id="@+id/imgViewPager"
+        android:layout_width="@dimen/width_image_normal"
+        android:layout_height="@dimen/height_image_normal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_fragment_intro_screens"
+        android:contentDescription="@string/pokepedia"
+        android:src="@drawable/branding_image_pokepedia" />
+
+    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+        android:id="@+id/viewPagerDotsIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/viewPager"
+        android:layout_marginStart="@dimen/margin_padding_normal"
+        android:layout_marginBottom="@dimen/margin_padding_medium"
+        app:dotsColor="@color/blue_pokemon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:selectedDotColor="@color/yellow_pokemon" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonViewPager"
+        style="@style/MaterialButton.Normal.NoCaps.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/margin_padding_normal"
+        android:layout_marginBottom="@dimen/margin_padding_normal"
+        android:stateListAnimator="@null"
+        tools:text="Next" />
+
+</RelativeLayout>
