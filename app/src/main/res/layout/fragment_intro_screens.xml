@@ -17,8 +17,8 @@
 
     <ImageView
         android:id="@+id/imgViewPager"
-        android:layout_width="@dimen/width_image_normal"
-        android:layout_height="@dimen/height_image_normal"
+        android:layout_width="@dimen/width_image_fragment_intro_screens"
+        android:layout_height="@dimen/height_image_fragment_intro_screens"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/margin_fragment_intro_screens"

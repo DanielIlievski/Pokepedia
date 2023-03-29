@@ -27,10 +27,10 @@
     <!-- endregion -->
 
     <!-- region margin & padding -->
-    <dimen name="margin_padding_xxtiny">6dp</dimen>
+    <dimen name="margin_padding_xxtiny">4dp</dimen>
     <dimen name="margin_padding_xtiny">6dp</dimen>
     <dimen name="margin_padding_tiny">8dp</dimen>
-    <dimen name="margin_paddingxx_small">10dp</dimen>
+    <dimen name="margin_padding_xxsmall">10dp</dimen>
     <dimen name="margin_padding_xsmall">12dp</dimen>
     <dimen name="margin_padding_small">14dp</dimen>
     <dimen name="margin_padding_normal">16dp</dimen>
@@ -43,10 +43,26 @@
     <dimen name="margin_padding_xlarge">40dp</dimen>
     <dimen name="margin_padding_xxlarge">50dp</dimen>
     <!-- endregion -->
-    
+
+    <!-- region radius-->
+    <dimen name="radius_xsmall">6dp</dimen>
+    <dimen name="radius_small">8dp</dimen>
+    <dimen name="radius_normal">10dp</dimen>
+    <dimen name="radius_xnormal">12dp</dimen>
+    <dimen name="radius_medium">14dp</dimen>
+    <dimen name="radius_xmedium">16dp</dimen>
+    <dimen name="radius_large">18dp</dimen>
+    <dimen name="radius_xlarge">20dp</dimen>
+    <!-- endregion -->
+
+    <!-- region custom miscellaneous -->
     <dimen name="margin_item_view_pager">470dp</dimen>
     <dimen name="margin_fragment_intro_screens">120dp</dimen>
 
-    <dimen name="width_image_normal">300dp</dimen>
-    <dimen name="height_image_normal">300dp</dimen>
+    <dimen name="width_image_fragment_intro_screens">300dp</dimen>
+    <dimen name="height_image_fragment_intro_screens">300dp</dimen>
+
+    <dimen name="width_image_fragment_login">300dp</dimen>
+    <dimen name="height_image_fragment_login">200dp</dimen>
+    <!-- endregion -->
 </resources>

@@ -9,9 +9,12 @@ import com.echo.pokepedia.ui.BaseFragment
 
 class LoginFragment : BaseFragment() {
 
+    // region fragment variables
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+    // endregion
 
+    // region fragment methods
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,4 +28,5 @@ class LoginFragment : BaseFragment() {
         super.onDestroyView()
         _binding = null
     }
+    // endregion
 }
