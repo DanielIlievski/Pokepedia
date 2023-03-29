@@ -53,7 +53,7 @@ class IntroScreensFragment : BaseFragment() {
 
     private fun initObservers() {
         observeIsLastScreen()
-        observeIsOnboardingAvailable()
+        observeIsOnBoardingAvailable()
     }
 
     private fun initUI() {
@@ -93,11 +93,12 @@ class IntroScreensFragment : BaseFragment() {
         }
     }
 
-    private fun observeIsOnboardingAvailable() {
+    private fun observeIsOnBoardingAvailable() {
         viewModel.isOnBoardingAvailable.observe(viewLifecycleOwner) { isOnBoardingAvailable ->
             if (!isOnBoardingAvailable) {
-                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginFragment()
+                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginActivity()
                 findNavController().navigate(action)
+                activity?.finish()
             }
         }
     }
@@ -119,8 +120,6 @@ class IntroScreensFragment : BaseFragment() {
         with(binding) {
             buttonViewPager.setOnClickListener {
                 editIsOnBoardingAvailable()
-                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginActivity()
-                findNavController().navigate(action)
             }
         }
     }
