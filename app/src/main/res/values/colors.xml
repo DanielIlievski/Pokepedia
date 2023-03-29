@@ -13,4 +13,5 @@
     <color name="blue_pokemon_variant">#1F4387</color>
     <color name="yellow_pokemon">#FFD73E</color>
     <color name="transparent">#00000000</color>
+    <color name="grey">#6E6C6C</color>
 </resources>

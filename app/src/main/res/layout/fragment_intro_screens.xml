@@ -38,6 +38,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonViewPager"
+        style="@style/MaterialButton.Normal.NoCaps.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -45,9 +46,6 @@
         android:layout_marginEnd="@dimen/margin_padding_normal"
         android:layout_marginBottom="@dimen/margin_padding_normal"
         android:stateListAnimator="@null"
-        android:textAllCaps="false"
-        android:textSize="@dimen/text_size_normal"
-        android:textStyle="bold"
         tools:text="Next" />
 
 </RelativeLayout>
