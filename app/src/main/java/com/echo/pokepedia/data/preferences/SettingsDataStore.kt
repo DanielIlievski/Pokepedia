@@ -7,10 +7,12 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
+import javax.inject.Inject
 
 private const val LAYOUT_PREFERENCES_NAME = "layout_preferences"
 
@@ -18,17 +20,19 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = LAYOUT_PREFERENCES_NAME
 )
 
-class SettingsDataStore(context: Context) {
+class SettingsDataStore @Inject constructor(
+    @ApplicationContext val context: Context
+) {
 
     private val IS_ONBOARDING_AVAILABLE = booleanPreferencesKey("is_onboarding_available")
 
-    suspend fun saveOnboardingToPreferencesStore(isOnboardingAvailable: Boolean, context: Context) {
+    suspend fun saveOnBoardingToPreferencesStore(isOnBoardingAvailable: Boolean) {
         context.dataStore.edit { preferences ->
-            preferences[IS_ONBOARDING_AVAILABLE] = isOnboardingAvailable
+            preferences[IS_ONBOARDING_AVAILABLE] = isOnBoardingAvailable
         }
     }
 
-    val onboardingPreferencesFlow: Flow<Boolean> = context.dataStore.data
+    val onBoardingPreferencesFlow: Flow<Boolean> = context.dataStore.data
         .catch {
             if (it is IOException) {
                 it.printStackTrace()

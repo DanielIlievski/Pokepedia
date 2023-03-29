@@ -5,18 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.echo.pokepedia.R
-import com.echo.pokepedia.data.preferences.SettingsDataStore
 import com.echo.pokepedia.databinding.FragmentIntroScreensBinding
 import com.echo.pokepedia.ui.BaseFragment
 import com.echo.pokepedia.util.getColorRes
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class IntroScreensFragment : BaseFragment() {
 
     // region fragment variables
@@ -26,8 +23,6 @@ class IntroScreensFragment : BaseFragment() {
     private val viewModel: IntroScreensViewModel by viewModels()
 
     private val introScreensAdapter = IntroScreensAdapter()
-
-    private lateinit var settingsDataStore: SettingsDataStore
     //endregion
 
     // region fragment methods
@@ -42,8 +37,6 @@ class IntroScreensFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setPreferencesDataStore()
 
         initObservers()
 
@@ -101,9 +94,9 @@ class IntroScreensFragment : BaseFragment() {
     }
 
     private fun observeIsOnboardingAvailable() {
-        settingsDataStore.onboardingPreferencesFlow.asLiveData().observe(viewLifecycleOwner) {isOnboardingAvailable ->
-            if (!isOnboardingAvailable) {
-                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginActivity()
+        viewModel.isOnBoardingAvailable.observe(viewLifecycleOwner) { isOnBoardingAvailable ->
+            if (!isOnBoardingAvailable) {
+                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginFragment()
                 findNavController().navigate(action)
             }
         }
@@ -133,29 +126,19 @@ class IntroScreensFragment : BaseFragment() {
     }
 
     private fun editIsOnBoardingAvailable() {
-        val isOnboardingAvailable = false
-        lifecycleScope.launch {
-            settingsDataStore.saveOnboardingToPreferencesStore(isOnboardingAvailable, requireContext())
-        }
+        val isOnBoardingAvailable = false
+        viewModel.setIsOnBoardingAvailable(isOnBoardingAvailable)
     }
 
     private fun onPageChangedListener() {
         binding.viewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                if (position == introScreensAdapter.itemCount - 1) {
-                    viewModel.setIsLastScreen(true)
-                } else {
-                    viewModel.setIsLastScreen(false)
-                }
+                val isLastScreen = position == introScreensAdapter.itemCount - 1
+                viewModel.setIsLastScreen(isLastScreen)
             }
         })
     }
     // endregion
 
-    // region PreferencesDataStore
-    private fun setPreferencesDataStore() {
-        settingsDataStore = SettingsDataStore(requireContext())
-    }
-    // endregion
 }

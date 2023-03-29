@@ -15,4 +15,5 @@
     <color name="transparent">#00000000</color>
     <color name="red_error">#FFC80404</color>
     <color name="facebook">#1877F2</color>
+    <color name="grey">#6E6C6C</color>
 </resources>

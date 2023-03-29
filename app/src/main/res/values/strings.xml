@@ -5,7 +5,7 @@
     <string name="skip">Skip</string>
     <string name="done">Done</string>
 
-    <!-- region IntroScreen -->
+    <!-- region IntroScreen.kt -->
     <string name="intro_screen_title_1">Welcome</string>
     <string name="intro_screen_description_1">Welcome to Pokepedia, your ultimate Pokemon reference guide with a complete Pokedex</string>
     <string name="intro_screen_title_2">Filter</string>
