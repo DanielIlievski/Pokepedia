@@ -21,7 +21,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textEmail"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_padding_medium"
         android:layout_marginTop="@dimen/margin_padding_normal"
@@ -33,6 +33,7 @@
         app:errorContentDescription="@string/invalid_email"
         app:errorTextColor="@color/red_error"
         app:hintTextColor="@color/blue_pokemon"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/image_login">
@@ -46,7 +47,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textPassword"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_padding_medium"
         android:layout_marginTop="@dimen/margin_padding_medium"
@@ -58,6 +59,7 @@
         app:errorContentDescription="@string/invalid_password"
         app:errorTextColor="@color/red_error"
         app:hintTextColor="@color/blue_pokemon"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textEmail">
@@ -72,8 +74,8 @@
         android:id="@+id/rememberMeCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/remember_me"
         android:buttonTint="@color/blue_pokemon"
+        android:text="@string/remember_me"
         android:textSize="@dimen/text_size_small"
         app:layout_constraintStart_toStartOf="@id/textPassword"
         app:layout_constraintTop_toBottomOf="@+id/textPassword" />
@@ -92,7 +94,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonFacebook"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_padding_medium"
         android:layout_marginTop="@dimen/margin_padding_normal"
@@ -101,39 +103,41 @@
         android:text="@string/sign_in_with_facebook"
         android:textAllCaps="false"
         android:textStyle="bold"
-        app:cornerRadius="@dimen/radius_large"
         app:background="?attr/selectableItemBackground"
+        app:cornerRadius="@dimen/radius_large"
         app:icon="@drawable/ic_facebook"
         app:iconPadding="@dimen/margin_padding_normal"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rememberMeCheckBox" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonGoogle"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_padding_medium"
         android:layout_marginTop="@dimen/margin_padding_normal"
         android:backgroundTint="@color/white"
         android:gravity="start|center_vertical"
-        app:background="?attr/selectableItemBackground"
         android:text="@string/sign_in_with_google"
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textStyle="bold"
+        app:background="?attr/selectableItemBackground"
         app:cornerRadius="@dimen/radius_large"
         app:icon="@drawable/ic_google"
         app:iconPadding="@dimen/margin_padding_normal"
         app:iconSize="@dimen/size_large"
         app:iconTintMode="multiply"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/buttonFacebook" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonLogin"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_padding_medium"
         android:layout_marginTop="@dimen/margin_padding_normal"
@@ -147,6 +151,7 @@
         android:textSize="@dimen/text_size_normal"
         app:background="?attr/selectableItemBackground"
         app:cornerRadius="@dimen/radius_large"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/buttonGoogle" />
@@ -163,17 +168,12 @@
 
     <TextView
         android:id="@+id/buttonRegister"
+        style="@style/TextView.Normal.Clickable.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_padding_normal"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
         android:text="@string/sign_up"
         android:textColor="@color/blue_pokemon"
-        android:textSize="@dimen/text_size_normal"
-        android:textStyle="bold"
-        app:background="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="@id/textRegister"
         app:layout_constraintEnd_toEndOf="@id/buttonLogin"
         app:layout_constraintTop_toBottomOf="@id/buttonLogin" />
