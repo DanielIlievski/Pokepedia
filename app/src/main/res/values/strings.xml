@@ -26,5 +26,22 @@
     <string name="sign_in_with_facebook">Sign in with Facebook</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="forgot_password">Forgot password</string>
+    <string name="verify_email">Please verify your email before you login!</string>
     <!-- endregion -->
+
+    <!-- region RegisterFragment -->
+    <string name="confirm_password">Confirm password</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="successful_registration">Your registration was successful, please verify your email.</string>
+    <string name="failed_registration">Your registration failed</string>
+    <string name="enter_first_name">Please enter a first name</string>
+    <string name="enter_last_name">Please enter a last name</string>
+    <string name="enter_email">Please enter an email</string>
+    <string name="enter_password">Please enter a password</string>
+    <string name="passwords_mismatch">Passwords do not match!</string>
+    <string name="weak_password">Passwords must contain at least 8 characters, including at least 1 capital letter, 1 number and 1 special sign</string>
+    <!-- endregion -->
+
 </resources>
