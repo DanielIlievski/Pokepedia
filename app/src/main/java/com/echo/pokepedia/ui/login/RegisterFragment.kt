@@ -139,7 +139,7 @@ class RegisterFragment : BaseFragment() {
         viewModel.registerUser.collect { result ->
             when (result) {
                 is Resource.Success -> onSuccessfulRegistration()
-                is Resource.Failure -> onFailedRegistration()
+                is Resource.Failure -> onFailedRegistration(result.exception)
             }
         }
     }
@@ -151,8 +151,8 @@ class RegisterFragment : BaseFragment() {
         findNavController().navigate(action)
     }
 
-    private fun onFailedRegistration() {
-        Toast.makeText(requireContext(), getString(R.string.failed_registration), Toast.LENGTH_SHORT).show()
+    private fun onFailedRegistration(e: Exception) {
+        Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
     }
     // endregion
 

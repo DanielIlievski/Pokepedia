@@ -3,20 +3,24 @@ package com.echo.pokepedia.data.repository
 import android.content.res.Resources
 import androidx.core.content.ContextCompat
 import com.echo.pokepedia.R
+import com.echo.pokepedia.data.model.User
 import com.echo.pokepedia.util.Resource
 import com.echo.pokepedia.domain.repository.AuthRepository
 import com.echo.pokepedia.util.ResourceProvider
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val resourceProvider: ResourceProvider
+    private val resourceProvider: ResourceProvider,
+    private val firebaseFirestore: FirebaseFirestore
 ) : AuthRepository {
 
     override suspend fun getCurrentUser(): Resource<FirebaseUser?> {
@@ -49,17 +53,31 @@ class AuthRepositoryImpl @Inject constructor(
         password: String
     ): Resource<FirebaseUser> {
         return try {
-            val username = firstName + lastName
-            val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-            result?.user?.updateProfile(
-                UserProfileChangeRequest.Builder().setDisplayName(username).build()
-            )?.await()
+            val user = createNewUser(firstName, lastName, email, password)
+
+            addUserToFirestore(firstName, lastName, email)
+
             firebaseAuth.currentUser?.sendEmailVerification()
-            Resource.Success(result.user!!)
+
+            Resource.Success(user)
         } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(e)
         }
+    }
+
+    private suspend fun createNewUser(firstName: String, lastName: String, email: String, password: String) : FirebaseUser {
+        val username = firstName + lastName
+        val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+        result?.user?.updateProfile(
+            UserProfileChangeRequest.Builder().setDisplayName(username).build()
+        )?.await()
+        return result.user!!
+    }
+
+    private suspend fun addUserToFirestore(firstName: String, lastName: String, email: String) {
+        val newUser = User(firstName, lastName, email, Timestamp.now())
+        firebaseFirestore.collection("users").add(newUser).await()
     }
 
     override suspend fun logout() {
