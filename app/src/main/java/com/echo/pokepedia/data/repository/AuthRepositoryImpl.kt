@@ -1,26 +1,29 @@
 package com.echo.pokepedia.data.repository
 
-import android.content.res.Resources
-import androidx.core.content.ContextCompat
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.model.User
 import com.echo.pokepedia.util.Resource
 import com.echo.pokepedia.domain.repository.AuthRepository
 import com.echo.pokepedia.util.ResourceProvider
-import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val resourceProvider: ResourceProvider,
-    private val firebaseFirestore: FirebaseFirestore
+    private val firebaseFirestore: FirebaseFirestore,
+    private val coroutineScope: CoroutineScope
 ) : AuthRepository {
 
     override suspend fun getCurrentUser(): Resource<FirebaseUser?> {
@@ -46,6 +49,32 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun googleSignIn(task: Task<GoogleSignInAccount>): Resource<FirebaseUser?> {
+        return try {
+            val account: GoogleSignInAccount? = task.getResult(ApiException::class.java)
+            if (account != null) {
+                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                val result = firebaseAuth.signInWithCredential(credential)
+                    .addOnCompleteListener { taskResult ->
+                        if (taskResult.isSuccessful) {
+                            val email = account.email ?: ""
+                            val fullName = account.displayName ?: ""
+                            val uid = account.id ?: ""
+                            coroutineScope.launch {
+                                addUserToFirestore(fullName, email, uid)
+                            }
+                        }
+                    }.await()
+                Resource.Success(result.user)
+            } else {
+                Resource.Failure(Exception(resourceProvider.fetchString(R.string.verify_email)))
+            }
+
+        } catch (e: ApiException) {
+            Resource.Failure(e)
+        }
+    }
+
     override suspend fun register(
         firstName: String,
         lastName: String,
@@ -55,7 +84,8 @@ class AuthRepositoryImpl @Inject constructor(
         return try {
             val user = createNewUser(firstName, lastName, email, password)
 
-            addUserToFirestore(firstName, lastName, email)
+            val fullName = "$firstName $lastName"
+            addUserToFirestore(fullName, email, user.uid)
 
             firebaseAuth.currentUser?.sendEmailVerification()
 
@@ -66,7 +96,17 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun createNewUser(firstName: String, lastName: String, email: String, password: String) : FirebaseUser {
+    override suspend fun logout() {
+        firebaseAuth.signOut()
+    }
+
+    // region auxiliary methods
+    private suspend fun createNewUser(
+        firstName: String,
+        lastName: String,
+        email: String,
+        password: String
+    ): FirebaseUser {
         val username = firstName + lastName
         val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
         result?.user?.updateProfile(
@@ -74,14 +114,14 @@ class AuthRepositoryImpl @Inject constructor(
         )?.await()
         return result.user!!
     }
-
-    private suspend fun addUserToFirestore(firstName: String, lastName: String, email: String) {
-        val newUser = User(firstName, lastName, email, Timestamp.now())
-        firebaseFirestore.collection("users").add(newUser).await()
+    private suspend fun addUserToFirestore(
+        fullName: String,
+        email: String,
+        uid: String,
+    ) {
+        val newUser = User(fullName, email, Timestamp.now(), uid)
+        firebaseFirestore.collection("users").document(uid).set(newUser).await()
     }
-
-    override suspend fun logout() {
-        firebaseAuth.signOut()
-    }
+    // endregion
 
 }

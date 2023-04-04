@@ -53,6 +53,8 @@ dependencies {
     implementation Firebase.firebaseFirestore
     // ViewModel
     implementation ViewModel.lifecycleVmKtx
+    implementation Google.googlePlayServices
+    implementation Facebook.facebookSdk
     // Tests
     testImplementation Junit.junit4
     androidTestImplementation JunitTest.junitTest
