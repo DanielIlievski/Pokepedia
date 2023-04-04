@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,7 +13,7 @@ import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentRegisterBinding
 import com.echo.pokepedia.ui.BaseFragment
 import com.echo.pokepedia.util.Resource
-import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -138,21 +137,21 @@ class RegisterFragment : BaseFragment() {
     private fun observeRegisterUser() = lifecycleScope.launch {
         viewModel.registerUser.collect { result ->
             when (result) {
-                is Resource.Success -> onSuccessfulRegistration()
+                is Resource.Success -> onSuccessfulRegistration(result.result)
                 is Resource.Failure -> onFailedRegistration(result.exception)
             }
         }
     }
 
-    private fun onSuccessfulRegistration() {
-        Toast.makeText(requireContext(), getString(R.string.successful_registration), Toast.LENGTH_LONG).show()
+    private fun onSuccessfulRegistration(user: FirebaseUser?) {
+        showToastMessage(getString(R.string.successful_registration), Toast.LENGTH_LONG)
 
         val action = RegisterFragmentDirections.registerFragmentToLoginFragment()
         findNavController().navigate(action)
     }
 
     private fun onFailedRegistration(e: Exception) {
-        Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+        showToastMessage(e.message, Toast.LENGTH_LONG)
     }
     // endregion
 

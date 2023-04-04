@@ -13,6 +13,7 @@ import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentLoginBinding
 import com.echo.pokepedia.ui.BaseFragment
 import com.echo.pokepedia.util.Resource
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -91,18 +92,18 @@ class LoginFragment : BaseFragment() {
     private fun observeLoginUser() = lifecycleScope.launch {
         viewModel.loginUser.collect {result ->
             when (result) {
-                is Resource.Success -> onSuccessfulLogin()
+                is Resource.Success -> onSuccessfulLogin(result.result)
                 is Resource.Failure -> onFailedLogin(result.exception)
             }
         }
     }
 
-    private fun onSuccessfulLogin() {
-        Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+    private fun onSuccessfulLogin(user: FirebaseUser?) {
+        showToastMessage("${user?.displayName}, login was successful!", Toast.LENGTH_SHORT)
     }
 
     private fun onFailedLogin(e: Exception) {
-        Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+        showToastMessage(e.message, Toast.LENGTH_LONG)
     }
     // endregion
 
