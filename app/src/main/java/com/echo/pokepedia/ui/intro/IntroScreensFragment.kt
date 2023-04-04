@@ -5,17 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.echo.pokepedia.R
-import com.echo.pokepedia.data.preferences.SettingsDataStore
 import com.echo.pokepedia.databinding.FragmentIntroScreensBinding
 import com.echo.pokepedia.ui.BaseFragment
 import com.echo.pokepedia.util.getColorRes
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class IntroScreensFragment : BaseFragment() {
@@ -57,7 +53,7 @@ class IntroScreensFragment : BaseFragment() {
 
     private fun initObservers() {
         observeIsLastScreen()
-        observeIsOnboardingAvailable()
+        observeIsOnBoardingAvailable()
     }
 
     private fun initUI() {
@@ -66,7 +62,7 @@ class IntroScreensFragment : BaseFragment() {
     }
 
     private fun initListeners() {
-        onButtonClickListener()
+        onSkipOrDoneButtonClickListener()
         onPageChangedListener()
     }
 
@@ -97,11 +93,12 @@ class IntroScreensFragment : BaseFragment() {
         }
     }
 
-    private fun observeIsOnboardingAvailable() {
+    private fun observeIsOnBoardingAvailable() {
         viewModel.isOnBoardingAvailable.observe(viewLifecycleOwner) { isOnBoardingAvailable ->
             if (!isOnBoardingAvailable) {
-                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginFragment()
+                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginActivity()
                 findNavController().navigate(action)
+                activity?.finish()
             }
         }
     }
@@ -119,12 +116,10 @@ class IntroScreensFragment : BaseFragment() {
     // endregion
 
     // region initListeners
-    private fun onButtonClickListener() {
+    private fun onSkipOrDoneButtonClickListener() {
         with(binding) {
             buttonViewPager.setOnClickListener {
                 editIsOnBoardingAvailable()
-                val action = IntroScreensFragmentDirections.viewPagerFragmentToLoginFragment()
-                findNavController().navigate(action)
             }
         }
     }

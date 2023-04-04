@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.Pokepedia" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
@@ -13,7 +13,7 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-    
+
     <!-- region button styles -->
     <style name="MaterialButton.Normal.Caps" parent="Widget.AppCompat.Button">
         <item name="android:textSize">@dimen/text_size_normal</item>
@@ -25,19 +25,39 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <style name="MaterialButton.Normal.NoCaps" parent="Widget.AppCompat.Button">
         <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:textAllCaps">false</item>
     </style>
-    
+
     <style name="MaterialButton.Normal.NoCaps.Bold" parent="Widget.AppCompat.Button">
         <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="MaterialButton.SmallText.Radius.Clickable.NoCaps.Bold" parent="Widget.MaterialComponents.Button">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="cornerRadius">@dimen/radius_large</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="background">?attr/selectableItemBackground</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MaterialButton.NormalText.Radius.Clickable.NoCaps.Bold" parent="Widget.MaterialComponents.Button">
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="cornerRadius">@dimen/radius_large</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="background">?attr/selectableItemBackground</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+    </style>
     <!-- endregion -->
-    
+
     <!-- region textview styles -->
     <style name="MaterialTextView.XLarge.Grey.Caps" parent="android:TextAppearance">
         <item name="android:textColor">@color/grey</item>
@@ -63,6 +83,49 @@
         <item name="android:textColor">@color/grey</item>
         <item name="android:gravity">center</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextView.Normal.Clickable" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="TextView.Normal.Clickable.Bold" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextView.Small.Grey.Clickable" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+    <!-- endregion -->
+
+    <!-- region textInputLayout styles -->
+    <style name="TextInputLayout.OutlinedBox.Custom" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/yellow_pokemon</item>
+        <item name="boxStrokeErrorColor">@color/red_error</item>
+        <item name="endIconTint">@color/blue_pokemon</item>
+        <item name="errorTextColor">@color/red_error</item>
+        <item name="hintTextColor">@color/blue_pokemon</item>
+    </style>
+    <!-- endregion -->
+
+    <!-- region checkbox styles -->
+    <style name="CheckBox.SmallText.Blue.Custom" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="buttonTint">@color/blue_pokemon</item>
     </style>
     <!-- endregion -->
 </resources>
