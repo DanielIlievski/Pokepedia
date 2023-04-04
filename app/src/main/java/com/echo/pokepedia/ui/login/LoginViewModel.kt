@@ -3,7 +3,7 @@ package com.echo.pokepedia.ui.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.domain.usecases.LoginUserUseCase
-import com.echo.pokepedia.util.Resource
+import com.echo.pokepedia.util.NetworkResult
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,8 +22,8 @@ class LoginViewModel @Inject constructor(
     val viewState: StateFlow<LoginViewState> get() = _viewState
 
     private var _loginUser =
-        MutableSharedFlow<Resource<FirebaseUser?>>()
-    val loginUser: SharedFlow<Resource<FirebaseUser?>> = _loginUser
+        MutableSharedFlow<NetworkResult<FirebaseUser?>>()
+    val loginUser: SharedFlow<NetworkResult<FirebaseUser?>> = _loginUser
 
     fun login(email: String, password: String) {
         if (isEmailFieldEmpty(email)) {

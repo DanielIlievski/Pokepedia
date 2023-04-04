@@ -2,7 +2,7 @@ package com.echo.pokepedia.data.repository
 
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.model.User
-import com.echo.pokepedia.util.Resource
+import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.domain.repository.AuthRepository
 import com.echo.pokepedia.util.ResourceProvider
 import com.echo.pokepedia.util.USERS_COLLECTION
@@ -21,26 +21,26 @@ class AuthRepositoryImpl @Inject constructor(
     @Named(USERS_COLLECTION) private val users: CollectionReference
 ) : AuthRepository {
 
-    override suspend fun getCurrentUser(): Resource<FirebaseUser?> {
+    override suspend fun getCurrentUser(): NetworkResult<FirebaseUser?> {
         return try {
-            Resource.Success(firebaseAuth.currentUser)
+            NetworkResult.Success(firebaseAuth.currentUser)
         } catch (e: Exception) {
             e.printStackTrace()
-            Resource.Failure(e)
+            NetworkResult.Failure(e)
         }
     }
 
-    override suspend fun login(email: String, password: String): Resource<FirebaseUser> {
+    override suspend fun login(email: String, password: String): NetworkResult<FirebaseUser> {
         return try {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             if (firebaseAuth.currentUser!!.isEmailVerified) {
-                Resource.Success(result.user!!)
+                NetworkResult.Success(result.user!!)
             } else {
-                Resource.Failure(Exception(resourceProvider.fetchString(R.string.verify_email)))
+                NetworkResult.Failure(Exception(resourceProvider.fetchString(R.string.verify_email)))
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Resource.Failure(e)
+            NetworkResult.Failure(e)
         }
     }
 
@@ -49,7 +49,7 @@ class AuthRepositoryImpl @Inject constructor(
         lastName: String,
         email: String,
         password: String
-    ): Resource<FirebaseUser> {
+    ): NetworkResult<FirebaseUser> {
         return try {
             val user = createNewUser(firstName, lastName, email, password)
 
@@ -57,10 +57,10 @@ class AuthRepositoryImpl @Inject constructor(
 
             firebaseAuth.currentUser?.sendEmailVerification()
 
-            Resource.Success(user)
+            NetworkResult.Success(user)
         } catch (e: Exception) {
             e.printStackTrace()
-            Resource.Failure(e)
+            NetworkResult.Failure(e)
         }
     }
 

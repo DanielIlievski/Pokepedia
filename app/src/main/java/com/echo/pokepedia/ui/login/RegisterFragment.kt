@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentRegisterBinding
 import com.echo.pokepedia.ui.BaseFragment
-import com.echo.pokepedia.util.Resource
+import com.echo.pokepedia.util.NetworkResult
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -137,8 +137,8 @@ class RegisterFragment : BaseFragment() {
     private fun observeRegisterUser() = lifecycleScope.launch {
         viewModel.registerUser.collect { result ->
             when (result) {
-                is Resource.Success -> onSuccessfulRegistration(result.result)
-                is Resource.Failure -> onFailedRegistration(result.exception)
+                is NetworkResult.Success -> onSuccessfulRegistration(result.result)
+                is NetworkResult.Failure -> onFailedRegistration(result.exception)
             }
         }
     }
