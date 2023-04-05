@@ -1,18 +1,17 @@
 package com.echo.pokepedia.data.repository
 
+import android.widget.Toast
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.model.User
 import com.echo.pokepedia.util.Resource
 import com.echo.pokepedia.domain.repository.AuthRepository
 import com.echo.pokepedia.util.ResourceProvider
+import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -57,11 +56,10 @@ class AuthRepositoryImpl @Inject constructor(
                 val result = firebaseAuth.signInWithCredential(credential)
                     .addOnCompleteListener { taskResult ->
                         if (taskResult.isSuccessful) {
-                            val email = account.email ?: ""
-                            val fullName = account.displayName ?: ""
-                            val uid = account.id ?: ""
+                            val user = taskResult.result.user
+
                             coroutineScope.launch {
-                                addUserToFirestore(fullName, email, uid)
+                                addUserToFirestore(user)
                             }
                         }
                     }.await()
@@ -70,7 +68,27 @@ class AuthRepositoryImpl @Inject constructor(
                 Resource.Failure(Exception(resourceProvider.fetchString(R.string.verify_email)))
             }
 
-        } catch (e: ApiException) {
+        } catch (e: Exception) {
+            Resource.Failure(e)
+        }
+    }
+
+    override suspend fun facebookSignIn(token: AccessToken): Resource<FirebaseUser?> {
+        return try {
+            val credential = FacebookAuthProvider.getCredential(token.token)
+            val result = firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener { taskResult ->
+                    if (taskResult.isSuccessful) {
+                        val user = taskResult.result.user
+
+                        coroutineScope.launch {
+                            addUserToFirestore(user)
+                        }
+                    }
+                }.await()
+            Resource.Success(result.user)
+        } catch (e: Exception) {
+            e.printStackTrace()
             Resource.Failure(e)
         }
     }
@@ -83,13 +101,14 @@ class AuthRepositoryImpl @Inject constructor(
     ): Resource<FirebaseUser> {
         return try {
             val user = createNewUser(firstName, lastName, email, password)
+            user?.sendEmailVerification()
 
-            val fullName = "$firstName $lastName"
-            addUserToFirestore(fullName, email, user.uid)
-
-            firebaseAuth.currentUser?.sendEmailVerification()
-
-            Resource.Success(user)
+            if (user != null) {
+                addUserToFirestore(user)
+                Resource.Success(user)
+            } else {
+                Resource.Failure(Exception("User is null"))
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(e)
@@ -106,20 +125,21 @@ class AuthRepositoryImpl @Inject constructor(
         lastName: String,
         email: String,
         password: String
-    ): FirebaseUser {
+    ): FirebaseUser? {
         val username = firstName + lastName
         val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
         result?.user?.updateProfile(
             UserProfileChangeRequest.Builder().setDisplayName(username).build()
         )?.await()
-        return result.user!!
+        return result.user
     }
-    private suspend fun addUserToFirestore(
-        fullName: String,
-        email: String,
-        uid: String,
-    ) {
+
+    private suspend fun addUserToFirestore(user: FirebaseUser?) {
+        val fullName = user?.displayName ?: ""
+        val email = user?.email ?: ""
+        val uid = user?.uid ?: ""
         val newUser = User(fullName, email, Timestamp.now(), uid)
+
         firebaseFirestore.collection("users").document(uid).set(newUser).await()
     }
     // endregion

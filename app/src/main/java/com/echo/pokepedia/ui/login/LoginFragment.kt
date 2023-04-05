@@ -15,6 +15,11 @@ import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentLoginBinding
 import com.echo.pokepedia.ui.BaseFragment
 import com.echo.pokepedia.util.Resource
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -36,6 +41,8 @@ class LoginFragment : BaseFragment() {
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private val firebaseAuth = FirebaseAuth.getInstance()
+
+    private lateinit var callbackManager: CallbackManager
     // endregion
 
     // region fragment methods
@@ -48,6 +55,8 @@ class LoginFragment : BaseFragment() {
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
+        callbackManager = CallbackManager.Factory.create()
     }
 
     override fun onCreateView(
@@ -75,14 +84,14 @@ class LoginFragment : BaseFragment() {
 
     private fun initObservers() {
         observeViewState()
-        observeLoginUser()
-        observeGoogleSignInUser()
+        observeSignInUser()
     }
 
     private fun initListeners() {
         onSignUpClickListener()
         onLoginClickListener()
         removeErrorMessageListener()
+        onFacebookSignInClickListener()
         onGoogleSignInClickListener()
     }
 
@@ -114,8 +123,8 @@ class LoginFragment : BaseFragment() {
     // endregion
 
     // region observeLoginUser
-    private fun observeLoginUser() = lifecycleScope.launch {
-        viewModel.loginUser.collect { result ->
+    private fun observeSignInUser() = lifecycleScope.launch {
+        viewModel.signInUser.collect { result ->
             when (result) {
                 is Resource.Success -> onSuccessfulLogin()
                 is Resource.Failure -> onFailedLogin(result.exception)
@@ -124,29 +133,10 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun onSuccessfulLogin() {
-        Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Sign in successful", Toast.LENGTH_SHORT).show()
     }
 
     private fun onFailedLogin(e: Exception) {
-        Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-    }
-    // endregion
-
-    // region observeGoogleSignInUser
-    private fun observeGoogleSignInUser() = lifecycleScope.launch {
-        viewModel.googleSignInUser.collect { result ->
-            when (result) {
-                is Resource.Success -> onSuccessfulGoogleSignIn(result.result)
-                is Resource.Failure -> onFailedGoogleSignIn(result.exception)
-            }
-        }
-    }
-
-    private fun onSuccessfulGoogleSignIn(user: FirebaseUser?) {
-        Toast.makeText(requireContext(), "${user!!.displayName}, google sign in was successful", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun onFailedGoogleSignIn(e: Exception) {
         Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
     }
     // endregion
@@ -174,6 +164,30 @@ class LoginFragment : BaseFragment() {
             textPassword.editText?.addTextChangedListener { textPassword.error = null }
         }
     }
+
+    private fun onFacebookSignInClickListener() {
+        binding.buttonFacebook.setOnClickListener {
+            facebookSignIn()
+        }
+    }
+
+    // region onFacebookSignInClickListener
+    private fun facebookSignIn() {
+        LoginManager.getInstance().logOut()
+        LoginManager.getInstance().apply {
+            logInWithReadPermissions(this@LoginFragment, callbackManager, listOf("email", "public_profile"))
+            registerCallback(callbackManager, object: FacebookCallback<LoginResult> {
+                override fun onCancel() {}
+
+                override fun onError(error: FacebookException) {}
+
+                override fun onSuccess(result: LoginResult) {
+                    viewModel.facebookSignIn(result.accessToken)
+                }
+            })
+        }
+    }
+    // endregion
 
     private fun onGoogleSignInClickListener() {
         binding.buttonGoogle.setOnClickListener {
