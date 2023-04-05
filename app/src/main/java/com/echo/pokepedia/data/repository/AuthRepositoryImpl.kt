@@ -38,10 +38,14 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun login(email: String, password: String): Resource<FirebaseUser> {
         return try {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-            if (firebaseAuth.currentUser!!.isEmailVerified) {
-                Resource.Success(result.user!!)
+            if (result.user != null) {
+                if (result.user!!.isEmailVerified) {
+                    Resource.Success(result.user!!)
+                } else {
+                    Resource.Failure(Exception(resourceProvider.fetchString(R.string.verify_email)))
+                }
             } else {
-                Resource.Failure(Exception(resourceProvider.fetchString(R.string.verify_email)))
+                Resource.Failure(Exception("User is null"))
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -57,17 +61,15 @@ class AuthRepositoryImpl @Inject constructor(
                 val result = firebaseAuth.signInWithCredential(credential)
                     .addOnCompleteListener { taskResult ->
                         if (taskResult.isSuccessful) {
-                            val email = account.email ?: ""
-                            val fullName = account.displayName ?: ""
-                            val uid = account.id ?: ""
+                            val user = taskResult.result.user
                             coroutineScope.launch {
-                                addUserToFirestore(fullName, email, uid)
+                                addUserToFirestore(user)
                             }
                         }
                     }.await()
                 Resource.Success(result.user)
             } else {
-                Resource.Failure(Exception(resourceProvider.fetchString(R.string.verify_email)))
+                Resource.Failure(Exception("Google sign in failed"))
             }
 
         } catch (e: ApiException) {
@@ -83,21 +85,27 @@ class AuthRepositoryImpl @Inject constructor(
     ): Resource<FirebaseUser> {
         return try {
             val user = createNewUser(firstName, lastName, email, password)
+            user?.sendEmailVerification()
 
-            val fullName = "$firstName $lastName"
-            addUserToFirestore(fullName, email, user.uid)
-
-            firebaseAuth.currentUser?.sendEmailVerification()
-
-            Resource.Success(user)
+            if (user != null) {
+                addUserToFirestore(user)
+                Resource.Success(user)
+            } else {
+                Resource.Failure(Exception("User is null"))
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(e)
         }
     }
 
-    override suspend fun logout() {
-        firebaseAuth.signOut()
+    override suspend fun logout(): Resource<Boolean> {
+        return try {
+            firebaseAuth.signOut()
+            Resource.Success(true)
+        } catch (e: Exception) {
+            Resource.Failure(e)
+        }
     }
 
     // region auxiliary methods
@@ -106,19 +114,19 @@ class AuthRepositoryImpl @Inject constructor(
         lastName: String,
         email: String,
         password: String
-    ): FirebaseUser {
+    ): FirebaseUser? {
         val username = firstName + lastName
         val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
         result?.user?.updateProfile(
             UserProfileChangeRequest.Builder().setDisplayName(username).build()
         )?.await()
-        return result.user!!
+        return result.user
     }
-    private suspend fun addUserToFirestore(
-        fullName: String,
-        email: String,
-        uid: String,
-    ) {
+
+    private suspend fun addUserToFirestore(user: FirebaseUser?) {
+        val email = user?.email ?: ""
+        val fullName = user?.displayName ?: ""
+        val uid = user?.uid ?: ""
         val newUser = User(fullName, email, Timestamp.now(), uid)
         firebaseFirestore.collection("users").document(uid).set(newUser).await()
     }
