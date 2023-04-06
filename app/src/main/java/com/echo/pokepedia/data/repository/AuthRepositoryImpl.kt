@@ -1,6 +1,5 @@
 package com.echo.pokepedia.data.repository
 
-import android.widget.Toast
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.model.User
 import com.echo.pokepedia.util.Resource
@@ -10,12 +9,12 @@ import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.util.*
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -138,7 +137,7 @@ class AuthRepositoryImpl @Inject constructor(
         val fullName = user?.displayName ?: ""
         val email = user?.email ?: ""
         val uid = user?.uid ?: ""
-        val newUser = User(fullName, email, Timestamp.now(), uid)
+        val newUser = User(fullName, email, Date(), uid)
 
         firebaseFirestore.collection("users").document(uid).set(newUser).await()
     }
