@@ -1,6 +1,5 @@
 package com.echo.pokepedia.data.repository
 
-import android.widget.Toast
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.model.User
 import com.echo.pokepedia.util.Resource
@@ -108,6 +107,29 @@ class AuthRepositoryImpl @Inject constructor(
                 Resource.Success(user)
             } else {
                 Resource.Failure(Exception("User is null"))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Failure(e)
+        }
+    }
+
+    override suspend fun sendPasswordResetEmail(email: String): Resource<Boolean> {
+        return try {
+            val isEmailPasswordProvider =
+                firebaseAuth.currentUser?.providerData?.any { it.providerId == "password" } ?: false
+
+            if (isEmailPasswordProvider) {
+                val result = firebaseAuth.sendPasswordResetEmail(email)
+                result.await()
+
+                if (result.isSuccessful) {
+                    Resource.Success(true)
+                } else {
+                    Resource.Failure(Exception("Password reset failed"))
+                }
+            } else {
+                Resource.Failure(Exception("Your provider is not email/password"))
             }
         } catch (e: Exception) {
             e.printStackTrace()

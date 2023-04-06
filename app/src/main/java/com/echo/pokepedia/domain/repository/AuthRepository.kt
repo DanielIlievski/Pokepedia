@@ -23,5 +23,7 @@ interface AuthRepository {
         password: String
     ): Resource<FirebaseUser>
 
+    suspend fun sendPasswordResetEmail(email: String): Resource<Boolean>
+
     suspend fun logout()
 }

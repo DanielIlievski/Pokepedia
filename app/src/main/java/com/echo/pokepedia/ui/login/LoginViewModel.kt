@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.domain.usecases.FacebookSignInUserCase
 import com.echo.pokepedia.domain.usecases.GoogleSignInUserUseCase
 import com.echo.pokepedia.domain.usecases.LoginUserUseCase
+import com.echo.pokepedia.domain.usecases.ResetPasswordUseCase
 import com.echo.pokepedia.util.Resource
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -22,7 +23,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginUserUseCase: LoginUserUseCase,
     private val googleSignInUserUseCase: GoogleSignInUserUseCase,
-    private val facebookSignInUserCase: FacebookSignInUserCase
+    private val facebookSignInUserCase: FacebookSignInUserCase,
+    private val resetPasswordUseCase: ResetPasswordUseCase
 ) : ViewModel() {
 
     // region viewModel variables
@@ -32,6 +34,9 @@ class LoginViewModel @Inject constructor(
     private var _signInUser =
         MutableSharedFlow<Resource<FirebaseUser?>>()
     val signInUser: SharedFlow<Resource<FirebaseUser?>> = _signInUser
+
+    private var _resetPassword = MutableSharedFlow<Resource<Boolean>>()
+    val resetPassword: SharedFlow<Resource<Boolean>> = _resetPassword
     // endregion
 
     fun login(email: String, password: String) {
@@ -54,6 +59,10 @@ class LoginViewModel @Inject constructor(
 
     fun facebookSignIn(token: AccessToken) = viewModelScope.launch {
         _signInUser.emit(facebookSignInUserCase.invoke(token))
+    }
+
+    fun resetPassword(email: String) = viewModelScope.launch {
+        _resetPassword.emit(resetPasswordUseCase.invoke(email))
     }
 
     // region auxiliary methods

@@ -11,6 +11,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.echo.pokepedia.BottomSheetListener
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentLoginBinding
 import com.echo.pokepedia.ui.BaseFragment
@@ -25,13 +26,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LoginFragment : BaseFragment() {
+class LoginFragment : BaseFragment(), BottomSheetListener {
 
     // region fragment variables
     private var _binding: FragmentLoginBinding? = null
@@ -40,7 +39,6 @@ class LoginFragment : BaseFragment() {
     private val viewModel: LoginViewModel by viewModels()
 
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val firebaseAuth = FirebaseAuth.getInstance()
 
     private lateinit var callbackManager: CallbackManager
     // endregion
@@ -85,6 +83,7 @@ class LoginFragment : BaseFragment() {
     private fun initObservers() {
         observeViewState()
         observeSignInUser()
+        observeResetPassword()
     }
 
     private fun initListeners() {
@@ -93,9 +92,12 @@ class LoginFragment : BaseFragment() {
         removeErrorMessageListener()
         onFacebookSignInClickListener()
         onGoogleSignInClickListener()
+        onForgotPasswordClickListener()
     }
 
     // region initObservers
+
+    // region observeViewState
     private fun observeViewState() = lifecycleScope.launch {
         viewModel.viewState.collect { viewState ->
             when (viewState) {
@@ -106,7 +108,6 @@ class LoginFragment : BaseFragment() {
         }
     }
 
-    // region viewState methods
     private fun onEmptyEmailField() {
         binding.textEmail.apply {
             error = getString(R.string.enter_email)
@@ -122,7 +123,7 @@ class LoginFragment : BaseFragment() {
     }
     // endregion
 
-    // region observeLoginUser
+    // region observeSignInUser
     private fun observeSignInUser() = lifecycleScope.launch {
         viewModel.signInUser.collect { result ->
             when (result) {
@@ -138,6 +139,26 @@ class LoginFragment : BaseFragment() {
 
     private fun onFailedLogin(e: Exception) {
         Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+    }
+    // endregion
+
+    // region observeResetPassword
+    private fun observeResetPassword() = lifecycleScope.launch {
+        viewModel.resetPassword.collect { result ->
+            when (result) {
+                is Resource.Success -> onSuccessfulPasswordReset()
+                is Resource.Failure -> onFailedPasswordReset(result.exception)
+            }
+        }
+    }
+
+    private fun onSuccessfulPasswordReset() {
+        Toast.makeText(requireContext(), "Password reset link sent successfully", Toast.LENGTH_LONG)
+            .show()
+    }
+
+    private fun onFailedPasswordReset(e: Exception) {
+        Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
     }
     // endregion
     // endregion
@@ -165,18 +186,22 @@ class LoginFragment : BaseFragment() {
         }
     }
 
+    // region onFacebookSignInClickListener
     private fun onFacebookSignInClickListener() {
         binding.buttonFacebook.setOnClickListener {
             facebookSignIn()
         }
     }
 
-    // region onFacebookSignInClickListener
     private fun facebookSignIn() {
         LoginManager.getInstance().logOut()
         LoginManager.getInstance().apply {
-            logInWithReadPermissions(this@LoginFragment, callbackManager, listOf("email", "public_profile"))
-            registerCallback(callbackManager, object: FacebookCallback<LoginResult> {
+            logInWithReadPermissions(
+                this@LoginFragment,
+                callbackManager,
+                listOf("email", "public_profile")
+            )
+            registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
                 override fun onCancel() {}
 
                 override fun onError(error: FacebookException) {}
@@ -189,13 +214,13 @@ class LoginFragment : BaseFragment() {
     }
     // endregion
 
+    // region onGoogleSignInClickListener
     private fun onGoogleSignInClickListener() {
         binding.buttonGoogle.setOnClickListener {
             googleSignIn()
         }
     }
 
-    // region onGoogleSignInClickListener
     private fun googleSignIn() {
         googleSignInClient.signOut()
         val signInIntent = googleSignInClient.signInIntent
@@ -211,5 +236,16 @@ class LoginFragment : BaseFragment() {
             }
         }
     // endregion
+
+    private fun onForgotPasswordClickListener() {
+        binding.buttonForgotPassword.setOnClickListener {
+            val bottomSheet = ResetPasswordBottomSheet(this)
+            bottomSheet.show(childFragmentManager, "Password reset")
+        }
+    }
+
+    override fun onButtonClickListener(email: String) {
+        viewModel.resetPassword(email)
+    }
     // endregion
 }
