@@ -1,19 +1,16 @@
 package com.echo.pokepedia.ui.login
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.domain.usecases.GoogleSignInUserUseCase
 import com.echo.pokepedia.domain.usecases.LoginUserUseCase
 import com.echo.pokepedia.util.Resource
+import com.echo.pokepedia.util.isEmailFieldEmpty
+import com.echo.pokepedia.util.isPasswordFieldEmpty
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -57,15 +54,6 @@ class LoginViewModel @Inject constructor(
         _googleSignInUser.emit(googleSignInUserUseCase.invoke(task))
     }
 
-    // region auxiliary methods
-    private fun isEmailFieldEmpty(email: String): Boolean {
-        return email.isBlank() || email.isEmpty()
-    }
-
-    private fun isPasswordFieldEmpty(password: String): Boolean {
-        return password.isBlank() || password.isEmpty()
-    }
-    // endregion
 }
 
 sealed class LoginViewState {

@@ -20,7 +20,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -35,7 +34,6 @@ class LoginFragment : BaseFragment() {
     private val viewModel: LoginViewModel by viewModels()
 
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val firebaseAuth = FirebaseAuth.getInstance()
     // endregion
 
     // region fragment methods
