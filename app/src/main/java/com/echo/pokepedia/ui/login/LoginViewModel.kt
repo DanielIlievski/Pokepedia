@@ -5,10 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.domain.usecases.FacebookSignInUserCase
 import com.echo.pokepedia.domain.usecases.GoogleSignInUserUseCase
 import com.echo.pokepedia.domain.usecases.LoginUserUseCase
-import com.echo.pokepedia.util.Resource
-import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.facebook.AccessToken
+import com.echo.pokepedia.util.isEmailFieldEmpty
+import com.echo.pokepedia.util.isPasswordFieldEmpty
 import com.google.android.gms.tasks.Task
+import com.echo.pokepedia.util.NetworkResult
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,8 +32,8 @@ class LoginViewModel @Inject constructor(
     val viewState: StateFlow<LoginViewState> get() = _viewState
 
     private var _signInUser =
-        MutableSharedFlow<Resource<FirebaseUser?>>()
-    val signInUser: SharedFlow<Resource<FirebaseUser?>> = _signInUser
+        MutableSharedFlow<NetworkResult<FirebaseUser?>>()
+    val signInUser: SharedFlow<NetworkResult<FirebaseUser?>> = _signInUser
     // endregion
 
     fun login(email: String, password: String) {
@@ -56,15 +58,6 @@ class LoginViewModel @Inject constructor(
         _signInUser.emit(facebookSignInUserCase.invoke(token))
     }
 
-    // region auxiliary methods
-    private fun isEmailFieldEmpty(email: String): Boolean {
-        return email.isBlank() || email.isEmpty()
-    }
-
-    private fun isPasswordFieldEmpty(password: String): Boolean {
-        return password.isBlank() || password.isEmpty()
-    }
-    // endregion
 }
 
 sealed class LoginViewState {

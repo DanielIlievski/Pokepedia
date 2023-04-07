@@ -1,17 +1,14 @@
 package com.echo.pokepedia.ui.login
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.domain.usecases.RegisterUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import android.util.Patterns.EMAIL_ADDRESS
-import com.echo.pokepedia.util.Resource
+import com.echo.pokepedia.util.*
+import com.echo.pokepedia.util.NetworkResult
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -26,8 +23,8 @@ class RegisterViewModel @Inject constructor(
     val viewState: StateFlow<RegisterViewState> get() = _viewState
 
     private var _registerUser =
-        MutableSharedFlow<Resource<FirebaseUser?>>()
-    val registerUser: SharedFlow<Resource<FirebaseUser?>> get() = _registerUser
+        MutableSharedFlow<NetworkResult<FirebaseUser?>>()
+    val registerUser: SharedFlow<NetworkResult<FirebaseUser?>> get() = _registerUser
 
     fun register(
         firstName: String,
@@ -67,40 +64,6 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-    private fun isValidEmail(email: String): Boolean {
-        return EMAIL_ADDRESS.matcher(email).matches()
-    }
-
-    private fun doPasswordsMatch(password: String, repeatPassword: String): Boolean {
-        return password == repeatPassword
-    }
-
-    private fun isPasswordStrong(password: String): Boolean {
-        val capitalRegex = Regex("[A-Z]")
-        val numberRegex = Regex("\\d")
-        val specialCharRegex = Regex("[^A-Za-z\\d]")
-
-        return password.length >= 8 &&
-                password.contains(capitalRegex) &&
-                password.contains(numberRegex) &&
-                password.contains(specialCharRegex)
-    }
-
-    private fun isEmailFieldEmpty(email: String): Boolean {
-        return email.isBlank() || email.isEmpty()
-    }
-
-    private fun isPasswordFieldEmpty(password: String): Boolean {
-        return password.isBlank() || password.isEmpty()
-    }
-
-    private fun isFirstNameFieldEmpty(firstName: String): Boolean {
-        return firstName.isBlank() || firstName.isEmpty()
-    }
-
-    private fun isLastNameFieldEmpty(lastName: String): Boolean {
-        return lastName.isBlank() || lastName.isEmpty()
-    }
 }
 
 sealed class RegisterViewState {
