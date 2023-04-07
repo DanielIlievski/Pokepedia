@@ -25,6 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.echo.pokepedia.util.NetworkResult
+import com.echo.pokepedia.util.facebookPermissionsList
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -176,7 +177,7 @@ class LoginFragment : BaseFragment() {
             logInWithReadPermissions(
                 this@LoginFragment,
                 callbackManager,
-                listOf("email", "public_profile")
+                facebookPermissionsList
             )
             registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
                 override fun onCancel() {}
