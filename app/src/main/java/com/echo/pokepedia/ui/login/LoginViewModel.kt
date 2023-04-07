@@ -2,7 +2,12 @@ package com.echo.pokepedia.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.echo.pokepedia.domain.usecases.GoogleSignInUserUseCase
 import com.echo.pokepedia.domain.usecases.LoginUserUseCase
+import com.echo.pokepedia.util.isEmailFieldEmpty
+import com.echo.pokepedia.util.isPasswordFieldEmpty
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Task
 import com.echo.pokepedia.util.NetworkResult
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,15 +20,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUserUseCase: LoginUserUseCase
+    private val loginUserUseCase: LoginUserUseCase,
+    private val googleSignInUserUseCase: GoogleSignInUserUseCase
 ) : ViewModel() {
 
+    // region viewModel variables
     private var _viewState = MutableStateFlow<LoginViewState>(LoginViewState.EmptyViewState)
     val viewState: StateFlow<LoginViewState> get() = _viewState
 
     private var _loginUser =
         MutableSharedFlow<NetworkResult<FirebaseUser?>>()
     val loginUser: SharedFlow<NetworkResult<FirebaseUser?>> = _loginUser
+
+    private var _googleSignInUser = MutableSharedFlow<NetworkResult<FirebaseUser?>>()
+    val googleSignInUser: SharedFlow<NetworkResult<FirebaseUser?>> = _googleSignInUser
+    // endregion
 
     fun login(email: String, password: String) {
         if (isEmailFieldEmpty(email)) {
@@ -39,13 +50,10 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun isEmailFieldEmpty(email: String): Boolean {
-        return email.isBlank() || email.isEmpty()
+    fun googleSignIn(task: Task<GoogleSignInAccount>) = viewModelScope.launch {
+        _googleSignInUser.emit(googleSignInUserUseCase.invoke(task))
     }
 
-    private fun isPasswordFieldEmpty(password: String): Boolean {
-        return password.isBlank() || password.isEmpty()
-    }
 }
 
 sealed class LoginViewState {

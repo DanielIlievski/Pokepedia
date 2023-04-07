@@ -1,6 +1,8 @@
 package com.echo.pokepedia.domain.repository
 
 import com.echo.pokepedia.util.NetworkResult
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
 
 interface AuthRepository {
@@ -9,11 +11,14 @@ interface AuthRepository {
 
     suspend fun login(email: String, password: String): NetworkResult<FirebaseUser>
 
+    suspend fun googleSignIn(task: Task<GoogleSignInAccount>): NetworkResult<FirebaseUser?>
+
     suspend fun register(
         firstName: String,
         lastName: String,
         email: String,
-        password: String): NetworkResult<FirebaseUser>
+        password: String
+    ): NetworkResult<FirebaseUser>
 
-    suspend fun logout()
+    suspend fun logout(): NetworkResult<Boolean>
 }

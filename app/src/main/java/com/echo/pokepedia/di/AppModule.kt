@@ -10,6 +10,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Named
 
 @Module
@@ -24,6 +26,9 @@ object AppModule {
 
     @Provides
     fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    @Provides
+    fun provideCoroutineScope() : CoroutineScope = CoroutineScope(Dispatchers.IO)
 
     @Provides
     @Named(USERS_COLLECTION)
