@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.domain.usecases.GoogleSignInUserUseCase
 import com.echo.pokepedia.domain.usecases.LoginUserUseCase
-import com.echo.pokepedia.util.Resource
 import com.echo.pokepedia.util.isEmailFieldEmpty
 import com.echo.pokepedia.util.isPasswordFieldEmpty
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
+import com.echo.pokepedia.util.NetworkResult
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,11 +29,11 @@ class LoginViewModel @Inject constructor(
     val viewState: StateFlow<LoginViewState> get() = _viewState
 
     private var _loginUser =
-        MutableSharedFlow<Resource<FirebaseUser?>>()
-    val loginUser: SharedFlow<Resource<FirebaseUser?>> = _loginUser
+        MutableSharedFlow<NetworkResult<FirebaseUser?>>()
+    val loginUser: SharedFlow<NetworkResult<FirebaseUser?>> = _loginUser
 
-    private var _googleSignInUser = MutableSharedFlow<Resource<FirebaseUser?>>()
-    val googleSignInUser: SharedFlow<Resource<FirebaseUser?>> = _googleSignInUser
+    private var _googleSignInUser = MutableSharedFlow<NetworkResult<FirebaseUser?>>()
+    val googleSignInUser: SharedFlow<NetworkResult<FirebaseUser?>> = _googleSignInUser
     // endregion
 
     fun login(email: String, password: String) {

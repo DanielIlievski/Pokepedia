@@ -2,58 +2,60 @@ package com.echo.pokepedia.data.repository
 
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.model.User
-import com.echo.pokepedia.util.Resource
+import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.domain.repository.AuthRepository
 import com.echo.pokepedia.util.ResourceProvider
+import com.google.android.gms.tasks.Task
+import com.echo.pokepedia.util.USERS_COLLECTION
+import com.google.firebase.firestore.CollectionReference
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import javax.inject.Named
 
 class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val resourceProvider: ResourceProvider,
-    private val firebaseFirestore: FirebaseFirestore,
+    @Named(USERS_COLLECTION) private val users: CollectionReference,
     private val coroutineScope: CoroutineScope
 ) : AuthRepository {
 
-    override suspend fun getCurrentUser(): Resource<FirebaseUser?> {
+    override suspend fun getCurrentUser(): NetworkResult<FirebaseUser?> {
         return try {
-            Resource.Success(firebaseAuth.currentUser)
+            NetworkResult.Success(firebaseAuth.currentUser)
         } catch (e: Exception) {
             e.printStackTrace()
-            Resource.Failure(e)
+            NetworkResult.Failure(e)
         }
     }
 
-    override suspend fun login(email: String, password: String): Resource<FirebaseUser> {
+    override suspend fun login(email: String, password: String): NetworkResult<FirebaseUser> {
         return try {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             if (result.user != null) {
                 if (result.user!!.isEmailVerified) {
-                    Resource.Success(result.user!!)
+                    NetworkResult.Success(result.user!!)
                 } else {
-                    Resource.Failure(Exception(resourceProvider.fetchString(R.string.verify_email)))
+                    NetworkResult.Failure(Exception(resourceProvider.fetchString(R.string.verify_email)))
                 }
             } else {
-                Resource.Failure(Exception("User is null"))
+                NetworkResult.Failure(Exception("User is null"))
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Resource.Failure(e)
+            NetworkResult.Failure(e)
         }
     }
 
-    override suspend fun googleSignIn(task: Task<GoogleSignInAccount>): Resource<FirebaseUser?> {
+    override suspend fun googleSignIn(task: Task<GoogleSignInAccount>): NetworkResult<FirebaseUser?> {
         return try {
             val account: GoogleSignInAccount? = task.getResult(ApiException::class.java)
             if (account != null) {
@@ -67,13 +69,13 @@ class AuthRepositoryImpl @Inject constructor(
                             }
                         }
                     }.await()
-                Resource.Success(result.user)
+                NetworkResult.Success(result.user)
             } else {
-                Resource.Failure(Exception("Google sign in failed"))
+                NetworkResult.Failure(Exception("Google sign in failed"))
             }
 
         } catch (e: ApiException) {
-            Resource.Failure(e)
+            NetworkResult.Failure(e)
         }
     }
 
@@ -82,29 +84,29 @@ class AuthRepositoryImpl @Inject constructor(
         lastName: String,
         email: String,
         password: String
-    ): Resource<FirebaseUser> {
+    ): NetworkResult<FirebaseUser> {
         return try {
             val user = createNewUser(firstName, lastName, email, password)
             user?.sendEmailVerification()
 
             if (user != null) {
                 addUserToFirestore(user)
-                Resource.Success(user)
+                NetworkResult.Success(user)
             } else {
-                Resource.Failure(Exception("User is null"))
+                NetworkResult.Failure(Exception("User is null"))
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Resource.Failure(e)
+            NetworkResult.Failure(e)
         }
     }
 
-    override suspend fun logout(): Resource<Boolean> {
+    override suspend fun logout(): NetworkResult<Boolean> {
         return try {
             firebaseAuth.signOut()
-            Resource.Success(true)
+            NetworkResult.Success(true)
         } catch (e: Exception) {
-            Resource.Failure(e)
+            NetworkResult.Failure(e)
         }
     }
 
@@ -128,7 +130,7 @@ class AuthRepositoryImpl @Inject constructor(
         val fullName = user?.displayName ?: ""
         val uid = user?.uid ?: ""
         val newUser = User(fullName, email, Timestamp.now(), uid)
-        firebaseFirestore.collection("users").document(uid).set(newUser).await()
+        users.document(uid).set(newUser).await()
     }
     // endregion
 

@@ -14,12 +14,12 @@ import androidx.navigation.fragment.findNavController
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentLoginBinding
 import com.echo.pokepedia.ui.BaseFragment
-import com.echo.pokepedia.util.Resource
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
+import com.echo.pokepedia.util.NetworkResult
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -115,18 +115,18 @@ class LoginFragment : BaseFragment() {
     private fun observeLoginUser() = lifecycleScope.launch {
         viewModel.loginUser.collect { result ->
             when (result) {
-                is Resource.Success -> onSuccessfulLogin()
-                is Resource.Failure -> onFailedLogin(result.exception)
+                is NetworkResult.Success -> onSuccessfulLogin(result.result)
+                is NetworkResult.Failure -> onFailedLogin(result.exception)
             }
         }
     }
 
-    private fun onSuccessfulLogin() {
-        Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+    private fun onSuccessfulLogin(user: FirebaseUser?) {
+        showToastMessage("${user?.displayName}, login was successful!", Toast.LENGTH_SHORT)
     }
 
     private fun onFailedLogin(e: Exception) {
-        Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+        showToastMessage(e.message, Toast.LENGTH_LONG)
     }
     // endregion
 
@@ -134,8 +134,8 @@ class LoginFragment : BaseFragment() {
     private fun observeGoogleSignInUser() = lifecycleScope.launch {
         viewModel.googleSignInUser.collect { result ->
             when (result) {
-                is Resource.Success -> onSuccessfulGoogleSignIn(result.result)
-                is Resource.Failure -> onFailedGoogleSignIn(result.exception)
+                is NetworkResult.Success -> onSuccessfulGoogleSignIn(result.result)
+                is NetworkResult.Failure -> onFailedGoogleSignIn(result.exception)
             }
         }
     }
@@ -173,13 +173,13 @@ class LoginFragment : BaseFragment() {
         }
     }
 
+    // region onGoogleSignInClickListener
     private fun onGoogleSignInClickListener() {
         binding.buttonGoogle.setOnClickListener {
             googleSignIn()
         }
     }
 
-    // region onGoogleSignInClickListener
     private fun googleSignIn() {
         googleSignInClient.signOut()
         val signInIntent = googleSignInClient.signInIntent

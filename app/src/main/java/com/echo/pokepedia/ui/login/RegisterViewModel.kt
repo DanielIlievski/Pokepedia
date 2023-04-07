@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.echo.pokepedia.util.*
+import com.echo.pokepedia.util.NetworkResult
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,8 +23,8 @@ class RegisterViewModel @Inject constructor(
     val viewState: StateFlow<RegisterViewState> get() = _viewState
 
     private var _registerUser =
-        MutableSharedFlow<Resource<FirebaseUser?>>()
-    val registerUser: SharedFlow<Resource<FirebaseUser?>> get() = _registerUser
+        MutableSharedFlow<NetworkResult<FirebaseUser?>>()
+    val registerUser: SharedFlow<NetworkResult<FirebaseUser?>> get() = _registerUser
 
     fun register(
         firstName: String,
