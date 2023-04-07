@@ -49,6 +49,8 @@ dependencies {
     // Firebase
     implementation Firebase.crashlyticsKtx
     implementation Firebase.analyticsKtx
+    implementation Firebase.firebaseAuth
+    implementation Firebase.firebaseFirestore
     // ViewModel
     implementation ViewModel.lifecycleVmKtx
     // Tests

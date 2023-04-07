@@ -7,4 +7,10 @@ object Firebase {
 
     private const val crashlyticsGradleVersion = "2.9.4"
     const val crashlyticsGradle = "com.google.firebase:firebase-crashlytics-gradle:$crashlyticsGradleVersion"
+
+    private const val firebaseAuthVersion = "21.2.0"
+    const val firebaseAuth = "com.google.firebase:firebase-auth-ktx:$firebaseAuthVersion"
+
+    private const val firebaseFirestoreVersion = "24.4.5"
+    const val firebaseFirestore = "com.google.firebase:firebase-firestore-ktx:$firebaseFirestoreVersion"
 }
