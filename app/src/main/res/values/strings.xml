@@ -44,4 +44,10 @@
     <string name="weak_password">Passwords must contain at least 8 characters, including at least 1 capital letter, 1 number and 1 special sign</string>
     <!-- endregion -->
 
+    <!-- region Facebook -->
+    <string name="facebook_app_id">786544306138666</string>
+    <string name="fb_login_protocol_scheme">fb786544306138666</string>
+    <string name="facebook_client_token">2e15e5fe4d6d85e44c4b191af682a077</string>
+    <!-- endregion -->
+
 </resources>

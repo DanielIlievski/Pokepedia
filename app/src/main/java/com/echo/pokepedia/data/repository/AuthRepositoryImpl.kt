@@ -5,19 +5,18 @@ import com.echo.pokepedia.data.model.User
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.domain.repository.AuthRepository
 import com.echo.pokepedia.util.ResourceProvider
-import com.google.android.gms.tasks.Task
+import com.facebook.AccessToken
 import com.echo.pokepedia.util.USERS_COLLECTION
 import com.google.firebase.firestore.CollectionReference
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -73,8 +72,27 @@ class AuthRepositoryImpl @Inject constructor(
             } else {
                 NetworkResult.Failure(Exception("Google sign in failed"))
             }
+        } catch (e: Exception) {
+            NetworkResult.Failure(e)
+        }
+    }
 
-        } catch (e: ApiException) {
+    override suspend fun facebookSignIn(token: AccessToken): NetworkResult<FirebaseUser?> {
+        return try {
+            val credential = FacebookAuthProvider.getCredential(token.token)
+            val result = firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener { taskResult ->
+                    if (taskResult.isSuccessful) {
+                        val user = taskResult.result.user
+
+                        coroutineScope.launch {
+                            addUserToFirestore(user)
+                        }
+                    }
+                }.await()
+            NetworkResult.Success(result.user)
+        } catch (e: Exception) {
+            e.printStackTrace()
             NetworkResult.Failure(e)
         }
     }
@@ -129,7 +147,8 @@ class AuthRepositoryImpl @Inject constructor(
         val email = user?.email ?: ""
         val fullName = user?.displayName ?: ""
         val uid = user?.uid ?: ""
-        val newUser = User(fullName, email, Timestamp.now(), uid)
+        val newUser = User(fullName, email, Date(), uid)
+
         users.document(uid).set(newUser).await()
     }
     // endregion

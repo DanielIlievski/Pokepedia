@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.ActivityMainBinding
+import com.facebook.FacebookSdk
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
