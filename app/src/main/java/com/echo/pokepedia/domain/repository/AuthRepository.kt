@@ -23,5 +23,7 @@ interface AuthRepository {
         password: String
     ): NetworkResult<FirebaseUser>
 
+    suspend fun sendPasswordResetEmail(email: String): NetworkResult<Boolean>
+
     suspend fun logout(): NetworkResult<Boolean>
 }

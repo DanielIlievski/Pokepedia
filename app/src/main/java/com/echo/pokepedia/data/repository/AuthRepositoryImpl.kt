@@ -119,6 +119,29 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun sendPasswordResetEmail(email: String): NetworkResult<Boolean> {
+        return try {
+            val isEmailPasswordProvider =
+                firebaseAuth.currentUser?.providerData?.any { it.providerId == "password" } ?: false
+
+            if (isEmailPasswordProvider) {
+                val result = firebaseAuth.sendPasswordResetEmail(email)
+                result.await()
+
+                if (result.isSuccessful) {
+                    NetworkResult.Success(true)
+                } else {
+                    NetworkResult.Failure(Exception("Password reset failed"))
+                }
+            } else {
+                NetworkResult.Failure(Exception("Your provider is not email/password"))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            NetworkResult.Failure(e)
+        }
+    }
+
     override suspend fun logout(): NetworkResult<Boolean> {
         return try {
             firebaseAuth.signOut()
@@ -144,8 +167,8 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     private suspend fun addUserToFirestore(user: FirebaseUser?) {
-        val email = user?.email ?: ""
         val fullName = user?.displayName ?: ""
+        val email = user?.email ?: ""
         val uid = user?.uid ?: ""
         val newUser = User(fullName, email, Date(), uid)
 

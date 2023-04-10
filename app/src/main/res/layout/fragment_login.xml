@@ -74,6 +74,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textPassword" />
 
         <TextView
+            android:id="@+id/buttonForgotPassword"
             style="@style/TextView.Small.Grey.Clickable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

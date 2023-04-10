@@ -48,6 +48,10 @@
     <string name="facebook_app_id">786544306138666</string>
     <string name="fb_login_protocol_scheme">fb786544306138666</string>
     <string name="facebook_client_token">2e15e5fe4d6d85e44c4b191af682a077</string>
+    <string name="enter_email_for_password_reset">Enter your email address to get a password reset link.</string>
+    <string name="trouble_logging_in">Having trouble logging in?</string>
+    <string name="send">Send</string>
+    <string name="cancel">Cancel</string>
     <!-- endregion -->
 
 </resources>

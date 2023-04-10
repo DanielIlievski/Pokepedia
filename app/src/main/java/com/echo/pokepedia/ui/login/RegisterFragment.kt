@@ -64,6 +64,8 @@ class RegisterFragment : BaseFragment() {
     }
 
     // region initObservers
+
+    // region observeViewState
     private fun observeViewState() = lifecycleScope.launch {
         viewModel.viewState.collect { viewState ->
             when (viewState) {
@@ -79,7 +81,6 @@ class RegisterFragment : BaseFragment() {
         }
     }
 
-    // region viewState methods
     private fun onEmptyEmailField() {
         binding.textEmail.apply {
             error = getString(R.string.enter_email)
@@ -134,6 +135,7 @@ class RegisterFragment : BaseFragment() {
     }
     // endregion
 
+    // region observeRegisterUser
     private fun observeRegisterUser() = lifecycleScope.launch {
         viewModel.registerUser.collect { result ->
             when (result) {
@@ -153,6 +155,7 @@ class RegisterFragment : BaseFragment() {
     private fun onFailedRegistration(e: Exception) {
         showToastMessage(e.message, Toast.LENGTH_LONG)
     }
+    // endregion
     // endregion
 
     // region initListeners

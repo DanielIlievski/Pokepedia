@@ -11,6 +11,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.echo.pokepedia.BottomSheetListener
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentLoginBinding
 import com.echo.pokepedia.ui.BaseFragment
@@ -31,7 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LoginFragment : BaseFragment() {
+class LoginFragment : BaseFragment(), BottomSheetListener {
 
     // region fragment variables
     private var _binding: FragmentLoginBinding? = null
@@ -84,6 +85,7 @@ class LoginFragment : BaseFragment() {
     private fun initObservers() {
         observeViewState()
         observeSignInUser()
+        observeResetPassword()
     }
 
     private fun initListeners() {
@@ -92,9 +94,12 @@ class LoginFragment : BaseFragment() {
         removeErrorMessageListener()
         onFacebookSignInClickListener()
         onGoogleSignInClickListener()
+        onForgotPasswordClickListener()
     }
 
     // region initObservers
+
+    // region observeViewState
     private fun observeViewState() = lifecycleScope.launch {
         viewModel.viewState.collect { viewState ->
             when (viewState) {
@@ -105,7 +110,6 @@ class LoginFragment : BaseFragment() {
         }
     }
 
-    // region viewState methods
     private fun onEmptyEmailField() {
         binding.textEmail.apply {
             error = getString(R.string.enter_email)
@@ -121,7 +125,7 @@ class LoginFragment : BaseFragment() {
     }
     // endregion
 
-    // region observeLoginUser
+    // region observeSignInUser
     private fun observeSignInUser() = lifecycleScope.launch {
         viewModel.signInUser.collect { result ->
             when (result) {
@@ -137,6 +141,26 @@ class LoginFragment : BaseFragment() {
 
     private fun onFailedLogin(e: Exception) {
         showToastMessage(e.message, Toast.LENGTH_LONG)
+    }
+    // endregion
+
+    // region observeResetPassword
+    private fun observeResetPassword() = lifecycleScope.launch {
+        viewModel.resetPassword.collect { result ->
+            when (result) {
+                is NetworkResult.Success -> onSuccessfulPasswordReset()
+                is NetworkResult.Failure -> onFailedPasswordReset(result.exception)
+            }
+        }
+    }
+
+    private fun onSuccessfulPasswordReset() {
+        Toast.makeText(requireContext(), "Password reset link sent successfully", Toast.LENGTH_LONG)
+            .show()
+    }
+
+    private fun onFailedPasswordReset(e: Exception) {
+        Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
     }
     // endregion
     // endregion
@@ -214,5 +238,16 @@ class LoginFragment : BaseFragment() {
             }
         }
     // endregion
+
+    private fun onForgotPasswordClickListener() {
+        binding.buttonForgotPassword.setOnClickListener {
+            val bottomSheet = ResetPasswordBottomSheet(this)
+            bottomSheet.show(childFragmentManager, "Password reset")
+        }
+    }
+
+    override fun onSendPasswordResetClickListener(email: String) {
+        viewModel.resetPassword(email)
+    }
     // endregion
 }
