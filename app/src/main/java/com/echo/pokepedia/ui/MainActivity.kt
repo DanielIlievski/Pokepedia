@@ -23,8 +23,6 @@ class MainActivity : BaseActivity() {
         initSplashScreen()
 
         setContentView(binding.root)
-
-        FacebookSdk.sdkInitialize(applicationContext);
     }
 
     @SuppressLint("ResourceType")

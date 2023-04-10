@@ -15,17 +15,19 @@ import com.echo.pokepedia.BottomSheetListener
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentLoginBinding
 import com.echo.pokepedia.ui.BaseFragment
-import com.echo.pokepedia.util.Resource
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
+import com.echo.pokepedia.util.NetworkResult
+import com.echo.pokepedia.util.facebookPermissionsList
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -127,18 +129,18 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     private fun observeSignInUser() = lifecycleScope.launch {
         viewModel.signInUser.collect { result ->
             when (result) {
-                is Resource.Success -> onSuccessfulLogin()
-                is Resource.Failure -> onFailedLogin(result.exception)
+                is NetworkResult.Success -> onSuccessfulLogin(result.result)
+                is NetworkResult.Failure -> onFailedLogin(result.exception)
             }
         }
     }
 
-    private fun onSuccessfulLogin() {
-        Toast.makeText(requireContext(), "Sign in successful", Toast.LENGTH_SHORT).show()
+    private fun onSuccessfulLogin(user: FirebaseUser?) {
+        showToastMessage("${user?.displayName}, sign in was successful!", Toast.LENGTH_SHORT)
     }
 
     private fun onFailedLogin(e: Exception) {
-        Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+        showToastMessage(e.message, Toast.LENGTH_LONG)
     }
     // endregion
 
@@ -146,8 +148,8 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     private fun observeResetPassword() = lifecycleScope.launch {
         viewModel.resetPassword.collect { result ->
             when (result) {
-                is Resource.Success -> onSuccessfulPasswordReset()
-                is Resource.Failure -> onFailedPasswordReset(result.exception)
+                is NetworkResult.Success -> onSuccessfulPasswordReset()
+                is NetworkResult.Failure -> onFailedPasswordReset(result.exception)
             }
         }
     }
@@ -199,7 +201,7 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
             logInWithReadPermissions(
                 this@LoginFragment,
                 callbackManager,
-                listOf("email", "public_profile")
+                facebookPermissionsList
             )
             registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
                 override fun onCancel() {}
@@ -244,7 +246,7 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
         }
     }
 
-    override fun onButtonClickListener(email: String) {
+    override fun onSendPasswordResetClickListener(email: String) {
         viewModel.resetPassword(email)
     }
     // endregion

@@ -49,7 +49,7 @@ class ResetPasswordBottomSheet(
 
     private fun onSendClickListener() {
         binding.buttonSend.setOnClickListener {
-            bottomSheetListener.onButtonClickListener(binding.textEmail.editText?.text.toString())
+            bottomSheetListener.onSendPasswordResetClickListener(binding.textEmail.editText?.text.toString())
             dismiss()
         }
     }
