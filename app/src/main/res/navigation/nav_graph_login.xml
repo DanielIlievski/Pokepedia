@@ -18,6 +18,14 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+
+        <action
+            android:id="@+id/loginFragment_to_homeScreenActivity"
+            app:destination="@id/homeScreenActivity"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
 
     <fragment
@@ -36,5 +44,11 @@
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
+
+    <activity
+        android:id="@+id/homeScreenActivity"
+        android:name="com.echo.pokepedia.ui.home.HomeScreenActivity"
+        android:label="activity_home_screen"
+        tools:layout="@layout/activity_home_screen" />
 
 </navigation>

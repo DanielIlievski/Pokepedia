@@ -75,6 +75,8 @@ dependencies {
     implementation PreferencesDataStore.preferencesDataStore
     // Live Data
     implementation LiveData.lifecycleLdKtx
+    // Circle Image View
+    implementation CircleImageView.circleImageView
 }
 
 kapt {
