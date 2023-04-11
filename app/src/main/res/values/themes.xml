@@ -126,6 +126,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextView.Medium.Grey" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
     <!-- endregion -->
 
     <!-- region textInputLayout styles -->
