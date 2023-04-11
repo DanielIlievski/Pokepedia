@@ -126,6 +126,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextView.Medium.Grey" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
     <!-- endregion -->
 
     <!-- region textInputLayout styles -->
@@ -142,6 +147,16 @@
     <style name="CheckBox.SmallText.Blue.Custom" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="buttonTint">@color/blue_pokemon</item>
+    </style>
+    <!-- endregion -->
+
+    <!-- region CardView styles -->
+    <style name="CardView.Radius.Elevated.Clickable" parent="CardView">
+        <item name="cardCornerRadius">@dimen/radius_medium</item>
+        <item name="cardElevation">@dimen/elevation_medium</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
     <!-- endregion -->
 </resources>

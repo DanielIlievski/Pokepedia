@@ -33,10 +33,10 @@
 
     <TextView
         android:id="@+id/textPokemonName"
+        style="@style/TextView.Medium.Grey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/margin_padding_normal"
-        android:textSize="@dimen/text_size_medium"
         app:layout_constraintEnd_toEndOf="@id/buddy_pokemon_container"
         app:layout_constraintStart_toEndOf="@id/imgPokemon"
         app:layout_constraintTop_toTopOf="@id/buddy_pokemon_container"
@@ -44,10 +44,10 @@
 
     <TextView
         android:id="@+id/textPokemonNickname"
+        style="@style/MaterialTextView.XLarge.Grey.Caps.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/margin_padding_normal"
-        android:textSize="@dimen/text_size_xlarge"
         app:layout_constraintEnd_toEndOf="@id/textPokemonName"
         app:layout_constraintStart_toStartOf="@id/textPokemonName"
         app:layout_constraintTop_toBottomOf="@id/textPokemonName"
