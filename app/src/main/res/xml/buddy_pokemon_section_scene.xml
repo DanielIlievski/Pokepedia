@@ -22,14 +22,14 @@
         <Constraint
             android:id="@+id/buddy_pokemon_container"
             android:layout_width="0dp"
-            android:layout_height="110dp"
+            android:layout_height="@dimen/buddy_pokemon_container_collapsed_height"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@+id/imgPokemon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="@dimen/img_pokemon_collapsed_width"
+            android:layout_height="@dimen/img_pokemon_collapsed_height"
             android:layout_marginTop="@dimen/margin_padding_tiny"
             android:layout_marginStart="@dimen/margin_padding_small"
             motion:layout_constraintStart_toStartOf="@id/buddy_pokemon_container"
@@ -40,9 +40,9 @@
             android:id="@+id/textPokemonNickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="@dimen/margin_padding_xxnormal"
+            android:layout_marginTop="@dimen/margin_padding_xxsmall"
+            android:layout_marginEnd="@dimen/margin_padding_xxnormal"
             motion:layout_constraintStart_toEndOf="@+id/imgPokemon"
             motion:layout_constraintTop_toTopOf="parent" />
         <Constraint
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             motion:layout_constraintStart_toEndOf="@id/imgPokemon"
             motion:layout_constraintTop_toBottomOf="@+id/textPokemonNickname"
-            android:layout_marginStart="50dp" />
+            android:layout_marginStart="@dimen/margin_padding_xxlarge" />
         <Constraint
             android:id="@+id/chipGroupPokemonTypes"
             android:alpha="0"
