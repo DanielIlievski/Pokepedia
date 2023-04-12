@@ -149,4 +149,14 @@
         <item name="buttonTint">@color/blue_pokemon</item>
     </style>
     <!-- endregion -->
+
+    <!-- region CardView styles -->
+    <style name="CardView.Radius.Elevated.Clickable" parent="CardView">
+        <item name="cardCornerRadius">@dimen/radius_medium</item>
+        <item name="cardElevation">@dimen/elevation_medium</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+    <!-- endregion -->
 </resources>

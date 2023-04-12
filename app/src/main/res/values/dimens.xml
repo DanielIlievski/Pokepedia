@@ -80,4 +80,11 @@
     <dimen name="buddy_pokemon_image_width">200dp</dimen>
     <dimen name="img_pokemon_collapsed_width">70dp</dimen>
     <!-- endregion -->
+
+    <!-- region elevation -->
+    <dimen name="elevation_small">4dp</dimen>
+    <dimen name="elevation_normal">6dp</dimen>
+    <dimen name="elevation_medium">8dp</dimen>
+    <dimen name="elevation_big">10dp</dimen>
+    <!-- endregion -->
 </resources>

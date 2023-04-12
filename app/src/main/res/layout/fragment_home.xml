@@ -8,8 +8,26 @@
 
     <include
         android:id="@+id/buddy_pokemon_section"
+        layout="@layout/buddy_pokemon_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/buddy_pokemon_section" />
+        android:layout_marginHorizontal="@dimen/margin_padding_small"
+        android:layout_marginVertical="@dimen/margin_padding_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/margin_padding_small"
+        android:layout_marginTop="@dimen/margin_padding_small"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buddy_pokemon_section"
+        app:spanCount="2"
+        tools:listitem="@layout/list_item_pokemon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
