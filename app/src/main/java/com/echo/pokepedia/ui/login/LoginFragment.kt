@@ -46,7 +46,6 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     // endregion
 
     // region fragment methods
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -136,7 +135,8 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     }
 
     private fun onSuccessfulLogin(user: FirebaseUser?) {
-        showToastMessage("${user?.displayName}, sign in was successful!", Toast.LENGTH_SHORT)
+        showToastMessage(getString(R.string.sign_in_successful, user?.displayName), Toast.LENGTH_SHORT)
+        navigateToHomeScreen()
     }
 
     private fun onFailedLogin(e: Exception) {
@@ -248,6 +248,11 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
 
     override fun onSendPasswordResetClickListener(email: String) {
         viewModel.resetPassword(email)
+    }
+
+    private fun navigateToHomeScreen() {
+        val action = LoginFragmentDirections.loginFragmentToHomeScreenActivity()
+        findNavController().navigate(action)
     }
     // endregion
 }
