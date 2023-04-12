@@ -13,7 +13,7 @@ import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentRegisterBinding
 import com.echo.pokepedia.ui.BaseFragment
 import com.echo.pokepedia.util.NetworkResult
-import com.google.firebase.auth.FirebaseUser
+import com.echo.pokepedia.util.UiText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -139,21 +139,21 @@ class RegisterFragment : BaseFragment() {
     private fun observeRegisterUser() = lifecycleScope.launch {
         viewModel.registerUser.collect { result ->
             when (result) {
-                is NetworkResult.Success -> onSuccessfulRegistration(result.result)
+                is NetworkResult.Success -> onSuccessfulRegistration()
                 is NetworkResult.Failure -> onFailedRegistration(result.exception)
             }
         }
     }
 
-    private fun onSuccessfulRegistration(user: FirebaseUser?) {
+    private fun onSuccessfulRegistration() {
         showToastMessage(getString(R.string.successful_registration), Toast.LENGTH_LONG)
 
         val action = RegisterFragmentDirections.registerFragmentToLoginFragment()
         findNavController().navigate(action)
     }
 
-    private fun onFailedRegistration(e: Exception) {
-        showToastMessage(e.message, Toast.LENGTH_LONG)
+    private fun onFailedRegistration(e: UiText?) {
+        showToastMessage(e?.asString(requireContext()), Toast.LENGTH_LONG)
     }
     // endregion
     // endregion

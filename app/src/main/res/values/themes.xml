@@ -13,6 +13,12 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    
+    <!-- region bottom navigation view style -->
+    <style name="BottomNavigationView.Custom" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        
+    </style>
+    <!-- -->
 
     <!-- region button styles -->
     <style name="MaterialButton.Normal.Caps" parent="Widget.AppCompat.Button">

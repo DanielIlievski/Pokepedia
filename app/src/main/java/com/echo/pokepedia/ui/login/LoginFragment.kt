@@ -26,6 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.echo.pokepedia.util.NetworkResult
+import com.echo.pokepedia.util.UiText
 import com.echo.pokepedia.util.facebookPermissionsList
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
@@ -135,13 +136,13 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     }
 
     private fun onSuccessfulLogin(user: FirebaseUser?) {
-        showToastMessage("${user?.displayName}, sign in was successful!", Toast.LENGTH_SHORT)
+        showToastMessage(getString(R.string.sign_in_successful, user?.displayName), Toast.LENGTH_SHORT)
 
         navigateToHomeScreen()
     }
 
-    private fun onFailedLogin(e: Exception) {
-        showToastMessage(e.message, Toast.LENGTH_LONG)
+    private fun onFailedLogin(e: UiText?) {
+        showToastMessage(e?.asString(requireContext()), Toast.LENGTH_LONG)
     }
     // endregion
 
@@ -156,12 +157,11 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     }
 
     private fun onSuccessfulPasswordReset() {
-        Toast.makeText(requireContext(), "Password reset link sent successfully", Toast.LENGTH_LONG)
-            .show()
+        showToastMessage(getString(R.string.password_reset_successful), Toast.LENGTH_SHORT)
     }
 
-    private fun onFailedPasswordReset(e: Exception) {
-        Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
+    private fun onFailedPasswordReset(e: UiText?) {
+        showToastMessage(e?.asString(requireContext()), Toast.LENGTH_LONG)
     }
     // endregion
     // endregion
@@ -254,6 +254,8 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     private fun navigateToHomeScreen() {
         val action = LoginFragmentDirections.loginFragmentToHomeScreenActivity()
         findNavController().navigate(action)
+
+        activity?.finish()
     }
     // endregion
 }
