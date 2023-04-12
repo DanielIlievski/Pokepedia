@@ -135,8 +135,7 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     }
 
     private fun onSuccessfulLogin(user: FirebaseUser?) {
-        showToastMessage("${user?.displayName}, sign in was successful!", Toast.LENGTH_SHORT)
-
+        showToastMessage(getString(R.string.sign_in_successful, user?.displayName), Toast.LENGTH_SHORT)
         navigateToHomeScreen()
     }
 

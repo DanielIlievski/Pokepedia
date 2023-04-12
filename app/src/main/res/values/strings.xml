@@ -27,6 +27,7 @@
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="forgot_password">Forgot password</string>
     <string name="verify_email">Please verify your email before you login!</string>
+    <string name="sign_in_successful">%1$s, sign in was successful!</string>
     <!-- endregion -->
 
     <!-- region RegisterFragment -->
