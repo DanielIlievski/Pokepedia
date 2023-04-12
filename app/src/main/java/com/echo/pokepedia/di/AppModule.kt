@@ -1,6 +1,6 @@
 package com.echo.pokepedia.di
 
-import com.echo.pokepedia.domain.repository.AuthRepository
+import com.echo.pokepedia.domain.authentication.repository.AuthRepository
 import com.echo.pokepedia.data.repository.AuthRepositoryImpl
 import com.echo.pokepedia.util.USERS_COLLECTION
 import com.google.firebase.auth.FirebaseAuth

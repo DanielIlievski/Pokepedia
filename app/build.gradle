@@ -77,6 +77,16 @@ dependencies {
     implementation LiveData.lifecycleLdKtx
     // Circle Image View
     implementation CircleImageView.circleImageView
+
+    // Retrofit
+    implementation Retrofit.retrofit
+    implementation Retrofit.gsonConverter
+    implementation Retrofit.okhttp
+    implementation Retrofit.loggingInterceptor
+
+    // Chucker
+    debugImplementation Chucker.chuckerDebugImplementation
+    releaseImplementation Chucker.chuckerReleaseImplementation
 }
 
 kapt {

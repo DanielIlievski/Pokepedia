@@ -1,8 +1,8 @@
-package com.echo.pokepedia.ui.login
+package com.echo.pokepedia.ui.authentication.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.echo.pokepedia.domain.usecases.RegisterUserUseCase
+import com.echo.pokepedia.domain.authentication.usecases.RegisterUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

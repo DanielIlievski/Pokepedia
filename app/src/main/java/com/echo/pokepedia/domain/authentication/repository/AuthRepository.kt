@@ -1,4 +1,4 @@
-package com.echo.pokepedia.domain.repository
+package com.echo.pokepedia.domain.authentication.repository
 
 import com.echo.pokepedia.util.NetworkResult
 import com.facebook.AccessToken

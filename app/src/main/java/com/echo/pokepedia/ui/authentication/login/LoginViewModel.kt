@@ -1,11 +1,11 @@
-package com.echo.pokepedia.ui.login
+package com.echo.pokepedia.ui.authentication.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.echo.pokepedia.domain.usecases.FacebookSignInUserCase
-import com.echo.pokepedia.domain.usecases.GoogleSignInUserUseCase
-import com.echo.pokepedia.domain.usecases.LoginUserUseCase
-import com.echo.pokepedia.domain.usecases.ResetPasswordUseCase
+import com.echo.pokepedia.domain.authentication.usecases.FacebookSignInUserCase
+import com.echo.pokepedia.domain.authentication.usecases.GoogleSignInUserUseCase
+import com.echo.pokepedia.domain.authentication.usecases.LoginUserUseCase
+import com.echo.pokepedia.domain.authentication.usecases.ResetPasswordUseCase
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.facebook.AccessToken
 import com.echo.pokepedia.util.isEmailFieldEmpty

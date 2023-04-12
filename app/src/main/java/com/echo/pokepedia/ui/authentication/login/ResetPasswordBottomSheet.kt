@@ -1,4 +1,4 @@
-package com.echo.pokepedia.ui.login
+package com.echo.pokepedia.ui.authentication.login
 
 import android.os.Bundle
 import android.view.LayoutInflater

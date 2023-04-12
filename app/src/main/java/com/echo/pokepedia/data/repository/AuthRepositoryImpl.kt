@@ -3,7 +3,7 @@ package com.echo.pokepedia.data.repository
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.model.User
 import com.echo.pokepedia.util.NetworkResult
-import com.echo.pokepedia.domain.repository.AuthRepository
+import com.echo.pokepedia.domain.authentication.repository.AuthRepository
 import com.facebook.AccessToken
 import com.echo.pokepedia.util.USERS_COLLECTION
 import com.echo.pokepedia.util.UiText

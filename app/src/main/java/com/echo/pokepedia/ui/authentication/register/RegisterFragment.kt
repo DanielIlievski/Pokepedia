@@ -1,4 +1,4 @@
-package com.echo.pokepedia.ui.login
+package com.echo.pokepedia.ui.authentication.register
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentRegisterBinding
 import com.echo.pokepedia.ui.BaseFragment
+import com.echo.pokepedia.ui.authentication.login.RegisterViewModel
+import com.echo.pokepedia.ui.authentication.login.RegisterViewState
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.UiText
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,6 +79,7 @@ class RegisterFragment : BaseFragment() {
                 RegisterViewState.EmptyFirstNameField -> onEmptyFirstNameField()
                 RegisterViewState.EmptyLastNameField -> onEmptyLastNameField()
                 RegisterViewState.EmptyViewState -> {}
+                else -> {}
             }
         }
     }

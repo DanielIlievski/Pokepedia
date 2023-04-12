@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ui.login.RegisterFragment">
+        tools:context=".ui.authentication.register.RegisterFragment">
 
         <ImageView
             android:id="@+id/image_login"

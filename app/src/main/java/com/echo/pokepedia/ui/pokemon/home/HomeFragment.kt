@@ -1,4 +1,4 @@
-package com.echo.pokepedia.ui.home
+package com.echo.pokepedia.ui.pokemon.home
 
 import android.os.Bundle
 import android.view.*

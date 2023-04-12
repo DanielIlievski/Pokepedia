@@ -1,4 +1,4 @@
-package com.echo.pokepedia.ui.home
+package com.echo.pokepedia.ui.pokemon.settings
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

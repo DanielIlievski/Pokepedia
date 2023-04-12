@@ -1,6 +1,6 @@
-package com.echo.pokepedia.domain.usecases
+package com.echo.pokepedia.domain.authentication.usecases
 
-import com.echo.pokepedia.domain.repository.AuthRepository
+import com.echo.pokepedia.domain.authentication.repository.AuthRepository
 import com.echo.pokepedia.util.NetworkResult
 import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject

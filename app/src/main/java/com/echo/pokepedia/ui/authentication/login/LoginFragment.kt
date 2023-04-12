@@ -1,4 +1,4 @@
-package com.echo.pokepedia.ui.login
+package com.echo.pokepedia.ui.authentication.login
 
 import android.app.Activity
 import android.os.Bundle
