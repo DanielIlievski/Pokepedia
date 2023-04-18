@@ -1,4 +1,4 @@
-package com.echo.pokepedia.domain.authentication.usecases
+package com.echo.pokepedia.domain.authentication.interactors
 
 import com.echo.pokepedia.domain.authentication.repository.AuthRepository
 import com.echo.pokepedia.util.NetworkResult

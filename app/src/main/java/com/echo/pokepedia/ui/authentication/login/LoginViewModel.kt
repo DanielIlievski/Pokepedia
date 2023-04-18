@@ -2,16 +2,16 @@ package com.echo.pokepedia.ui.authentication.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.echo.pokepedia.domain.authentication.usecases.FacebookSignInUserCase
-import com.echo.pokepedia.domain.authentication.usecases.GoogleSignInUserUseCase
-import com.echo.pokepedia.domain.authentication.usecases.LoginUserUseCase
-import com.echo.pokepedia.domain.authentication.usecases.ResetPasswordUseCase
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.facebook.AccessToken
+import com.echo.pokepedia.domain.authentication.interactors.FacebookSignInUserCase
+import com.echo.pokepedia.domain.authentication.interactors.GoogleSignInUserUseCase
+import com.echo.pokepedia.domain.authentication.interactors.LoginUserUseCase
+import com.echo.pokepedia.domain.authentication.interactors.ResetPasswordUseCase
+import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.isEmailFieldEmpty
 import com.echo.pokepedia.util.isPasswordFieldEmpty
+import com.facebook.AccessToken
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
-import com.echo.pokepedia.util.NetworkResult
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

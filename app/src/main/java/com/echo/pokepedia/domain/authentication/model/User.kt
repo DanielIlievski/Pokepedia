@@ -1,4 +1,4 @@
-package com.echo.pokepedia.data.model
+package com.echo.pokepedia.domain.authentication.model
 
 import java.util.*
 

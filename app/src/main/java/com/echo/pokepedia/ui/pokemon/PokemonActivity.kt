@@ -24,7 +24,6 @@ class PokemonActivity : BaseActivity() {
     }
 
     private fun initBottomNavigationView() {
-        supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment_home, HomeFragment()).commit()
         binding.bottomNavigationView.selectedItemId = R.id.home
 
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
@@ -35,7 +34,8 @@ class PokemonActivity : BaseActivity() {
                 R.id.settings -> selectedFragment = SettingsFragment()
             }
 
-            supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment_home, selectedFragment).commit()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_home, selectedFragment).commit()
             true
         }
     }
