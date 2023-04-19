@@ -10,11 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentHomeBinding
-import com.echo.pokepedia.domain.pokemon.Pokemon
-import com.echo.pokepedia.domain.pokemon.PokemonList
 import com.echo.pokepedia.ui.BaseFragment
-import com.echo.pokepedia.util.NetworkResult
-import com.echo.pokepedia.util.UiText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -61,6 +57,7 @@ class HomeFragment : BaseFragment() {
     private fun initObservers() {
         observePokemonList()
         observePokemonInfo()
+        observeErrorObservable()
     }
 
     private fun initListeners() {}
@@ -84,42 +81,22 @@ class HomeFragment : BaseFragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    // region observePokemonList
     private fun observePokemonList() = lifecycleScope.launch {
         viewModel.pokemonList.collect {result ->
-            when (result) {
-                is NetworkResult.Success -> onSuccessfulPokemonListFetch(result.result)
-                is NetworkResult.Failure -> onFailedPokemonListFetch(result.exception)
-            }
+            Log.d("HomeFragment", "PokemonList: $result")
         }
     }
 
-    private fun onSuccessfulPokemonListFetch(result: PokemonList) {
-        Log.d("HomeFragment", "onSuccessfulPokemonListFetch: $result")
-    }
-
-    private fun onFailedPokemonListFetch(exception: UiText?) {
-        Log.d("HomeFragment", "onFailedPokemonListFetch: ${exception!!.asString(requireContext())}")
-    }
-    // endregion
-
-    // region observePokemonInfo
     private fun observePokemonInfo() = lifecycleScope.launch {
         viewModel.pokemonInfo.collect {result ->
-            when (result) {
-                is NetworkResult.Success -> onSuccessfulPokemonInfoFetch(result.result)
-                is NetworkResult.Failure -> onFailedPokemonInfoFetch(result.exception)
-            }
+            Log.d("HomeFragment", "PokemonInfo: $result")
         }
     }
 
-    private fun onSuccessfulPokemonInfoFetch(result: Pokemon) {
-        Log.d("HomeFragment", "onSuccessfulPokemonInfoFetch: $result")
+    private fun observeErrorObservable() = lifecycleScope.launch {
+        viewModel.errorObservable.collect {exception ->
+            Log.d("HomeFragment", "Error: ${exception.asString(requireContext())}")
+        }
     }
-
-    private fun onFailedPokemonInfoFetch(exception: UiText?) {
-        Log.d("HomeFragment", "onFailedPokemonInfoFetch: ${exception!!.asString(requireContext())}")
-    }
-    // endregion
 
 }
