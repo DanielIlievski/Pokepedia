@@ -8,16 +8,16 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.echo.pokepedia.ui.home.HomeFragment"
-        android:label="Home"
+        android:label="@string/home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/myTeamFragment"
         android:name="com.echo.pokepedia.ui.home.MyTeamFragment"
-        android:label="My Team"
+        android:label="@string/my_team"
         tools:layout="@layout/fragment_my_team" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.echo.pokepedia.ui.home.SettingsFragment"
-        android:label="Settings"
+        android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>

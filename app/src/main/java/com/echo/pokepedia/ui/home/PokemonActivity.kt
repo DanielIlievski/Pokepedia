@@ -8,10 +8,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.ActivityHomeScreenBinding
 import com.echo.pokepedia.ui.BaseActivity
+import com.echo.pokepedia.util.appBarConfigDestinations
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeScreenActivity : BaseActivity() {
+class PokemonActivity : BaseActivity() {
 
     private lateinit var binding: ActivityHomeScreenBinding
 
@@ -29,13 +30,7 @@ class HomeScreenActivity : BaseActivity() {
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
 
-        val configuration = AppBarConfiguration(
-            setOf(
-                R.id.myTeamFragment,
-                R.id.homeFragment,
-                R.id.settingsFragment
-            )
-        )
+        val configuration = AppBarConfiguration(appBarConfigDestinations)
         setupActionBarWithNavController(navController, configuration)
     }
 }
