@@ -1,9 +1,9 @@
 package com.echo.pokepedia.data.repository
 
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
-import com.echo.pokepedia.domain.pokemon.Pokemon
-import com.echo.pokepedia.domain.pokemon.PokemonList
-import com.echo.pokepedia.domain.pokemon.model.network.PokemonDTO
+import com.echo.pokepedia.domain.pokemon.model.PokemonDetails
+import com.echo.pokepedia.domain.pokemon.model.PokemonList
+import com.echo.pokepedia.domain.pokemon.model.network.PokemonDetailsDTO
 import com.echo.pokepedia.domain.pokemon.model.network.PokemonListDTO
 import com.echo.pokepedia.domain.pokemon.repository.PokemonRepository
 import com.echo.pokepedia.util.NetworkResult
@@ -28,7 +28,7 @@ class PokemonRepositoryImpl @Inject constructor(
 
     override suspend fun getPokemonInfoFromApi(
         name: String
-    ): NetworkResult<Pokemon> {
+    ): NetworkResult<PokemonDetails> {
         val pokemonResult = remotePokemonDataSource.getPokemonInfo(name)
 
         return when (pokemonResult) {
@@ -49,7 +49,7 @@ class PokemonRepositoryImpl @Inject constructor(
         return NetworkResult.Failure(exception)
     }
 
-    private fun onSuccessfulPokemonFetch(result: PokemonDTO?): NetworkResult<Pokemon> {
+    private fun onSuccessfulPokemonFetch(result: PokemonDetailsDTO?): NetworkResult<PokemonDetails> {
         return NetworkResult.Success(result!!.toPokemon())
     }
 }

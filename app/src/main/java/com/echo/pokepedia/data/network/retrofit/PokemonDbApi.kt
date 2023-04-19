@@ -1,6 +1,6 @@
 package com.echo.pokepedia.data.network.retrofit
 
-import com.echo.pokepedia.domain.pokemon.model.network.PokemonDTO
+import com.echo.pokepedia.domain.pokemon.model.network.PokemonDetailsDTO
 import com.echo.pokepedia.domain.pokemon.model.network.PokemonListDTO
 import retrofit2.Response
 import retrofit2.http.GET
@@ -18,5 +18,5 @@ interface PokemonDbApi {
     @GET("pokemon/{name}")
     suspend fun getPokemonInfo(
         @Path("name") name: String
-    ): Response<PokemonDTO>
+    ): Response<PokemonDetailsDTO>
 }

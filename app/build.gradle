@@ -87,6 +87,12 @@ dependencies {
     // Chucker
     debugImplementation Chucker.chuckerDebugImplementation
     releaseImplementation Chucker.chuckerReleaseImplementation
+
+    // Glide
+    implementation Glide.glide
+
+    // Palette
+    implementation 'androidx.palette:palette-ktx:1.0.0'
 }
 
 kapt {

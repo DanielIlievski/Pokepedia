@@ -2,7 +2,7 @@ package com.echo.pokepedia.data.network.retrofit
 
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
-import com.echo.pokepedia.domain.pokemon.model.network.PokemonDTO
+import com.echo.pokepedia.domain.pokemon.model.network.PokemonDetailsDTO
 import com.echo.pokepedia.domain.pokemon.model.network.PokemonListDTO
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.UiText
@@ -25,7 +25,7 @@ class RetrofitPokemonDataSource @Inject constructor(
         }
     }
 
-    override suspend fun getPokemonInfo(name: String): NetworkResult<PokemonDTO> {
+    override suspend fun getPokemonInfo(name: String): NetworkResult<PokemonDetailsDTO> {
         return try {
             val pokemon = pokemonDbApi.getPokemonInfo(name)
 

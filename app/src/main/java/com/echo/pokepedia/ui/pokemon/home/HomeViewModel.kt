@@ -1,11 +1,12 @@
 package com.echo.pokepedia.ui.pokemon.home
 
+//import android.support.v7.graphics.Palette
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.echo.pokepedia.domain.pokemon.Pokemon
-import com.echo.pokepedia.domain.pokemon.PokemonList
 import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonInfoFromApiUserCase
 import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonListFromApiUserCase
+import com.echo.pokepedia.domain.pokemon.model.PokemonDetails
+import com.echo.pokepedia.domain.pokemon.model.PokemonList
 import com.echo.pokepedia.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,10 +24,10 @@ class HomeViewModel @Inject constructor(
     )
     val pokemonList: StateFlow<NetworkResult<PokemonList>> get() = _pokemonList
 
-    private var _pokemonInfo = MutableStateFlow<NetworkResult<Pokemon>>(
-        NetworkResult.Success(Pokemon())
+    private var _pokemonDetailsInfo = MutableStateFlow<NetworkResult<PokemonDetails>>(
+        NetworkResult.Success(PokemonDetails())
     )
-    val pokemonInfo: StateFlow<NetworkResult<Pokemon>> get() = _pokemonInfo
+    val pokemonDetailsInfo: StateFlow<NetworkResult<PokemonDetails>> get() = _pokemonDetailsInfo
 
     fun getPokemonList(limit: Int, offset: Int) = viewModelScope.launch {
         val response = getPokemonListFromApiUserCase.invoke(limit, offset)
@@ -35,7 +36,7 @@ class HomeViewModel @Inject constructor(
 
     fun getPokemonInfo(name: String) = viewModelScope.launch {
         val response = getPokemonInfoFromApiUserCase.invoke(name)
-        _pokemonInfo.value = response
+        _pokemonDetailsInfo.value = response
     }
 
 }
