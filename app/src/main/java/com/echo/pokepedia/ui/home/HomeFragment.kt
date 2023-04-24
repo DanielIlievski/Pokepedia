@@ -1,13 +1,17 @@
 package com.echo.pokepedia.ui.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
+import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentHomeBinding
+import com.echo.pokepedia.ui.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-class HomeFragment : Fragment() {
+@AndroidEntryPoint
+class HomeFragment : BaseFragment() {
 
     // region fragment variables
     private var _binding: FragmentHomeBinding? = null
@@ -30,6 +34,8 @@ class HomeFragment : Fragment() {
         initObservers()
 
         initListeners()
+
+        initOptionsMenu()
     }
 
     override fun onDestroyView() {
@@ -41,4 +47,23 @@ class HomeFragment : Fragment() {
     private fun initObservers() {}
 
     private fun initListeners() {}
+
+    private fun initOptionsMenu() {
+        val menuHost: MenuHost = requireActivity()
+
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_fragment_home, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.search -> {
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
 }

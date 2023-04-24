@@ -4,14 +4,13 @@ import com.echo.pokepedia.R
 import com.echo.pokepedia.data.model.User
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.domain.repository.AuthRepository
-import com.echo.pokepedia.util.ResourceProvider
 import com.facebook.AccessToken
 import com.echo.pokepedia.util.USERS_COLLECTION
+import com.echo.pokepedia.util.UiText
 import com.google.firebase.firestore.CollectionReference
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -22,7 +21,6 @@ import javax.inject.Named
 
 class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val resourceProvider: ResourceProvider,
     @Named(USERS_COLLECTION) private val users: CollectionReference,
     private val coroutineScope: CoroutineScope
 ) : AuthRepository {
@@ -32,7 +30,7 @@ class AuthRepositoryImpl @Inject constructor(
             NetworkResult.Success(firebaseAuth.currentUser)
         } catch (e: Exception) {
             e.printStackTrace()
-            NetworkResult.Failure(e)
+            NetworkResult.Failure(UiText.DynamicString(e.localizedMessage))
         }
     }
 
@@ -43,14 +41,14 @@ class AuthRepositoryImpl @Inject constructor(
                 if (result.user!!.isEmailVerified) {
                     NetworkResult.Success(result.user!!)
                 } else {
-                    NetworkResult.Failure(Exception(resourceProvider.fetchString(R.string.verify_email)))
+                    NetworkResult.Failure(UiText.StringResource(R.string.verify_email))
                 }
             } else {
-                NetworkResult.Failure(Exception("User is null"))
+                NetworkResult.Failure(UiText.StringResource(R.string.user_is_null))
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            NetworkResult.Failure(e)
+            NetworkResult.Failure(UiText.DynamicString(e.localizedMessage))
         }
     }
 
@@ -70,10 +68,10 @@ class AuthRepositoryImpl @Inject constructor(
                     }.await()
                 NetworkResult.Success(result.user)
             } else {
-                NetworkResult.Failure(Exception("Google sign in failed"))
+                NetworkResult.Failure(UiText.StringResource(R.string.failed_google_sign))
             }
         } catch (e: Exception) {
-            NetworkResult.Failure(e)
+            NetworkResult.Failure(UiText.DynamicString(e.localizedMessage))
         }
     }
 
@@ -93,7 +91,7 @@ class AuthRepositoryImpl @Inject constructor(
             NetworkResult.Success(result.user)
         } catch (e: Exception) {
             e.printStackTrace()
-            NetworkResult.Failure(e)
+            NetworkResult.Failure(UiText.DynamicString(e.localizedMessage))
         }
     }
 
@@ -111,11 +109,11 @@ class AuthRepositoryImpl @Inject constructor(
                 addUserToFirestore(user)
                 NetworkResult.Success(user)
             } else {
-                NetworkResult.Failure(Exception("User is null"))
+                NetworkResult.Failure(UiText.StringResource(R.string.user_is_null))
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            NetworkResult.Failure(e)
+            NetworkResult.Failure(UiText.DynamicString(e.localizedMessage))
         }
     }
 
@@ -131,14 +129,14 @@ class AuthRepositoryImpl @Inject constructor(
                 if (result.isSuccessful) {
                     NetworkResult.Success(true)
                 } else {
-                    NetworkResult.Failure(Exception("Password reset failed"))
+                    NetworkResult.Failure(UiText.StringResource(R.string.failed_password_reset))
                 }
             } else {
-                NetworkResult.Failure(Exception("Your provider is not email/password"))
+                NetworkResult.Failure(UiText.StringResource(R.string.incorrect_provider))
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            NetworkResult.Failure(e)
+            NetworkResult.Failure(UiText.DynamicString(e.localizedMessage))
         }
     }
 
@@ -147,7 +145,7 @@ class AuthRepositoryImpl @Inject constructor(
             firebaseAuth.signOut()
             NetworkResult.Success(true)
         } catch (e: Exception) {
-            NetworkResult.Failure(e)
+            NetworkResult.Failure(UiText.DynamicString(e.localizedMessage))
         }
     }
 

@@ -27,7 +27,16 @@
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="forgot_password">Forgot password</string>
     <string name="verify_email">Please verify your email before you login!</string>
+    <string name="user_is_null">User is null</string>
+    <string name="failed_google_sign">Google sign in failed</string>
+    <string name="incorrect_provider">Your provider is not email/password</string>
+    <string name="failed_password_reset">Password reset failed</string>
+    <string name="password_reset_successful">Password reset link sent successfully</string>
     <string name="sign_in_successful">%1$s, sign in was successful!</string>
+    <string name="enter_email_for_password_reset">Enter your email address to get a password reset link.</string>
+    <string name="trouble_logging_in">Having trouble logging in?</string>
+    <string name="send">Send</string>
+    <string name="cancel">Cancel</string>
     <!-- endregion -->
 
     <!-- region RegisterFragment -->
@@ -49,10 +58,19 @@
     <string name="facebook_app_id">786544306138666</string>
     <string name="fb_login_protocol_scheme">fb786544306138666</string>
     <string name="facebook_client_token">2e15e5fe4d6d85e44c4b191af682a077</string>
-    <string name="enter_email_for_password_reset">Enter your email address to get a password reset link.</string>
-    <string name="trouble_logging_in">Having trouble logging in?</string>
-    <string name="send">Send</string>
-    <string name="cancel">Cancel</string>
+    <!-- endregion -->
+
+    <!-- region MyTeamFragment -->
+    <string name="my_team">My Team</string>
+    <!-- endregion -->
+
+    <!-- region HomeFragment -->
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <!-- endregion -->
+
+    <!-- region SettingsFragment -->
+    <string name="settings">Settings</string>
     <!-- endregion -->
 
 </resources>

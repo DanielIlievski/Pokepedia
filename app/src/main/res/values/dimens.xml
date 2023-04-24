@@ -72,8 +72,10 @@
     <dimen name="buddy_pokemon_container_height">250dp</dimen>
     <dimen name="buddy_pokemon_image_height">200dp</dimen>
     <dimen name="expand_collapse_decoration_height">30dp</dimen>
+    <dimen name="img_pokemon_height">140dp</dimen>
     <dimen name="img_pokemon_collapsed_height">70dp</dimen>
     <dimen name="buddy_pokemon_container_collapsed_height">110dp</dimen>
+    <dimen name="bottom_navigation_view_height">60dp</dimen>
     <!-- endregion -->
 
     <!-- region width -->

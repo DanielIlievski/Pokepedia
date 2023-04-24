@@ -11,6 +11,7 @@
     <color name="cream">#FBFAD4</color>
     <color name="cream_variant">#F4F188</color>
     <color name="blue_pokemon">#FF2755A8</color>
+    <color name="blue_pokemon_translucent">#C62755A8</color>
     <color name="blue_pokemon_variant">#1F4387</color>
     <color name="yellow_pokemon">#FFD73E</color>
     <color name="transparent">#00000000</color>

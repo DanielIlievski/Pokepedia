@@ -47,7 +47,7 @@
 
     <activity
         android:id="@+id/homeScreenActivity"
-        android:name="com.echo.pokepedia.ui.home.HomeScreenActivity"
+        android:name="com.echo.pokepedia.ui.home.PokemonActivity"
         android:label="activity_home_screen"
         tools:layout="@layout/activity_home_screen" />
 
