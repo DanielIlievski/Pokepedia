@@ -9,7 +9,6 @@ import com.echo.pokepedia.domain.pokemon.model.Pokemon
 import com.echo.pokepedia.domain.pokemon.model.PokemonDetails
 import com.echo.pokepedia.ui.BaseViewModel
 import com.echo.pokepedia.util.NetworkResult
-import com.echo.pokepedia.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -31,32 +30,11 @@ class HomeViewModel @Inject constructor(
 
     private var _pokemonDetailsInfo = MutableStateFlow<PokemonDetails>(PokemonDetails())
     val pokemonDetailsInfo: StateFlow<PokemonDetails> get() = _pokemonDetailsInfo
-
-    private var _errorObservable  = MutableStateFlow<UiText>(UiText.DynamicString())
-    val errorObservable : StateFlow<UiText> get() = _errorObservable
-
-    private var currPage = 0
-
-    private var _endReached = MutableStateFlow<Boolean>(false)
-    val endReached: StateFlow<Boolean> get() = _endReached
     // endregion
 
     init {
         getPokemonListPaginated()
     }
-
-//    fun getPokemonListPaginated() = viewModelScope.launch {
-//        val response = getPokemonListFromApiUserCase.invoke(PAGE_SIZE, currPage * PAGE_SIZE)
-//        when (response) {
-//            is NetworkResult.Success -> {
-//                _endReached.value = currPage * PAGE_SIZE >= response.result.count!!
-//                currPage++
-//                _pokemonList.value += response.result.pokemonList!!
-//                Log.d("HelloWorld", "getPokemonListPaginated: ${_pokemonList.value.size}")
-//            }
-//            is NetworkResult.Failure -> _errorObservable.value = response.exception!!
-//        }
-//    }
 
     fun getPokemonListPaginated() {
         viewModelScope.launch(Dispatchers.IO) {

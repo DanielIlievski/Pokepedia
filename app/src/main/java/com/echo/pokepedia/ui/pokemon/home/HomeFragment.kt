@@ -58,7 +58,6 @@ class HomeFragment : BaseFragment() {
     private fun initObservers() {
         observePokemonList()
         observePokemonInfo()
-        observeErrorObservable()
     }
 
     private fun initUI() {
@@ -111,28 +110,5 @@ class HomeFragment : BaseFragment() {
             Log.d("HomeFragment", "onSuccessfulPokemonInfoFetch: $result")
         }
     }
-
-    private fun observeErrorObservable() = lifecycleScope.launch {
-        viewModel.errorObservable.collect {exception ->
-            showToastMessageLong(exception.asString(requireContext()))
-            Log.d("HomeFragment", "Error: ${exception.asString(requireContext())}")
-        }
-    }
-    // endregion
-
-    // region initListeners
-//    private fun onRecyclerBottomReachedListener() {
-//        adapter?.setOnBottomReachedListener(object : OnBottomReachedListener {
-//            override fun onBottomReached(position: Int) {
-//                lifecycleScope.launch {
-//                    viewModel.endReached.collect { endReached ->
-//                        if (!endReached) {
-//                            viewModel.getPokemonListPaginated()
-//                        }
-//                    }
-//                }
-//            }
-//        })
-//    }
     // endregion
 }

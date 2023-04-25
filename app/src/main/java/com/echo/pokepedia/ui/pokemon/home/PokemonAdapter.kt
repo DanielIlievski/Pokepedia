@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.echo.pokepedia.OnBottomReachedListener
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.ListItemPokemonBinding
 import com.echo.pokepedia.domain.pokemon.model.Pokemon
@@ -20,12 +19,6 @@ import com.echo.pokepedia.util.loadImageFromUrlAndCalculateDominantColorGradient
 class PokemonAdapter(
     private val onItemClicked: (Pokemon) -> Unit
 ) : PagingDataAdapter<Pokemon, PokemonAdapter.PokemonViewHolder>(DiffCallback) {
-
-    private lateinit var onBottomReachedListener: OnBottomReachedListener
-
-    fun setOnBottomReachedListener(onBottomReachedListener: OnBottomReachedListener) {
-        this.onBottomReachedListener = onBottomReachedListener
-    }
 
     inner class PokemonViewHolder(private val binding: ListItemPokemonBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -102,10 +95,6 @@ class PokemonAdapter(
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         val currentPokemon = getItem(position)
         currentPokemon?.let { holder.bind(it) }
-
-//        if (position == itemCount - 7) {
-//            onBottomReachedListener.onBottomReached(position)
-//        }
     }
 
     companion object {
