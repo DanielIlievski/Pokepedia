@@ -4,9 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.echo.pokepedia.data.model.IntroScreen
-import com.echo.pokepedia.data.model.getIntroScreens
 import com.echo.pokepedia.databinding.ItemViewPagerBinding
+import com.echo.pokepedia.domain.authentication.model.IntroScreen
+import com.echo.pokepedia.domain.authentication.model.getIntroScreens
 
 class IntroScreensAdapter() : RecyclerView.Adapter<IntroScreensAdapter.ViewPagerViewHolder>() {
 

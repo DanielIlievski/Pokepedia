@@ -13,7 +13,7 @@
 
         <action
             android:id="@+id/viewPagerFragment_to_loginActivity"
-            app:destination="@id/loginActivity"
+            app:destination="@id/authActivity"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
             app:popUpTo="@id/viewPagerFragment"
@@ -21,8 +21,8 @@
     </fragment>
 
     <activity
-        android:id="@+id/loginActivity"
-        android:name="com.echo.pokepedia.ui.login.LoginActivity"
+        android:id="@+id/authActivity"
+        android:name="com.echo.pokepedia.ui.authentication.AuthActivity"
         android:label="activity_login"
-        tools:layout="@layout/activity_login" />
+        tools:layout="@layout/activity_auth" />
 </navigation>

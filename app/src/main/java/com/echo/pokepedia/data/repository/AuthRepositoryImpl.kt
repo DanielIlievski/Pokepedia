@@ -1,17 +1,17 @@
 package com.echo.pokepedia.data.repository
 
 import com.echo.pokepedia.R
-import com.echo.pokepedia.data.model.User
+import com.echo.pokepedia.domain.authentication.model.User
+import com.echo.pokepedia.domain.authentication.repository.AuthRepository
 import com.echo.pokepedia.util.NetworkResult
-import com.echo.pokepedia.domain.repository.AuthRepository
-import com.facebook.AccessToken
 import com.echo.pokepedia.util.USERS_COLLECTION
 import com.echo.pokepedia.util.UiText
-import com.google.firebase.firestore.CollectionReference
+import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
+import com.google.firebase.firestore.CollectionReference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await

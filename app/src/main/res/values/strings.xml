@@ -67,6 +67,7 @@
     <!-- region HomeFragment -->
     <string name="home">Home</string>
     <string name="search">Search</string>
+    <string name="fetch_unsuccessful">Fetch unsuccessful</string>
     <!-- endregion -->
 
     <!-- region SettingsFragment -->
