@@ -1,6 +1,5 @@
 package com.echo.pokepedia.ui.pokemon.home
 
-//import android.support.v7.graphics.Palette
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -10,6 +9,7 @@ import com.echo.pokepedia.domain.pokemon.model.Pokemon
 import com.echo.pokepedia.domain.pokemon.model.PokemonDetails
 import com.echo.pokepedia.ui.BaseViewModel
 import com.echo.pokepedia.util.NetworkResult
+import com.echo.pokepedia.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,9 +29,11 @@ class HomeViewModel @Inject constructor(
     private var _pokemonList = MutableSharedFlow<PagingData<Pokemon>>(replay = 0)
     val pokemonList: SharedFlow<PagingData<Pokemon>> get() = _pokemonList
 
-
     private var _pokemonDetailsInfo = MutableStateFlow<PokemonDetails>(PokemonDetails())
     val pokemonDetailsInfo: StateFlow<PokemonDetails> get() = _pokemonDetailsInfo
+
+    private var _errorObservable  = MutableStateFlow<UiText>(UiText.DynamicString())
+    val errorObservable : StateFlow<UiText> get() = _errorObservable
 
     private var currPage = 0
 

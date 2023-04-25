@@ -1,17 +1,18 @@
 package com.echo.pokepedia.ui.pokemon
 
 import android.os.Bundle
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.ActivityPokemonBinding
 import com.echo.pokepedia.ui.BaseActivity
+import com.echo.pokepedia.util.appBarConfigDestinations
 import com.echo.pokepedia.ui.BaseViewModel
-import com.echo.pokepedia.ui.pokemon.home.HomeFragment
-import com.echo.pokepedia.ui.pokemon.myteam.MyTeamFragment
-import com.echo.pokepedia.ui.pokemon.settings.SettingsFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -33,20 +34,13 @@ class PokemonActivity : BaseActivity() {
     }
 
     private fun initBottomNavigationView() {
-        binding.bottomNavigationView.selectedItemId = R.id.home
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_home) as NavHostFragment
+        val navController = navHostFragment.navController
+        binding.bottomNavigationView.setupWithNavController(navController)
 
-        binding.bottomNavigationView.setOnItemSelectedListener { item ->
-            lateinit var selectedFragment: Fragment
-            when (item.itemId) {
-                R.id.pokeball -> selectedFragment = MyTeamFragment()
-                R.id.home -> selectedFragment = HomeFragment()
-                R.id.settings -> selectedFragment = SettingsFragment()
-            }
-
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_home, selectedFragment).commit()
-            true
-        }
+        val configuration = AppBarConfiguration(appBarConfigDestinations)
+        setupActionBarWithNavController(navController, configuration)
     }
 
     private fun initObservers() {

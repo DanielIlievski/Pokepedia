@@ -3,7 +3,6 @@ package com.echo.pokepedia.ui.pokemon.home
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
@@ -59,6 +58,7 @@ class HomeFragment : BaseFragment() {
     private fun initObservers() {
         observePokemonList()
         observePokemonInfo()
+        observeErrorObservable()
     }
 
     private fun initUI() {
@@ -92,7 +92,7 @@ class HomeFragment : BaseFragment() {
 
     private fun setPokemonAdapter() {
         adapter = PokemonAdapter {pokemon ->
-            showToastMessage(pokemon.name, Toast.LENGTH_SHORT)
+            showToastMessageShort(pokemon.name)
         }
         binding.pokemonRecyclerView.adapter = adapter
     }
@@ -109,6 +109,13 @@ class HomeFragment : BaseFragment() {
     private fun observePokemonInfo() = lifecycleScope.launch {
         viewModel.pokemonDetailsInfo.collect { result ->
             Log.d("HomeFragment", "onSuccessfulPokemonInfoFetch: $result")
+        }
+    }
+
+    private fun observeErrorObservable() = lifecycleScope.launch {
+        viewModel.errorObservable.collect {exception ->
+            showToastMessageLong(exception.asString(requireContext()))
+            Log.d("HomeFragment", "Error: ${exception.asString(requireContext())}")
         }
     }
     // endregion

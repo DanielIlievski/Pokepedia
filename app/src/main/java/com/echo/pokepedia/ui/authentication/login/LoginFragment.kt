@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -136,13 +135,13 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     }
 
     private fun onSuccessfulLogin(user: FirebaseUser?) {
-        showToastMessage(getString(R.string.sign_in_successful, user?.displayName), Toast.LENGTH_SHORT)
+        showToastMessageShort(getString(R.string.sign_in_successful, user?.displayName))
 
         navigateToHomeScreen()
     }
 
     private fun onFailedLogin(e: UiText?) {
-        showToastMessage(e?.asString(requireContext()), Toast.LENGTH_LONG)
+        showToastMessageLong(e?.asString(requireContext()))
     }
     // endregion
 
@@ -157,11 +156,11 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     }
 
     private fun onSuccessfulPasswordReset() {
-        showToastMessage(getString(R.string.password_reset_successful), Toast.LENGTH_SHORT)
+        showToastMessageShort(getString(R.string.password_reset_successful))
     }
 
     private fun onFailedPasswordReset(e: UiText?) {
-        showToastMessage(e?.asString(requireContext()), Toast.LENGTH_LONG)
+        showToastMessageLong(e?.asString(requireContext()))
     }
     // endregion
     // endregion

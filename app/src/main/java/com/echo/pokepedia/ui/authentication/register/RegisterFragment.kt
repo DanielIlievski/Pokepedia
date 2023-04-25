@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -149,14 +148,14 @@ class RegisterFragment : BaseFragment() {
     }
 
     private fun onSuccessfulRegistration() {
-        showToastMessage(getString(R.string.successful_registration), Toast.LENGTH_LONG)
+        showToastMessageShort(getString(R.string.successful_registration))
 
         val action = RegisterFragmentDirections.registerFragmentToLoginFragment()
         findNavController().navigate(action)
     }
 
     private fun onFailedRegistration(e: UiText?) {
-        showToastMessage(e?.asString(requireContext()), Toast.LENGTH_LONG)
+        showToastMessageLong(e?.asString(requireContext()))
     }
     // endregion
     // endregion
