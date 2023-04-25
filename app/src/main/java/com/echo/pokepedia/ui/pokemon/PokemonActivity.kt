@@ -1,13 +1,14 @@
 package com.echo.pokepedia.ui.pokemon
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.ActivityPokemonBinding
 import com.echo.pokepedia.ui.BaseActivity
-import com.echo.pokepedia.ui.pokemon.home.HomeFragment
-import com.echo.pokepedia.ui.pokemon.myteam.MyTeamFragment
-import com.echo.pokepedia.ui.pokemon.settings.SettingsFragment
+import com.echo.pokepedia.util.appBarConfigDestinations
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,19 +25,12 @@ class PokemonActivity : BaseActivity() {
     }
 
     private fun initBottomNavigationView() {
-        binding.bottomNavigationView.selectedItemId = R.id.home
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_home) as NavHostFragment
+        val navController = navHostFragment.navController
+        binding.bottomNavigationView.setupWithNavController(navController)
 
-        binding.bottomNavigationView.setOnItemSelectedListener { item ->
-            lateinit var selectedFragment: Fragment
-            when (item.itemId) {
-                R.id.pokeball -> selectedFragment = MyTeamFragment()
-                R.id.home -> selectedFragment = HomeFragment()
-                R.id.settings -> selectedFragment = SettingsFragment()
-            }
-
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_home, selectedFragment).commit()
-            true
-        }
+        val configuration = AppBarConfiguration(appBarConfigDestinations)
+        setupActionBarWithNavController(navController, configuration)
     }
 }
