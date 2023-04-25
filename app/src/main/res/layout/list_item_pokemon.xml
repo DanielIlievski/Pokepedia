@@ -34,12 +34,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_padding_normal"
                 android:gravity="center"
+                android:maxLines="1"
                 android:paddingBottom="@dimen/margin_padding_normal"
+                android:autoSizeTextType="uniform"
                 android:textSize="@dimen/text_size_xmedium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imgPokemon"
-                tools:text="Pikachu" />
+                android:layout_marginHorizontal="@dimen/margin_padding_xsmall"
+                tools:text="Pikachu"
+                tools:targetApi="o" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

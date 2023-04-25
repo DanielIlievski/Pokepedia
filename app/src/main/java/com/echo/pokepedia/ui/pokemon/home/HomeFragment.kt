@@ -9,13 +9,10 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import com.echo.pokepedia.OnBottomReachedListener
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentHomeBinding
-import com.echo.pokepedia.domain.pokemon.model.PokemonDetails
-import com.echo.pokepedia.domain.pokemon.model.PokemonList
 import com.echo.pokepedia.ui.BaseFragment
-import com.echo.pokepedia.util.NetworkResult
-import com.echo.pokepedia.util.UiText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -67,10 +64,11 @@ class HomeFragment : BaseFragment() {
     private fun initUI() {
         initOptionsMenu()
         setPokemonAdapter()
-        fetchPokemonList()
     }
 
-    private fun initListeners() {}
+    private fun initListeners() {
+        onRecyclerBottomReachedListener()
+    }
 
     // region initUI
     private fun initOptionsMenu() {
@@ -98,52 +96,36 @@ class HomeFragment : BaseFragment() {
         }
         binding.pokemonRecyclerView.adapter = adapter
     }
-
-    private fun fetchPokemonList() {
-        viewModel.getPokemonList(20, 20)
-    }
     // endregion
 
     // region initObservers
 
-    // region observePokemonList
     private fun observePokemonList() = lifecycleScope.launch {
-        viewModel.pokemonList.collect {result ->
-            when (result) {
-                is NetworkResult.Success -> onSuccessfulPokemonListFetch(result.result)
-                is NetworkResult.Failure -> onFailedPokemonListFetch(result.exception)
-            }
+        viewModel.pokemonList.collect { result ->
+            adapter?.submitList(result.toMutableList())
         }
     }
 
-    private fun onSuccessfulPokemonListFetch(result: PokemonList) {
-        Log.d("HomeFragment", "onSuccessfulPokemonListFetch: $result")
-        adapter?.submitList(result.pokemonList?.toMutableList())
-    }
-
-    private fun onFailedPokemonListFetch(exception: UiText?) {
-        Log.d("HomeFragment", "onFailedPokemonListFetch: ${exception!!.asString(requireContext())}")
-    }
-    // endregion
-
-    // region observePokemonInfo
     private fun observePokemonInfo() = lifecycleScope.launch {
         viewModel.pokemonDetailsInfo.collect { result ->
-            when (result) {
-                is NetworkResult.Success -> onSuccessfulPokemonInfoFetch(result.result)
-                is NetworkResult.Failure -> onFailedPokemonInfoFetch(result.exception)
-            }
+            Log.d("HomeFragment", "onSuccessfulPokemonInfoFetch: $result")
         }
     }
-
-    private fun onSuccessfulPokemonInfoFetch(result: PokemonDetails) {
-        Log.d("HomeFragment", "onSuccessfulPokemonInfoFetch: $result")
-    }
-
-    private fun onFailedPokemonInfoFetch(exception: UiText?) {
-        Log.d("HomeFragment", "onFailedPokemonInfoFetch: ${exception!!.asString(requireContext())}")
-    }
-    // endregion
     // endregion
 
+    // region initListeners
+    private fun onRecyclerBottomReachedListener() {
+        adapter?.setOnBottomReachedListener(object : OnBottomReachedListener {
+            override fun onBottomReached(position: Int) {
+                lifecycleScope.launch {
+                    viewModel.endReached.collect { endReached ->
+                        if (!endReached) {
+                            viewModel.getPokemonListPaginated()
+                        }
+                    }
+                }
+            }
+        })
+    }
+    // endregion
 }

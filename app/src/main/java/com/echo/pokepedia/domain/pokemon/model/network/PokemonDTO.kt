@@ -12,7 +12,7 @@ data class PokemonDTO(
         } else {
             url.takeLastWhile { it.isDigit() }
         }
-        val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${number}.png"
+        val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${number}.png"
         return Pokemon(name, imageUrl)
     }
 }
