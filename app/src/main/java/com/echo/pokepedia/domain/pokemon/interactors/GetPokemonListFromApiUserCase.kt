@@ -1,15 +1,16 @@
 package com.echo.pokepedia.domain.pokemon.interactors
 
-import com.echo.pokepedia.domain.pokemon.model.PokemonList
+import androidx.paging.PagingData
+import com.echo.pokepedia.domain.pokemon.model.Pokemon
 import com.echo.pokepedia.domain.pokemon.repository.PokemonRepository
-import com.echo.pokepedia.util.NetworkResult
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetPokemonListFromApiUserCase @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) {
 
-    suspend operator fun invoke(limit: Int, offset: Int): NetworkResult<PokemonList> {
-        return pokemonRepository.getPokemonListFromApi(limit, offset)
+    suspend operator fun invoke(): Flow<PagingData<Pokemon>> {
+        return pokemonRepository.getPokemonList()
     }
 }

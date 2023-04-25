@@ -9,11 +9,11 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import com.echo.pokepedia.OnBottomReachedListener
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentHomeBinding
 import com.echo.pokepedia.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -67,7 +67,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun initListeners() {
-        onRecyclerBottomReachedListener()
+//        onRecyclerBottomReachedListener()
     }
 
     // region initUI
@@ -101,8 +101,8 @@ class HomeFragment : BaseFragment() {
     // region initObservers
 
     private fun observePokemonList() = lifecycleScope.launch {
-        viewModel.pokemonList.collect { result ->
-            adapter?.submitList(result.toMutableList())
+        viewModel.pokemonList.collectLatest { result ->
+            adapter?.submitData(result)
         }
     }
 
@@ -114,18 +114,18 @@ class HomeFragment : BaseFragment() {
     // endregion
 
     // region initListeners
-    private fun onRecyclerBottomReachedListener() {
-        adapter?.setOnBottomReachedListener(object : OnBottomReachedListener {
-            override fun onBottomReached(position: Int) {
-                lifecycleScope.launch {
-                    viewModel.endReached.collect { endReached ->
-                        if (!endReached) {
-                            viewModel.getPokemonListPaginated()
-                        }
-                    }
-                }
-            }
-        })
-    }
+//    private fun onRecyclerBottomReachedListener() {
+//        adapter?.setOnBottomReachedListener(object : OnBottomReachedListener {
+//            override fun onBottomReached(position: Int) {
+//                lifecycleScope.launch {
+//                    viewModel.endReached.collect { endReached ->
+//                        if (!endReached) {
+//                            viewModel.getPokemonListPaginated()
+//                        }
+//                    }
+//                }
+//            }
+//        })
+//    }
     // endregion
 }

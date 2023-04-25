@@ -1,14 +1,12 @@
 package com.echo.pokepedia.ui.pokemon.home
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -21,7 +19,7 @@ import com.echo.pokepedia.util.loadImageFromUrlAndCalculateDominantColorGradient
 
 class PokemonAdapter(
     private val onItemClicked: (Pokemon) -> Unit
-) : ListAdapter<Pokemon, PokemonAdapter.PokemonViewHolder>(DiffCallback) {
+) : PagingDataAdapter<Pokemon, PokemonAdapter.PokemonViewHolder>(DiffCallback) {
 
     private lateinit var onBottomReachedListener: OnBottomReachedListener
 
@@ -36,12 +34,16 @@ class PokemonAdapter(
             binding.textPokemonName.text = pokemon.name?.replaceFirstChar { it.uppercase() }
             // calculate the dominant color the first time the item is shown and update the model
             if (pokemon.dominantColor == null) {
-                Log.d("HelloWorld", "bind: unknown dominant color")
                 Glide.with(binding.root.context)
                     .load(pokemon.url)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.progress_spinner_anim)
-                    .error(AppCompatResources.getDrawable(binding.root.context, R.drawable.image_not_available))
+                    .error(
+                        AppCompatResources.getDrawable(
+                            binding.root.context,
+                            R.drawable.image_not_available
+                        )
+                    )
                     .into(binding.imgPokemon)
                 binding.imgPokemon.loadImageFromUrlAndCalculateDominantColorGradient(
                     binding.root.context,
@@ -54,7 +56,6 @@ class PokemonAdapter(
                     pokemon.dominantColor = dominantColor
                     gradientDrawable.cornerRadius =
                         binding.root.context.resources.getDimension(R.dimen.radius_medium)
-                    binding.cardPokemon.setCardBackgroundColor(ColorStateList.valueOf(Color.TRANSPARENT))
                     binding.cardPokemon.background = gradientDrawable
                 }
             }
@@ -64,12 +65,22 @@ class PokemonAdapter(
                 Glide.with(binding.root)
                     .load(pokemon.url)
                     .placeholder(R.drawable.progress_spinner_anim)
-                    .error(AppCompatResources.getDrawable(binding.root.context, R.drawable.image_not_available))
+                    .error(
+                        AppCompatResources.getDrawable(
+                            binding.root.context,
+                            R.drawable.image_not_available
+                        )
+                    )
                     .into(binding.imgPokemon)
                 val gradientDrawable = GradientDrawable(
                     GradientDrawable.Orientation.TOP_BOTTOM,
-                    intArrayOf(pokemon.dominantColor!!, binding.root.context.getColorRes(R.color.white))
+                    intArrayOf(
+                        pokemon.dominantColor!!,
+                        binding.root.context.getColorRes(R.color.white)
+                    )
                 )
+                gradientDrawable.cornerRadius =
+                    binding.root.context.resources.getDimension(R.dimen.radius_medium)
                 binding.cardPokemon.background = gradientDrawable
             }
             binding.cardPokemon.setOnClickListener {
@@ -90,11 +101,11 @@ class PokemonAdapter(
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         val currentPokemon = getItem(position)
-        holder.bind(currentPokemon)
+        currentPokemon?.let { holder.bind(it) }
 
-        if (position == itemCount - 7) {
-            onBottomReachedListener.onBottomReached(position)
-        }
+//        if (position == itemCount - 7) {
+//            onBottomReachedListener.onBottomReached(position)
+//        }
     }
 
     companion object {
