@@ -12,7 +12,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.echo.pokepedia.R
 
-fun ImageView.loadImageFromUrlAndCalculateDominantColorGradient(context: Context, url: String?, onFinish: (GradientDrawable) -> Unit) {
+fun ImageView.loadImageCalcDominantColor(context: Context, url: String?, onFinish: (GradientDrawable) -> Unit) {
     Glide.with(context)
         .load(url)
         .placeholder(R.drawable.progress_spinner_anim)
@@ -21,7 +21,7 @@ fun ImageView.loadImageFromUrlAndCalculateDominantColorGradient(context: Context
                 resource: Drawable,
                 transition: Transition<in Drawable>?
             ) {
-                this@loadImageFromUrlAndCalculateDominantColorGradient.setImageDrawable(resource)
+                this@loadImageCalcDominantColor.setImageDrawable(resource)
                 val dominantColor = calcDominantColor(resource, context)
                 val gradientDrawable = GradientDrawable(
                     GradientDrawable.Orientation.TOP_BOTTOM,

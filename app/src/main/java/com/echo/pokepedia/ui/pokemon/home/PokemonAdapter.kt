@@ -11,7 +11,7 @@ import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.ListItemPokemonBinding
 import com.echo.pokepedia.domain.pokemon.model.Pokemon
 import com.echo.pokepedia.util.capitalizeFirstLetter
-import com.echo.pokepedia.util.loadImageFromUrlAndCalculateDominantColorGradient
+import com.echo.pokepedia.util.loadImageCalcDominantColor
 
 class PokemonAdapter(
     private val onItemClicked: (Pokemon) -> Unit
@@ -22,7 +22,7 @@ class PokemonAdapter(
 
         fun bind(pokemon: Pokemon) {
             binding.textPokemonName.text = pokemon.name?.capitalizeFirstLetter()
-            binding.imgPokemon.loadImageFromUrlAndCalculateDominantColorGradient(binding.root.context, pokemon.url) { gradientDrawable ->
+            binding.imgPokemon.loadImageCalcDominantColor(binding.root.context, pokemon.url) { gradientDrawable ->
                 gradientDrawable.cornerRadius = binding.root.context.resources.getDimension(R.dimen.radius_medium)
                 binding.cardPokemon.setCardBackgroundColor(ColorStateList.valueOf(Color.TRANSPARENT))
                 binding.cardPokemon.background = gradientDrawable
