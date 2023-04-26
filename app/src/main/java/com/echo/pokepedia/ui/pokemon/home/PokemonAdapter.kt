@@ -9,23 +9,29 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.ListItemPokemonBinding
-import com.echo.pokepedia.domain.pokemon.model.Pokemon
+import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
 import com.echo.pokepedia.util.capitalizeFirstLetter
 import com.echo.pokepedia.util.loadImageCalcDominantColor
 
 class PokemonAdapter(
-    private val onItemClicked: (Pokemon) -> Unit
-) : ListAdapter<Pokemon, PokemonAdapter.PokemonViewHolder>(DiffCallback) {
+    private val onItemClicked: (PokemonDTO) -> Unit
+) : ListAdapter<PokemonDTO, PokemonAdapter.PokemonViewHolder>(DiffCallback) {
 
     inner class PokemonViewHolder(private val binding: ListItemPokemonBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(pokemon: Pokemon) {
-            binding.textPokemonName.text = pokemon.name?.capitalizeFirstLetter()
-            binding.imgPokemon.loadImageCalcDominantColor(binding.root.context, pokemon.url) { gradientDrawable ->
-                gradientDrawable.cornerRadius = binding.root.context.resources.getDimension(R.dimen.radius_medium)
-                binding.cardPokemon.setCardBackgroundColor(ColorStateList.valueOf(Color.TRANSPARENT))
-                binding.cardPokemon.background = gradientDrawable
+        fun bind(pokemon: PokemonDTO) {
+            with(binding) {
+                textPokemonName.text = pokemon.name?.capitalizeFirstLetter()
+                imgPokemon.loadImageCalcDominantColor(
+                    root.context,
+                    pokemon.url
+                ) { gradientDrawable ->
+                    gradientDrawable.cornerRadius =
+                        binding.root.context.resources.getDimension(R.dimen.radius_medium)
+                    cardPokemon.setCardBackgroundColor(ColorStateList.valueOf(Color.TRANSPARENT))
+                    cardPokemon.background = gradientDrawable
+                }
             }
         }
     }
@@ -49,12 +55,12 @@ class PokemonAdapter(
     }
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<Pokemon>() {
-            override fun areItemsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
+        private val DiffCallback = object : DiffUtil.ItemCallback<PokemonDTO>() {
+            override fun areItemsTheSame(oldItem: PokemonDTO, newItem: PokemonDTO): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
+            override fun areContentsTheSame(oldItem: PokemonDTO, newItem: PokemonDTO): Boolean {
                 return oldItem.name == newItem.name
             }
         }

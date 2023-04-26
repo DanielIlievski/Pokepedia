@@ -1,6 +1,6 @@
 package com.echo.pokepedia.domain.pokemon.model
 
-data class PokemonList(
+data class PokemonListDTO(
     val count: Int? = null,
-    val pokemonList : List<Pokemon>? = null
+    val pokemonList : List<PokemonDTO>? = null
 )

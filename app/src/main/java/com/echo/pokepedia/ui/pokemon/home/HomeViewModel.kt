@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonInfoFromApiUserCase
 import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonListFromApiUserCase
-import com.echo.pokepedia.domain.pokemon.model.PokemonDetails
-import com.echo.pokepedia.domain.pokemon.model.PokemonList
+import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
+import com.echo.pokepedia.domain.pokemon.model.PokemonListDTO
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,11 +21,11 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     // region viewModel variables
-    private var _pokemonList = MutableStateFlow<PokemonList>(PokemonList())
-    val pokemonList: StateFlow<PokemonList> get() = _pokemonList
+    private var _pokemonList = MutableStateFlow<PokemonListDTO>(PokemonListDTO())
+    val pokemonList: StateFlow<PokemonListDTO> get() = _pokemonList
 
-    private var _pokemonDetailsInfo = MutableStateFlow<PokemonDetails>(PokemonDetails())
-    val pokemonDetailsInfo: StateFlow<PokemonDetails> get() = _pokemonDetailsInfo
+    private var _pokemonDetailsInfo = MutableStateFlow<PokemonDetailsDTO>(PokemonDetailsDTO())
+    val pokemonDetailsInfo: StateFlow<PokemonDetailsDTO> get() = _pokemonDetailsInfo
 
     private var _errorObservable  = MutableStateFlow<UiText>(UiText.DynamicString())
     val errorObservable : StateFlow<UiText> get() = _errorObservable

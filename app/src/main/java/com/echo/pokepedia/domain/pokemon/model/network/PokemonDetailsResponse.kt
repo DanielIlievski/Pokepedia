@@ -1,8 +1,8 @@
 package com.echo.pokepedia.domain.pokemon.model.network
 
-import com.echo.pokepedia.domain.pokemon.model.PokemonDetails
+import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
 
-data class PokemonDetailsDTO(
+data class PokemonDetailsResponse(
     val id: Int,
     val name: String,
     val types: List<Type>,
@@ -10,13 +10,13 @@ data class PokemonDetailsDTO(
     val moves: List<Move>,
     val sprites: Sprites
 ) {
-    fun toPokemon(): PokemonDetails {
+    fun toPokemonDetailsDTO(): PokemonDetailsDTO {
         val myTypes: List<String> = types.map { it.type.name }
         val myAbilities: List<String> = abilities.map { it.ability.name }
         val myMoves: List<String> = moves.map { it.move.name }
         val imageDefault: String = sprites.other.home.front_default
         val imageShiny: String = sprites.other.home.front_shiny
-        return PokemonDetails(
+        return PokemonDetailsDTO(
             id,
             name,
             myTypes,

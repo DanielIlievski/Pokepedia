@@ -1,10 +1,10 @@
 package com.echo.pokepedia.data.repository
 
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
-import com.echo.pokepedia.domain.pokemon.model.PokemonDetails
-import com.echo.pokepedia.domain.pokemon.model.PokemonList
-import com.echo.pokepedia.domain.pokemon.model.network.PokemonDetailsDTO
-import com.echo.pokepedia.domain.pokemon.model.network.PokemonListDTO
+import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
+import com.echo.pokepedia.domain.pokemon.model.PokemonListDTO
+import com.echo.pokepedia.domain.pokemon.model.network.PokemonDetailsResponse
+import com.echo.pokepedia.domain.pokemon.model.network.PokemonListResponse
 import com.echo.pokepedia.domain.pokemon.repository.PokemonRepository
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.UiText
@@ -17,7 +17,7 @@ class PokemonRepositoryImpl @Inject constructor(
     override suspend fun getPokemonListFromApi(
         limit: Int,
         offset: Int
-    ): NetworkResult<PokemonList> {
+    ): NetworkResult<PokemonListDTO> {
         val pokemonListResult = remotePokemonDataSource.getPokemonList(limit, offset)
 
         return when (pokemonListResult) {
@@ -28,7 +28,7 @@ class PokemonRepositoryImpl @Inject constructor(
 
     override suspend fun getPokemonInfoFromApi(
         name: String
-    ): NetworkResult<PokemonDetails> {
+    ): NetworkResult<PokemonDetailsDTO> {
         val pokemonResult = remotePokemonDataSource.getPokemonInfo(name)
 
         return when (pokemonResult) {
@@ -41,15 +41,15 @@ class PokemonRepositoryImpl @Inject constructor(
         return NetworkResult.Failure(exception)
     }
 
-    private fun onSuccessfulPokemonListFetch(results: PokemonListDTO?): NetworkResult<PokemonList> {
-        return NetworkResult.Success(results!!.toPokemonList())
+    private fun onSuccessfulPokemonListFetch(results: PokemonListResponse?): NetworkResult<PokemonListDTO> {
+        return NetworkResult.Success(results!!.toPokemonListDTO())
     }
 
     private fun onFailedPokemonFetch(exception: UiText?): NetworkResult.Failure {
         return NetworkResult.Failure(exception)
     }
 
-    private fun onSuccessfulPokemonFetch(result: PokemonDetailsDTO?): NetworkResult<PokemonDetails> {
-        return NetworkResult.Success(result!!.toPokemon())
+    private fun onSuccessfulPokemonFetch(result: PokemonDetailsResponse?): NetworkResult<PokemonDetailsDTO> {
+        return NetworkResult.Success(result!!.toPokemonDetailsDTO())
     }
 }
