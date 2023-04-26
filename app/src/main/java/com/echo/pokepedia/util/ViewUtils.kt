@@ -12,7 +12,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.echo.pokepedia.R
 
-fun ImageView.loadImageFromUrlAndCalculateDominantColorGradient(
+fun ImageView.loadImageCalcDominantColor(
     context: Context,
     url: String?,
     onFinish: (Int) -> Unit
@@ -23,11 +23,11 @@ fun ImageView.loadImageFromUrlAndCalculateDominantColorGradient(
         .error(AppCompatResources.getDrawable(context, R.drawable.image_not_available))
         .into(object : CustomTarget<Drawable>() {
             override fun onLoadStarted(placeholder: Drawable?) {
-                this@loadImageFromUrlAndCalculateDominantColorGradient.setImageDrawable(placeholder)
+                this@loadImageCalcDominantColor.setImageDrawable(placeholder)
             }
 
             override fun onLoadFailed(errorDrawable: Drawable?) {
-                this@loadImageFromUrlAndCalculateDominantColorGradient.setImageDrawable(
+                this@loadImageCalcDominantColor.setImageDrawable(
                     errorDrawable
                 )
                 val dominantColor = calcDominantColor(errorDrawable, context)
@@ -38,6 +38,7 @@ fun ImageView.loadImageFromUrlAndCalculateDominantColorGradient(
                 resource: Drawable,
                 transition: Transition<in Drawable>?
             ) {
+                this@loadImageCalcDominantColor.setImageDrawable(resource)
                 val dominantColor = calcDominantColor(resource, context)
                 onFinish(dominantColor)
             }

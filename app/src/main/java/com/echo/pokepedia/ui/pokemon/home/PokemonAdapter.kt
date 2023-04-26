@@ -12,72 +12,74 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.ListItemPokemonBinding
-import com.echo.pokepedia.domain.pokemon.model.Pokemon
+import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
 import com.echo.pokepedia.util.getColorRes
-import com.echo.pokepedia.util.loadImageFromUrlAndCalculateDominantColorGradient
+import com.echo.pokepedia.util.loadImageCalcDominantColor
 
 class PokemonAdapter(
-    private val onItemClicked: (Pokemon) -> Unit
-) : PagingDataAdapter<Pokemon, PokemonAdapter.PokemonViewHolder>(DiffCallback) {
+    private val onItemClicked: (PokemonDTO) -> Unit
+) : PagingDataAdapter<PokemonDTO, PokemonAdapter.PokemonViewHolder>(DiffCallback) {
 
     inner class PokemonViewHolder(private val binding: ListItemPokemonBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(pokemon: Pokemon) {
-            binding.textPokemonName.text = pokemon.name?.replaceFirstChar { it.uppercase() }
-            // calculate the dominant color the first time the item is shown and update the model
-            if (pokemon.dominantColor == null) {
-                Glide.with(binding.root.context)
-                    .load(pokemon.url)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.drawable.progress_spinner_anim)
-                    .error(
-                        AppCompatResources.getDrawable(
-                            binding.root.context,
-                            R.drawable.image_not_available
+        fun bind(pokemon: PokemonDTO) {
+            with(binding) {
+                textPokemonName.text = pokemon.name?.replaceFirstChar { it.uppercase() }
+                // calculate the dominant color the first time the item is shown and update the model
+                if (pokemon.dominantColor == null) {
+                    Glide.with(root.context)
+                        .load(pokemon.url)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.progress_spinner_anim)
+                        .error(
+                            AppCompatResources.getDrawable(
+                                root.context,
+                                R.drawable.image_not_available
+                            )
                         )
-                    )
-                    .into(binding.imgPokemon)
-                binding.imgPokemon.loadImageFromUrlAndCalculateDominantColorGradient(
-                    binding.root.context,
-                    pokemon.url
-                ) { dominantColor ->
+                        .into(imgPokemon)
+                    imgPokemon.loadImageCalcDominantColor(
+                        root.context,
+                        pokemon.url
+                    ) { dominantColor ->
+                        val gradientDrawable = GradientDrawable(
+                            GradientDrawable.Orientation.TOP_BOTTOM,
+                            intArrayOf(dominantColor, root.context.getColorRes(R.color.white))
+                        )
+                        pokemon.dominantColor = dominantColor
+                        gradientDrawable.cornerRadius =
+                            root.context.resources.getDimension(R.dimen.radius_medium)
+                        cardPokemon.background = gradientDrawable
+                    }
+                }
+                // read the dominant color from the item
+                else {
+                    Log.d("HelloWorld", "bind: dominant color ${pokemon.dominantColor}")
+                    Glide.with(root)
+                        .load(pokemon.url)
+                        .placeholder(R.drawable.progress_spinner_anim)
+                        .error(
+                            AppCompatResources.getDrawable(
+                                root.context,
+                                R.drawable.image_not_available
+                            )
+                        )
+                        .into(imgPokemon)
                     val gradientDrawable = GradientDrawable(
                         GradientDrawable.Orientation.TOP_BOTTOM,
-                        intArrayOf(dominantColor, binding.root.context.getColorRes(R.color.white))
-                    )
-                    pokemon.dominantColor = dominantColor
-                    gradientDrawable.cornerRadius =
-                        binding.root.context.resources.getDimension(R.dimen.radius_medium)
-                    binding.cardPokemon.background = gradientDrawable
-                }
-            }
-            // read the dominant color from the item
-            else {
-                Log.d("HelloWorld", "bind: dominant color ${pokemon.dominantColor}")
-                Glide.with(binding.root)
-                    .load(pokemon.url)
-                    .placeholder(R.drawable.progress_spinner_anim)
-                    .error(
-                        AppCompatResources.getDrawable(
-                            binding.root.context,
-                            R.drawable.image_not_available
+                        intArrayOf(
+                            pokemon.dominantColor!!,
+                            root.context.getColorRes(R.color.white)
                         )
                     )
-                    .into(binding.imgPokemon)
-                val gradientDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.TOP_BOTTOM,
-                    intArrayOf(
-                        pokemon.dominantColor!!,
-                        binding.root.context.getColorRes(R.color.white)
-                    )
-                )
-                gradientDrawable.cornerRadius =
-                    binding.root.context.resources.getDimension(R.dimen.radius_medium)
-                binding.cardPokemon.background = gradientDrawable
-            }
-            binding.cardPokemon.setOnClickListener {
-                onItemClicked(pokemon)
+                    gradientDrawable.cornerRadius =
+                        root.context.resources.getDimension(R.dimen.radius_medium)
+                    cardPokemon.background = gradientDrawable
+                }
+                cardPokemon.setOnClickListener {
+                    onItemClicked(pokemon)
+                }
             }
         }
     }
@@ -98,12 +100,12 @@ class PokemonAdapter(
     }
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<Pokemon>() {
-            override fun areItemsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
+        private val DiffCallback = object : DiffUtil.ItemCallback<PokemonDTO>() {
+            override fun areItemsTheSame(oldItem: PokemonDTO, newItem: PokemonDTO): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
+            override fun areContentsTheSame(oldItem: PokemonDTO, newItem: PokemonDTO): Boolean {
                 return oldItem.name == newItem.name
             }
         }

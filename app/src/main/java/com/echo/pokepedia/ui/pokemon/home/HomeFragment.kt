@@ -45,8 +45,6 @@ class HomeFragment : BaseFragment() {
         initObservers()
 
         initListeners()
-
-        initOptionsMenu()
     }
 
     override fun onDestroyView() {

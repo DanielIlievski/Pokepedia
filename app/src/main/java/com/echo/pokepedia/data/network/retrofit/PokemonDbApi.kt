@@ -1,7 +1,7 @@
 package com.echo.pokepedia.data.network.retrofit
 
-import com.echo.pokepedia.domain.pokemon.model.network.PokemonDetailsDTO
-import com.echo.pokepedia.domain.pokemon.model.network.PokemonListDTO
+import com.echo.pokepedia.domain.pokemon.model.network.PokemonDetailsResponse
+import com.echo.pokepedia.domain.pokemon.model.network.PokemonListResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -13,10 +13,10 @@ interface PokemonDbApi {
     suspend fun getPokemonList(
         @Query("limit") limit: Int,
         @Query("offset") offset: Int
-    ): Response<PokemonListDTO>
+    ): Response<PokemonListResponse>
 
     @GET("pokemon/{name}")
     suspend fun getPokemonInfo(
         @Path("name") name: String
-    ): Response<PokemonDetailsDTO>
+    ): Response<PokemonDetailsResponse>
 }
