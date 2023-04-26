@@ -22,6 +22,8 @@ class HomeFragment : BaseFragment() {
     private val binding get() = _binding!!
 
     private val viewModel: HomeViewModel by viewModels()
+
+    private var adapter: PokemonAdapter? = null
     // endregion
 
     // region fragment methods
@@ -37,15 +39,13 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initUI()
+
         initObservers()
 
         initListeners()
 
         initOptionsMenu()
-
-        // TODO: Just for general testing, will be removed in the next task
-        viewModel.getPokemonList(20, 20)
-        viewModel.getPokemonInfo("charmander")
     }
 
     override fun onDestroyView() {
@@ -60,8 +60,15 @@ class HomeFragment : BaseFragment() {
         observeErrorObservable()
     }
 
+    private fun initUI() {
+        initOptionsMenu()
+        setPokemonAdapter()
+        fetchPokemonList()
+    }
+
     private fun initListeners() {}
 
+    // region initUI
     private fun initOptionsMenu() {
         val menuHost: MenuHost = requireActivity()
 
@@ -81,22 +88,38 @@ class HomeFragment : BaseFragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    private fun setPokemonAdapter() {
+        adapter = PokemonAdapter {pokemon ->
+            showToastMessageShort(pokemon.name)
+        }
+        binding.pokemonRecyclerView.adapter = adapter
+    }
+
+    private fun fetchPokemonList() {
+        viewModel.getPokemonList(20, 20)
+    }
+    // endregion
+
+    // region initObservers
+
     private fun observePokemonList() = lifecycleScope.launch {
         viewModel.pokemonList.collect {result ->
-            Log.d("HomeFragment", "PokemonList: $result")
+            adapter?.submitList(result.pokemonList)
         }
     }
 
     private fun observePokemonInfo() = lifecycleScope.launch {
-        viewModel.pokemonInfo.collect {result ->
-            Log.d("HomeFragment", "PokemonInfo: $result")
+        viewModel.pokemonDetailsInfo.collect { result ->
+            Log.d("HomeFragment", "onSuccessfulPokemonInfoFetch: $result")
         }
     }
 
     private fun observeErrorObservable() = lifecycleScope.launch {
         viewModel.errorObservable.collect {exception ->
+            showToastMessageLong(exception.asString(requireContext()))
             Log.d("HomeFragment", "Error: ${exception.asString(requireContext())}")
         }
     }
+    // endregion
 
 }

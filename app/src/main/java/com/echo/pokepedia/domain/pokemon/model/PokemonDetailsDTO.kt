@@ -1,6 +1,6 @@
-package com.echo.pokepedia.domain.pokemon
+package com.echo.pokepedia.domain.pokemon.model
 
-data class Pokemon(
+data class PokemonDetailsDTO(
     val id: Int? = null,
     val name: String? = null,
     val types: List<String>? = null,

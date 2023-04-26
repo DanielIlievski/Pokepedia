@@ -1,12 +1,12 @@
 package com.echo.pokepedia.domain.pokemon.repository
 
-import com.echo.pokepedia.domain.pokemon.Pokemon
-import com.echo.pokepedia.domain.pokemon.PokemonList
+import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
+import com.echo.pokepedia.domain.pokemon.model.PokemonListDTO
 import com.echo.pokepedia.util.NetworkResult
 
 interface PokemonRepository {
 
-    suspend fun getPokemonListFromApi(limit: Int, offset: Int): NetworkResult<PokemonList>
+    suspend fun getPokemonListFromApi(limit: Int, offset: Int): NetworkResult<PokemonListDTO>
 
-    suspend fun getPokemonInfoFromApi(name: String): NetworkResult<Pokemon>
+    suspend fun getPokemonInfoFromApi(name: String): NetworkResult<PokemonDetailsDTO>
 }

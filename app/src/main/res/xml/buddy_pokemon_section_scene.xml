@@ -30,10 +30,11 @@
             android:id="@+id/imgPokemon"
             android:layout_width="@dimen/img_pokemon_collapsed_width"
             android:layout_height="@dimen/img_pokemon_collapsed_height"
-            android:layout_marginTop="@dimen/margin_padding_tiny"
+            android:layout_marginVertical="@dimen/margin_padding_normal"
             android:layout_marginStart="@dimen/margin_padding_small"
             motion:layout_constraintStart_toStartOf="@id/buddy_pokemon_container"
             motion:layout_constraintTop_toTopOf="@id/buddy_pokemon_container"
+            motion:layout_constraintBottom_toTopOf="@id/expand_collapse"
             android:clickable="false"
             android:focusable="false"/>
         <Constraint

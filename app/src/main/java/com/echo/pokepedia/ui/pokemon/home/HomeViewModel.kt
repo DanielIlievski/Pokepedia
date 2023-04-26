@@ -2,10 +2,10 @@ package com.echo.pokepedia.ui.pokemon.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.echo.pokepedia.domain.pokemon.Pokemon
-import com.echo.pokepedia.domain.pokemon.PokemonList
 import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonInfoFromApiUserCase
 import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonListFromApiUserCase
+import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
+import com.echo.pokepedia.domain.pokemon.model.PokemonListDTO
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,11 +21,11 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     // region viewModel variables
-    private var _pokemonList = MutableStateFlow<PokemonList>(PokemonList())
-    val pokemonList: StateFlow<PokemonList> get() = _pokemonList
+    private var _pokemonList = MutableStateFlow<PokemonListDTO>(PokemonListDTO())
+    val pokemonList: StateFlow<PokemonListDTO> get() = _pokemonList
 
-    private var _pokemonInfo = MutableStateFlow<Pokemon>(Pokemon())
-    val pokemonInfo: StateFlow<Pokemon> get() = _pokemonInfo
+    private var _pokemonDetailsInfo = MutableStateFlow<PokemonDetailsDTO>(PokemonDetailsDTO())
+    val pokemonDetailsInfo: StateFlow<PokemonDetailsDTO> get() = _pokemonDetailsInfo
 
     private var _errorObservable  = MutableStateFlow<UiText>(UiText.DynamicString())
     val errorObservable : StateFlow<UiText> get() = _errorObservable
@@ -42,7 +42,7 @@ class HomeViewModel @Inject constructor(
     fun getPokemonInfo(name: String) = viewModelScope.launch {
         val response = getPokemonInfoFromApiUserCase.invoke(name)
         when (response) {
-            is NetworkResult.Success -> _pokemonInfo.value = response.result
+            is NetworkResult.Success -> _pokemonDetailsInfo.value = response.result
             is NetworkResult.Failure -> response.exception?.let { _errorObservable.value }
         }
     }
