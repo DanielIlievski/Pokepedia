@@ -5,7 +5,7 @@ data class PokemonDetailsDTO(
     val name: String? = null,
     val types: List<String>? = null,
     val abilities: List<String>? = null,
-    val moves: List<String>? = null,
+    val stats: List<Triple<String, Int, Int>>? = null,
     val imageDefault: String? = null,
     val imageShiny: String? = null
 )

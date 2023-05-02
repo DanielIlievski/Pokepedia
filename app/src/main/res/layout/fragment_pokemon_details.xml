@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarPokemonDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:title="Pokemon name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_padding_large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarPokemonDetails"
+        tools:context=".ui.pokemon.details.PokemonDetailsFragment">
+
+        <LinearLayout
+            android:id="@+id/pokemonDetails"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/margin_padding_large"
+            android:layout_marginTop="@dimen/pokemon_details_margin_top"
+            android:layout_marginBottom="@dimen/margin_padding_large"
+            android:background="@drawable/rounded_shape">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbarThumbVertical="@color/transparent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_padding_medium"
+                    android:layout_marginTop="@dimen/margin_padding_xxhuge"
+                    android:layout_marginBottom="@dimen/margin_padding_medium">
+
+                    <TextView
+                        android:id="@+id/pokemonNameAndId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="30sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:targetApi="o"
+                        tools:text="@string/pokemon_id_name" />
+
+                    <LinearLayout
+                        android:id="@+id/groupPokemonTypes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_padding_normal"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/pokemonNameAndId" />
+
+                    <TextView
+                        android:id="@+id/textBaseStats"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_padding_normal"
+                        android:layout_marginTop="@dimen/margin_padding_normal"
+                        android:text="@string/base_stats"
+                        android:textSize="@dimen/text_size_xnormal"
+                        app:layout_constraintTop_toBottomOf="@id/groupPokemonTypes" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/baseStatsRecycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_padding_normal"
+                        android:orientation="vertical"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintTop_toBottomOf="@id/textBaseStats"
+                        tools:listitem="@layout/list_item_base_stat" />
+
+                    <TextView
+                        android:id="@+id/textAbilities"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_padding_normal"
+                        android:layout_marginTop="@dimen/margin_padding_normal"
+                        android:text="@string/abilities"
+                        android:textSize="@dimen/text_size_xnormal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/baseStatsRecycler" />
+
+                    <HorizontalScrollView
+                        android:id="@+id/horizontalScroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_padding_normal"
+                        android:background="@drawable/rounded_shape_transparent"
+                        android:scrollbarThumbHorizontal="@color/transparent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/textAbilities">
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipGroupPokemonAbilities"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:chipSpacing="@dimen/margin_padding_tiny" />
+                    </HorizontalScrollView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imgPokemon"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pokemon_details_img_pokemon_height"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="@dimen/margin_padding_large"
+            android:layout_marginTop="@dimen/margin_padding_large"
+            tools:src="@drawable/ic_pikachu_confused" />
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

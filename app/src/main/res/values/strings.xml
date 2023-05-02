@@ -75,4 +75,12 @@
     <string name="buddy_pokemon">Buddy pokemon</string>
     <!-- endregion -->
 
+    <!-- region PokemonDetailsFragment -->
+    <string name="abilities">Abilities:</string>
+    <string name="base_stats">Base stats:</string>
+    <string name="pokemon_id_name">#%1d %2$s</string>
+    <string name="retry">Retry</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <!-- endregion -->
+
 </resources>
