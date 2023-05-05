@@ -8,6 +8,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentHomeBinding
 import com.echo.pokepedia.ui.BaseFragment
@@ -65,6 +66,8 @@ class HomeFragment : BaseFragment() {
 
     private fun initListeners() {
 //        onRecyclerBottomReachedListener()
+        onFabClickListener()
+        onRecyclerScrollListener()
     }
 
     // region initUI
@@ -88,7 +91,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun setPokemonAdapter() {
-        adapter = PokemonAdapter {pokemon ->
+        adapter = PokemonAdapter { pokemon ->
             showToastMessageShort(pokemon.name)
         }
         binding.pokemonRecyclerView.adapter = adapter
@@ -96,7 +99,6 @@ class HomeFragment : BaseFragment() {
     // endregion
 
     // region initObservers
-
     private fun observePokemonList() = lifecycleScope.launch {
         viewModel.pokemonList.collectLatest { result ->
             adapter?.submitData(result)
@@ -107,6 +109,24 @@ class HomeFragment : BaseFragment() {
         viewModel.pokemonDetailsInfo.collect { result ->
             Log.d("HomeFragment", "onSuccessfulPokemonInfoFetch: $result")
         }
+    }
+    // endregion
+
+    // region initListeners
+    private fun onFabClickListener() {
+        binding.fabScrollToTop.setOnClickListener {
+            binding.pokemonRecyclerView.smoothScrollToPosition(0)
+        }
+    }
+
+    private fun onRecyclerScrollListener() {
+        binding.pokemonRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                binding.fabScrollToTop.visibility = if (dy >= 0) View.GONE else View.VISIBLE
+            }
+        })
     }
     // endregion
 }
