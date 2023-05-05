@@ -123,11 +123,14 @@
 
         <ImageView
             android:id="@+id/imgPokemon"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/pokemon_details_img_pokemon_height"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="@dimen/margin_padding_large"
             android:layout_marginTop="@dimen/margin_padding_large"
-            tools:src="@drawable/ic_pikachu_confused" />
+            tools:src="@drawable/ic_pikachu_confused"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

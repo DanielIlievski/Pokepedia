@@ -7,4 +7,11 @@ data class PokemonDTO(
     val urlShiny: String? = null,
     var dominantColor: Int? = null,
     var dominantColorShiny: Int? = null
-)
+) {
+    fun overrideColors(dominantColor: Int, dominantColorShiny: Int): PokemonDTO {
+        return this.copy(
+            dominantColor = dominantColor,
+            dominantColorShiny = dominantColorShiny
+        )
+    }
+}

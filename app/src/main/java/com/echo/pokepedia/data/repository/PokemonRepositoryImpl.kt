@@ -37,9 +37,9 @@ class PokemonRepositoryImpl @Inject constructor(
             PokemonPagingSource(remotePokemonDataSource)
         }.flow.map {
             it.map { pokemonDTO ->
-                pokemonDTO.copy(
-                    dominantColor = getDominantColor(pokemonDTO.url ?: ""),
-                    dominantColorShiny = getDominantColor(pokemonDTO.urlShiny ?: "")
+                pokemonDTO.overrideColors(
+                    getDominantColor(pokemonDTO.url ?: ""),
+                    getDominantColor(pokemonDTO.urlShiny ?: "")
                 )
             }
         }
