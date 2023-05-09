@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:layoutDescription="@xml/buddy_pokemon_section_scene"
     tools:context=".ui.pokemon.home.HomeFragment">
 
@@ -37,6 +37,7 @@
         style="@style/TextView.Medium.Grey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_padding_tiny"
         android:layout_marginVertical="@dimen/margin_padding_normal"
         app:layout_constraintEnd_toEndOf="@id/buddy_pokemon_container"
         app:layout_constraintStart_toEndOf="@id/imgPokemon"
@@ -46,21 +47,23 @@
     <TextView
         android:id="@+id/textPokemonNickname"
         style="@style/MaterialTextView.XLarge.Grey.Caps.Bold"
-        android:layout_width="wrap_content"
+        android:layout_width="190dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_padding_tiny"
         android:layout_marginVertical="@dimen/margin_padding_normal"
-        app:layout_constraintEnd_toEndOf="@id/textPokemonName"
-        app:layout_constraintStart_toStartOf="@id/textPokemonName"
+        android:gravity="center_horizontal"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="@id/buddy_pokemon_container"
+        app:layout_constraintStart_toEndOf="@id/imgPokemon"
         app:layout_constraintTop_toBottomOf="@id/textPokemonName"
         tools:text="Bulbi" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroupPokemonTypes"
-        android:layout_width="wrap_content"
+    <com.echo.pokepedia.ui.pokemon.PokemonTypesView
+        android:id="@+id/groupPokemonTypes"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_padding_xsmall"
-        android:layout_marginVertical="@dimen/margin_padding_normal"
-        app:layout_constraintEnd_toEndOf="@id/buddy_pokemon_container"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imgPokemon"
         app:layout_constraintTop_toBottomOf="@id/textPokemonNickname" />
 

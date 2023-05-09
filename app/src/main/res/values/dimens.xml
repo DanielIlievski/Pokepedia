@@ -69,9 +69,8 @@
 
     <dimen name="width_image_fragment_login">300dp</dimen>
     <dimen name="height_image_fragment_login">200dp</dimen>
-    <!-- endregion -->
-
-    <!-- region height -->
+    <dimen name="buddy_pokemon_image_width">200dp</dimen>
+    <dimen name="img_pokemon_collapsed_width">70dp</dimen>
     <dimen name="buddy_pokemon_container_height">250dp</dimen>
     <dimen name="buddy_pokemon_image_height">200dp</dimen>
     <dimen name="expand_collapse_decoration_height">30dp</dimen>
@@ -80,11 +79,7 @@
     <dimen name="buddy_pokemon_container_collapsed_height">110dp</dimen>
     <dimen name="bottom_navigation_view_height">60dp</dimen>
     <dimen name="pokemon_details_img_pokemon_height">180dp</dimen>
-    <!-- endregion -->
-
-    <!-- region width -->
-    <dimen name="buddy_pokemon_image_width">200dp</dimen>
-    <dimen name="img_pokemon_collapsed_width">70dp</dimen>
+    <dimen name="img_favorite_pokemon_margin_top">140dp</dimen>
     <!-- endregion -->
 
     <!-- region elevation -->

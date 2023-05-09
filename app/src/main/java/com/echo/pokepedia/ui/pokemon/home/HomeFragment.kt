@@ -1,18 +1,24 @@
 package com.echo.pokepedia.ui.pokemon.home
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.LinearLayout
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentHomeBinding
 import com.echo.pokepedia.ui.BaseFragment
+import com.echo.pokepedia.util.capitalizeFirstLetter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -35,12 +41,14 @@ class HomeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("HelloWorld54", "onViewCreated: ")
+
+        viewModel.getPokemonInfo()
 
         initUI()
 
@@ -52,6 +60,7 @@ class HomeFragment : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        viewModel.clearBuddyPokemonDetails()
     }
     // endregion
 
@@ -62,7 +71,9 @@ class HomeFragment : BaseFragment() {
 
     private fun initObservers() {
         observePokemonList()
+        observeBuddyPokemonNickname()
         observePokemonInfo()
+        observeBuddyPokemonDominantColor()
     }
 
     private fun initListeners() {}
@@ -125,9 +136,38 @@ class HomeFragment : BaseFragment() {
         }
     }
 
+    private fun observeBuddyPokemonNickname() = lifecycleScope.launch {
+        viewModel.buddyPokemonNickname.observe(viewLifecycleOwner) { pokemonNickname ->
+            if (pokemonNickname.isNotEmpty()) {
+                binding.buddyPokemonSection.textPokemonNickname.text = pokemonNickname
+            }
+        }
+    }
+
     private fun observePokemonInfo() = lifecycleScope.launch {
-        viewModel.pokemonDetailsInfo.collect { result ->
-            Log.d("HomeFragment", "onSuccessfulPokemonInfoFetch: $result")
+        viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.buddyPokemonDetails.collect { pokemon ->
+                if (pokemon != null) {
+                    with(binding.buddyPokemonSection) {
+                        Glide.with(this.root)
+                            .load(pokemon.imageDefault)
+                            .placeholder(R.drawable.progress_spinner_anim)
+                            .into(imgPokemon)
+                        textPokemonName.text = pokemon.name!!.capitalizeFirstLetter()
+                        pokemon.types?.let { groupPokemonTypes.render(it, LinearLayout.VERTICAL) }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeBuddyPokemonDominantColor() = lifecycleScope.launch {
+        viewModel.buddyPokemonDominantColor.observe(viewLifecycleOwner) { dominantColor ->
+            val gradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.BL_TR,
+                intArrayOf(dominantColor, Color.WHITE)
+            ).apply { cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, 60f, 60f, 60f, 60f) }
+            binding.buddyPokemonSection.buddyPokemonContainer.background = gradientDrawable
         }
     }
     // endregion
