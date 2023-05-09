@@ -8,8 +8,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -77,15 +75,12 @@ class PokemonActivity : BaseActivity() {
         }
     }
 
-    private fun initObservers() {
-        observeErrorObservable()
-    }
-
     @SuppressLint("RestrictedApi")
     fun hideToolbar() {
         this.supportActionBar?.hide()
         this.supportActionBar?.setShowHideAnimationEnabled(false)
     }
+
     @SuppressLint("RestrictedApi")
     fun showToolbar() {
         this.supportActionBar?.show()
