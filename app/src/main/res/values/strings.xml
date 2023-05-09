@@ -68,6 +68,7 @@
     <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="fetch_unsuccessful">Fetch unsuccessful</string>
+    <string name="scroll_to_top">Scroll to top</string>
     <!-- endregion -->
 
     <!-- region SettingsFragment -->

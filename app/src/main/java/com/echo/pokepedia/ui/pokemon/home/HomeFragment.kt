@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentHomeBinding
 import com.echo.pokepedia.ui.BaseFragment
@@ -65,7 +66,10 @@ class HomeFragment : BaseFragment() {
         observePokemonInfo()
     }
 
-    private fun initListeners() {}
+    private fun initListeners() {
+        onFabClickListener()
+        onRecyclerScrollListener()
+    }
 
     // region initUI
     private fun initOptionsMenu() {
@@ -129,6 +133,24 @@ class HomeFragment : BaseFragment() {
         viewModel.pokemonDetailsInfo.collect { result ->
             Log.d("HomeFragment", "onSuccessfulPokemonInfoFetch: $result")
         }
+    }
+    // endregion
+
+    // region initListeners
+    private fun onFabClickListener() {
+        binding.fabScrollToTop.setOnClickListener {
+            binding.pokemonRecyclerView.smoothScrollToPosition(0)
+        }
+    }
+
+    private fun onRecyclerScrollListener() {
+        binding.pokemonRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                binding.fabScrollToTop.visibility = if (dy >= 0) View.GONE else View.VISIBLE
+            }
+        })
     }
     // endregion
 }

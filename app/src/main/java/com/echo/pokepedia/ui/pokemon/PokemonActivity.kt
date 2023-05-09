@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -40,7 +42,7 @@ class PokemonActivity : BaseActivity() {
 
         initBottomNavigationView()
 
-        initObservers()
+        observeErrorObservable()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -98,6 +100,4 @@ class PokemonActivity : BaseActivity() {
             }
         }
     }
-
-
 }
