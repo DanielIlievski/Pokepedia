@@ -8,10 +8,12 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentHomeBinding
 import com.echo.pokepedia.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -44,8 +46,6 @@ class HomeFragment : BaseFragment() {
         initObservers()
 
         initListeners()
-
-        initOptionsMenu()
     }
 
     override fun onDestroyView() {
@@ -57,16 +57,18 @@ class HomeFragment : BaseFragment() {
     private fun initObservers() {
         observePokemonList()
         observePokemonInfo()
-        observeErrorObservable()
     }
 
     private fun initUI() {
         initOptionsMenu()
         setPokemonAdapter()
-        fetchPokemonList()
     }
 
-    private fun initListeners() {}
+    private fun initListeners() {
+//        onRecyclerBottomReachedListener()
+        onFabClickListener()
+        onRecyclerScrollListener()
+    }
 
     // region initUI
     private fun initOptionsMenu() {
@@ -89,22 +91,17 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun setPokemonAdapter() {
-        adapter = PokemonAdapter {pokemon ->
+        adapter = PokemonAdapter { pokemon ->
             showToastMessageShort(pokemon.name)
         }
         binding.pokemonRecyclerView.adapter = adapter
     }
-
-    private fun fetchPokemonList() {
-        viewModel.getPokemonList(20, 20)
-    }
     // endregion
 
     // region initObservers
-
     private fun observePokemonList() = lifecycleScope.launch {
-        viewModel.pokemonList.collect {result ->
-            adapter?.submitList(result.pokemonList)
+        viewModel.pokemonList.collectLatest { result ->
+            adapter?.submitData(result)
         }
     }
 
@@ -113,13 +110,23 @@ class HomeFragment : BaseFragment() {
             Log.d("HomeFragment", "onSuccessfulPokemonInfoFetch: $result")
         }
     }
-
-    private fun observeErrorObservable() = lifecycleScope.launch {
-        viewModel.errorObservable.collect {exception ->
-            showToastMessageLong(exception.asString(requireContext()))
-            Log.d("HomeFragment", "Error: ${exception.asString(requireContext())}")
-        }
-    }
     // endregion
 
+    // region initListeners
+    private fun onFabClickListener() {
+        binding.fabScrollToTop.setOnClickListener {
+            binding.pokemonRecyclerView.smoothScrollToPosition(0)
+        }
+    }
+
+    private fun onRecyclerScrollListener() {
+        binding.pokemonRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                binding.fabScrollToTop.visibility = if (dy >= 0) View.GONE else View.VISIBLE
+            }
+        })
+    }
+    // endregion
 }
