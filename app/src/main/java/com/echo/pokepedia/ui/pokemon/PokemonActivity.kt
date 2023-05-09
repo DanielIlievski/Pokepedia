@@ -1,18 +1,18 @@
 package com.echo.pokepedia.ui.pokemon
 
 import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.ActivityPokemonBinding
 import com.echo.pokepedia.ui.BaseActivity
-import com.echo.pokepedia.util.appBarConfigDestinations
 import com.echo.pokepedia.ui.BaseViewModel
+import com.echo.pokepedia.util.appBarConfigDestinations
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -30,7 +30,7 @@ class PokemonActivity : BaseActivity() {
 
         initBottomNavigationView()
 
-        initObservers()
+        observeErrorObservable()
     }
 
     private fun initBottomNavigationView() {
@@ -41,10 +41,6 @@ class PokemonActivity : BaseActivity() {
 
         val configuration = AppBarConfiguration(appBarConfigDestinations)
         setupActionBarWithNavController(navController, configuration)
-    }
-
-    private fun initObservers() {
-        observeErrorObservable()
     }
 
     private fun observeErrorObservable() = lifecycleScope.launch {
