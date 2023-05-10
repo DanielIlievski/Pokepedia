@@ -110,14 +110,15 @@ class PokemonDetailsFragment : BaseFragment() {
     }
 
     private fun initToolbar() {
-        with(binding) {
-            toolbarPokemonDetails.background = getGradientBlackTop(args.dominantColor)
-            toolbarPokemonDetails.setTitleTextColor(Color.WHITE)
-            toolbarPokemonDetails.elevation = 0f
-            toolbarPokemonDetails.title = args.pokemonName.capitalizeFirstLetter()
-            toolbarPokemonDetails.navigationIcon =
+        with(binding.toolbarPokemonDetails) {
+            background = getGradientBlackTop(args.dominantColor)
+            setTitleTextColor(Color.WHITE)
+            elevation = 0f
+            title =
+                getString(R.string.pokemon_id_name, args.pokemonId, args.pokemonName.capitalizeFirstLetter())
+            navigationIcon =
                 AppCompatResources.getDrawable(requireContext(), R.drawable.ic_back_arrow)
-            toolbarPokemonDetails.setNavigationOnClickListener {
+            setNavigationOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             }
         }
@@ -149,23 +150,27 @@ class PokemonDetailsFragment : BaseFragment() {
 
     // region initListeners
     private fun onPokemonImgLongClickListener(pokemonDetails: PokemonDetailsDTO) {
+        binding.imgPokemon.setOnLongClickListener {
+            toggleDefaultOrShinyImg(pokemonDetails)
+            return@setOnLongClickListener true
+        }
+    }
+
+    private fun toggleDefaultOrShinyImg(pokemonDetails: PokemonDetailsDTO) {
         with(binding) {
-            imgPokemon.setOnLongClickListener {
-                val imgUrl =
-                    if (isDefaultImg) pokemonDetails.imageShiny else pokemonDetails.imageDefault
-                val color = if (isDefaultImg) args.dominantColorShiny else args.dominantColor
+            val imgUrl =
+                if (isDefaultImg) pokemonDetails.imageShiny else pokemonDetails.imageDefault
+            val color = if (isDefaultImg) args.dominantColorShiny else args.dominantColor
 
-                loadImage(imgUrl, imgPokemon)
-                root.background = getGradientWhiteBottom(color)
-                viewModel.refreshStats()
+            loadImage(imgUrl, imgPokemon)
+            root.background = getGradientWhiteBottom(color)
+            viewModel.refreshStats()
 
-                toolbarPokemonDetails.background = getGradientBlackTop(
-                    if (isDefaultImg) args.dominantColorShiny else args.dominantColor
-                )
+            toolbarPokemonDetails.background = getGradientBlackTop(
+                if (isDefaultImg) args.dominantColorShiny else args.dominantColor
+            )
 
-                isDefaultImg = !isDefaultImg
-                return@setOnLongClickListener true
-            }
+            isDefaultImg = !isDefaultImg
         }
     }
 

@@ -15,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import androidx.recyclerview.widget.RecyclerView
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentHomeBinding
 import com.echo.pokepedia.ui.BaseFragment
@@ -41,12 +42,12 @@ class HomeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("HelloWorld54", "onViewCreated: ")
 
         viewModel.getPokemonInfo()
 
@@ -76,7 +77,10 @@ class HomeFragment : BaseFragment() {
         observeBuddyPokemonDominantColor()
     }
 
-    private fun initListeners() {}
+    private fun initListeners() {
+        onFabClickListener()
+        onRecyclerScrollListener()
+    }
 
     // region initUI
     private fun initOptionsMenu() {
@@ -169,6 +173,24 @@ class HomeFragment : BaseFragment() {
             ).apply { cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, 60f, 60f, 60f, 60f) }
             binding.buddyPokemonSection.buddyPokemonContainer.background = gradientDrawable
         }
+    }
+    // endregion
+
+    // region initListeners
+    private fun onFabClickListener() {
+        binding.fabScrollToTop.setOnClickListener {
+            binding.pokemonRecyclerView.smoothScrollToPosition(0)
+        }
+    }
+
+    private fun onRecyclerScrollListener() {
+        binding.pokemonRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                binding.fabScrollToTop.visibility = if (dy >= 0) View.GONE else View.VISIBLE
+            }
+        })
     }
     // endregion
 }

@@ -40,7 +40,7 @@ class PokemonActivity : BaseActivity() {
 
         initBottomNavigationView()
 
-        initObservers()
+        observeErrorObservable()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -75,15 +75,12 @@ class PokemonActivity : BaseActivity() {
         }
     }
 
-    private fun initObservers() {
-        observeErrorObservable()
-    }
-
     @SuppressLint("RestrictedApi")
     fun hideToolbar() {
         this.supportActionBar?.hide()
         this.supportActionBar?.setShowHideAnimationEnabled(false)
     }
+
     @SuppressLint("RestrictedApi")
     fun showToolbar() {
         this.supportActionBar?.show()
@@ -98,6 +95,4 @@ class PokemonActivity : BaseActivity() {
             }
         }
     }
-
-
 }
