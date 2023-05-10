@@ -20,4 +20,30 @@
     <color name="grey">#6E6C6C</color>
     <color name="grey_light">#E9E6E6</color>
     <color name="grey_light_translucent">#1C8C8888</color>
+
+    <color name="type_normal">#FF9099a0</color>
+    <color name="type_fighting">#FFCD406A</color>
+    <color name="type_flying">#FF90A8DD</color>
+    <color name="type_poison">#FFAB6AC8</color>
+    <color name="type_ground">#FFDA7746</color>
+    <color name="type_rock">#FFC6B88B</color>
+    <color name="type_bug">#FF90C12C</color>
+    <color name="type_ghost">#FF5368AB</color>
+    <color name="type_steel">#FF5A8EA1</color>
+    <color name="type_fire">#FFFF9C54</color>
+    <color name="type_water">#FF4D8FD4</color>
+    <color name="type_grass">#FF64BB5A</color>
+    <color name="type_electric">#FFF4D13C</color>
+    <color name="type_psychic">#FFF97177</color>
+    <color name="type_ice">#FF75CEBF</color>
+    <color name="type_dragon">#FF086DC4</color>
+    <color name="type_dark">#FF5A5266</color>
+    <color name="type_fairy">#FFED8EE6</color>
+
+    <color name="hp_color">#FF64BB5A</color>
+    <color name="atk_color">#FFC80404</color>
+    <color name="spatk_color">#774EBF</color>
+    <color name="def_color">#475AC0</color>
+    <color name="spdef_color">#BA4A9B</color>
+    <color name="spd_color">#FFF5FF00</color>
 </resources>

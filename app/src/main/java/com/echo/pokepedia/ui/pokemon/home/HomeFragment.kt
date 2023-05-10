@@ -8,6 +8,8 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentHomeBinding
@@ -54,18 +56,17 @@ class HomeFragment : BaseFragment() {
     }
     // endregion
 
-    private fun initObservers() {
-        observePokemonList()
-        observePokemonInfo()
-    }
-
     private fun initUI() {
         initOptionsMenu()
         setPokemonAdapter()
     }
 
+    private fun initObservers() {
+        observePokemonList()
+        observePokemonInfo()
+    }
+
     private fun initListeners() {
-//        onRecyclerBottomReachedListener()
         onFabClickListener()
         onRecyclerScrollListener()
     }
@@ -92,9 +93,32 @@ class HomeFragment : BaseFragment() {
 
     private fun setPokemonAdapter() {
         adapter = PokemonAdapter { pokemon ->
-            showToastMessageShort(pokemon.name)
+            val action = HomeFragmentDirections.homeFragmentToPokemonDetailsFragment(
+                pokemon.id!!,
+                pokemon.name!!,
+                pokemon.dominantColor!!,
+                pokemon.dominantColorShiny!!
+            )
+
+            findNavController().navigate(action)
         }
-        binding.pokemonRecyclerView.adapter = adapter
+        adapter.let {
+            val footerAdapter = PokemonLoadStateAdapter { it?.retry() }
+            binding.pokemonRecyclerView.adapter =
+                it?.withLoadStateFooter(footerAdapter)
+            binding.pokemonRecyclerView.layoutManager =
+                GridLayoutManager(requireContext(), 2).apply {
+                    spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                        override fun getSpanSize(position: Int): Int {
+                            return if (position == adapter!!.itemCount && footerAdapter.itemCount > 0) {
+                                2
+                            } else {
+                                1
+                            }
+                        }
+                    }
+                }
+        }
     }
     // endregion
 

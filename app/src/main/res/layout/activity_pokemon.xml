@@ -7,7 +7,7 @@
     tools:context=".ui.pokemon.PokemonActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host_fragment_home"
+        android:id="@+id/nav_host_activity_pokemon"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"

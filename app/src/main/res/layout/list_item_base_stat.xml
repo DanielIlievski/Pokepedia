@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="@dimen/margin_padding_xxtiny">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/indicatorBaseStat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:trackCornerRadius="@dimen/radius_xlarge"
+        app:trackThickness="25dp" />
+
+    <TextView
+        android:id="@+id/statName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginHorizontal="@dimen/margin_padding_xxsmall"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        tools:text="HP" />
+
+    <TextView
+        android:id="@+id/baseStat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginHorizontal="@dimen/margin_padding_xxsmall"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        tools:text="85" />
+</FrameLayout>

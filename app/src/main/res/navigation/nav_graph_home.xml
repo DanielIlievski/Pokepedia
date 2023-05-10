@@ -9,15 +9,44 @@
         android:id="@+id/homeFragment"
         android:name="com.echo.pokepedia.ui.pokemon.home.HomeFragment"
         android:label="@string/home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/homeFragment_to_pokemonDetailsFragment"
+            app:destination="@id/pokemonDetailsFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/myTeamFragment"
         android:name="com.echo.pokepedia.ui.pokemon.myteam.MyTeamFragment"
         android:label="@string/my_team"
         tools:layout="@layout/fragment_my_team" />
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.echo.pokepedia.ui.pokemon.settings.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/pokemonDetailsFragment"
+        android:name="com.echo.pokepedia.ui.pokemon.details.PokemonDetailsFragment"
+        tools:layout="@layout/fragment_pokemon_details">
+
+        <argument
+            android:name="pokemonId"
+            app:argType="integer" />
+
+        <argument
+            android:name="pokemonName"
+            app:argType="string" />
+
+        <argument
+            android:name="dominantColor"
+            app:argType="integer"/>
+
+        <argument
+            android:name="dominantColorShiny"
+            app:argType="integer"/>
+    </fragment>
 </navigation>

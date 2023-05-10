@@ -34,7 +34,7 @@ class HomeViewModel @Inject constructor(
         getPokemonListPaginated()
     }
 
-    fun getPokemonListPaginated() {
+    private fun getPokemonListPaginated() {
         viewModelScope.launch(Dispatchers.IO) {
             getPokemonListFromApiUserCase.invoke()
                 .cachedIn(viewModelScope)

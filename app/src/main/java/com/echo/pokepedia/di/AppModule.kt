@@ -1,5 +1,8 @@
 package com.echo.pokepedia.di
 
+import android.content.Context
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.data.network.retrofit.PokemonDbApi
 import com.echo.pokepedia.data.network.retrofit.RetrofitPokemonDataSource
@@ -15,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,6 +74,11 @@ object AppModule {
             .client(okHttp)
             .build()
             .create(PokemonDbApi::class.java)
+    }
+    @Provides
+    @Singleton
+    fun provideGlideInstance(@ApplicationContext context: Context): RequestManager {
+        return Glide.with(context)
     }
 
     @Singleton
