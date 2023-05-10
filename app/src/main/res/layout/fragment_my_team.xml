@@ -1,13 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.pokemon.myteam.MyTeamFragment">
+    android:columnCount="2"
+    android:padding="16dp"
+    android:rowCount="3">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_marginEnd="@dimen/margin_padding_tiny"
+        android:layout_marginBottom="@dimen/margin_padding_tiny">
 
-</FrameLayout>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgPokemon1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitCenter"
+            android:background="@color/grey_light"
+            android:src="@drawable/ic_add_pokemon"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
+
+        <ImageButton
+            android:contentDescription="@string/delete"
+            android:id="@+id/btnDelete1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="@dimen/margin_padding_tiny"
+            android:layout_marginEnd="@dimen/margin_padding_tiny"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_delete" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_marginEnd="@dimen/margin_padding_tiny"
+        android:layout_marginBottom="@dimen/margin_padding_tiny">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgPokemon2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitCenter"
+            android:background="@color/grey_light"
+            android:src="@drawable/ic_add_pokemon"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
+
+        <ImageButton
+            android:contentDescription="@string/delete"
+            android:id="@+id/btnDelete2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="@dimen/margin_padding_tiny"
+            android:layout_marginEnd="@dimen/margin_padding_tiny"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_delete" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_marginEnd="@dimen/margin_padding_tiny"
+        android:layout_marginBottom="@dimen/margin_padding_tiny">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgPokemon3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitCenter"
+            android:background="@color/grey_light"
+            android:src="@drawable/ic_add_pokemon"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
+
+        <ImageButton
+            android:contentDescription="@string/delete"
+            android:id="@+id/btnDelete3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="@dimen/margin_padding_tiny"
+            android:layout_marginEnd="@dimen/margin_padding_tiny"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_delete" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_marginEnd="@dimen/margin_padding_tiny"
+        android:layout_marginBottom="@dimen/margin_padding_tiny">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgPokemon4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitCenter"
+            android:background="@color/grey_light"
+            android:src="@drawable/ic_add_pokemon"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
+
+        <ImageButton
+            android:contentDescription="@string/delete"
+            android:id="@+id/btnDelete4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="@dimen/margin_padding_tiny"
+            android:layout_marginEnd="@dimen/margin_padding_tiny"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_delete" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_marginEnd="@dimen/margin_padding_tiny"
+        android:layout_marginBottom="@dimen/margin_padding_tiny">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgPokemon5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitCenter"
+            android:background="@color/grey_light"
+            android:src="@drawable/ic_add_pokemon"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
+
+        <ImageButton
+            android:contentDescription="@string/delete"
+            android:id="@+id/btnDelete5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="@dimen/margin_padding_tiny"
+            android:layout_marginEnd="@dimen/margin_padding_tiny"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_delete" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_marginEnd="@dimen/margin_padding_tiny"
+        android:layout_marginBottom="@dimen/margin_padding_tiny">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgPokemon6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitCenter"
+            android:background="@color/grey_light"
+            android:src="@drawable/ic_add_pokemon"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
+
+        <ImageButton
+            android:contentDescription="@string/delete"
+            android:id="@+id/btnDelete6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="@dimen/margin_padding_tiny"
+            android:layout_marginEnd="@dimen/margin_padding_tiny"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_delete" />
+    </FrameLayout>
+
+</GridLayout>

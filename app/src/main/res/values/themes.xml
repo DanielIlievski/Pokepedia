@@ -201,10 +201,16 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
     <!-- endregion -->
-    
+
+    <!-- region AlertDialog -->
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowBackground">@drawable/rounded_shape</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/TextView.Normal.Grey.Clickable</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/TextView.Normal.Grey.Clickable</item>
+    </style>
+    <!-- endregion -->
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
+        <item name="cornerSize">10%</item>
     </style>
 </resources>
