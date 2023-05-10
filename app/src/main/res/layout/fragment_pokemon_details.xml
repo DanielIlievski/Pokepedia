@@ -46,24 +46,19 @@
 
                     <TextView
                         android:id="@+id/pokemonNameAndId"
+                        style="@style/MaterialTextView.XLarge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:maxLines="1"
-                        android:textColor="@color/black"
-                        android:textSize="30sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:targetApi="o"
                         tools:text="@string/pokemon_id_name" />
 
-                    <LinearLayout
+                    <com.echo.pokepedia.ui.pokemon.PokemonTypesView
                         android:id="@+id/groupPokemonTypes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/margin_padding_normal"
-                        android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/pokemonNameAndId" />
@@ -105,7 +100,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margin_padding_normal"
-                        android:background="@drawable/rounded_shape_transparent"
+                        android:background="@drawable/rounded_shape"
                         android:scrollbarThumbHorizontal="@color/transparent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -122,6 +117,7 @@
         </LinearLayout>
 
         <ImageView
+            android:contentDescription="@string/pokemon_image"
             android:id="@+id/imgPokemon"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pokemon_details_img_pokemon_height"
@@ -132,5 +128,22 @@
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"/>
+        
+        <uk.bandev.xplosion.XplosionView
+            android:id="@+id/imgFavoriteAnim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/img_favorite_pokemon_margin_top"
+            android:layout_marginEnd="@dimen/margin_padding_xlarge">
+
+            <ImageView
+                android:contentDescription="@string/choose_as_favorite"
+                android:id="@+id/imgFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/heart_selector"
+                android:layout_gravity="center"/>
+        </uk.bandev.xplosion.XplosionView>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

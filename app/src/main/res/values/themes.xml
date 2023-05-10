@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.Pokepedia" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
@@ -73,9 +73,29 @@
         <item name="android:clickable">false</item>
         <item name="android:focusable">false</item>
     </style>
+
+    <style name="MaterialButton.PokemonType" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_weight">1</item>
+        <item name="android:autoSizeTextType" tools:targetApi="o">uniform</item>
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="textAllCaps">false</item>
+        <item name="cornerRadius">@dimen/radius_xlarge</item>
+        <item name="iconSize">@dimen/size_xxlarge</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconTintMode">multiply</item>
+    </style>
     <!-- endregion -->
 
     <!-- region textview styles -->
+    <style name="MaterialTextView.XLarge" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/text_size_xlarge</item>
+        <item name="android:autoSizeTextType" tools:targetApi="o">uniform</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
     <style name="MaterialTextView.XLarge.Grey.Caps" parent="android:TextAppearance">
         <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">@dimen/text_size_xlarge</item>
@@ -87,6 +107,9 @@
         <item name="android:textColor">@color/grey</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:autoSizeTextType" tools:targetApi="o">uniform</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="MaterialTextView.Normal.Grey.Center" parent="android:TextAppearance">
@@ -146,6 +169,8 @@
     <style name="TextView.Medium.Grey" parent="android:TextAppearance">
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/grey</item>
+        <item name="android:autoSizeTextType" tools:targetApi="o">uniform</item>
+        <item name="android:maxLines">1</item>
     </style>
 
     <!-- endregion -->
@@ -167,7 +192,7 @@
     </style>
     <!-- endregion -->
 
-    <!-- region CardView styles -->
+    <!-- region cardView styles -->
     <style name="CardView.Radius.Elevated.Clickable" parent="CardView">
         <item name="cardCornerRadius">@dimen/radius_medium</item>
         <item name="cardElevation">@dimen/elevation_medium</item>
@@ -176,4 +201,10 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
     <!-- endregion -->
+    
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/rounded_shape</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/TextView.Normal.Grey.Clickable</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/TextView.Normal.Grey.Clickable</item>
+    </style>
 </resources>

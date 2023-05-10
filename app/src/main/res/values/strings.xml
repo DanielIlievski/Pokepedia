@@ -82,6 +82,12 @@
     <string name="pokemon_id_name">#%1d %2$s</string>
     <string name="retry">Retry</string>
     <string name="no_internet_connection">No internet connection</string>
+    <string name="add_a_nickname_to_your_buddy">Add a nickname to your buddy:</string>
+    <string name="save">Save</string>
+    <string name="nickname_hint">ex: Mikey</string>
+    <string name="enter_nickname_error">Please enter a nickname.</string>
+    <string name="choose_as_favorite">Choose as favorite!</string>
+    <string name="pokemon_image">Pokemon image.</string>
     <!-- endregion -->
 
 </resources>

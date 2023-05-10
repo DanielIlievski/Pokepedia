@@ -1,12 +1,11 @@
 package com.echo.pokepedia.ui.pokemon.details
 
-import android.annotation.SuppressLint
 import android.app.ActionBar.LayoutParams
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -23,10 +22,10 @@ import com.echo.pokepedia.ui.BaseFragment
 import com.echo.pokepedia.ui.pokemon.PokemonActivity
 import com.echo.pokepedia.util.capitalizeFirstLetter
 import com.echo.pokepedia.util.getColorRes
-import com.echo.pokepedia.util.parseTypeToColorRes
-import com.echo.pokepedia.util.parseTypeToDrawableRes
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -69,20 +68,19 @@ class PokemonDetailsFragment : BaseFragment() {
 
         initObservers()
 
+        onImageFavoriteClickListener()
+
         viewModel.getPokemonDetails(args.pokemonName)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         (activity as PokemonActivity).showToolbar()
+        activity?.window?.statusBarColor =
+            requireContext().getColorRes(R.color.blue_pokemon_variant)
         _binding = null
     }
     // endregion
-
-    private fun initUI(pokemonDetails: PokemonDetailsDTO) {
-        initViews(pokemonDetails)
-        initToolbar()
-    }
 
     private fun initObservers() {
         observePokemonDetails()
@@ -90,8 +88,14 @@ class PokemonDetailsFragment : BaseFragment() {
     }
 
     // region init UI
+    private fun initUI(pokemonDetails: PokemonDetailsDTO) {
+        activity?.window?.statusBarColor = requireContext().getColorRes(R.color.black)
+        initViews(pokemonDetails)
+        initToolbar()
+        setImgFavoriteSelected()
+    }
+
     private fun initViews(pokemonDetails: PokemonDetailsDTO) {
-        activity?.actionBar?.title = getString(R.string.pokemon_id_name, 1, args.pokemonName)
         binding.root.background = getGradientWhiteBottom(args.dominantColor)
         loadImage(pokemonDetails.imageDefault, binding.imgPokemon)
         if (pokemonDetails.id != null && pokemonDetails.name != null) {
@@ -101,10 +105,8 @@ class PokemonDetailsFragment : BaseFragment() {
                 pokemonDetails.name.capitalizeFirstLetter()
             )
         }
-        setTypesGroup(pokemonDetails.types)
-        if (pokemonDetails.abilities != null) {
-            setAbilitiesGroup(pokemonDetails.abilities)
-        }
+        pokemonDetails.types?.let { binding.groupPokemonTypes.render(it, LinearLayout.HORIZONTAL) }
+        setAbilitiesGroup(pokemonDetails.abilities)
     }
 
     private fun initToolbar() {
@@ -113,17 +115,36 @@ class PokemonDetailsFragment : BaseFragment() {
             setTitleTextColor(Color.WHITE)
             elevation = 0f
             title =
-                getString(
-                    R.string.pokemon_id_name,
-                    args.pokemonId,
-                    args.pokemonName.capitalizeFirstLetter()
-                )
+                getString(R.string.pokemon_id_name, args.pokemonId, args.pokemonName.capitalizeFirstLetter())
             navigationIcon =
                 AppCompatResources.getDrawable(requireContext(), R.drawable.ic_back_arrow)
             setNavigationOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             }
         }
+    }
+
+    private fun setAbilitiesGroup(abilities: List<String>?) {
+        abilities?.forEach { ability ->
+            Chip(requireContext()).apply {
+                id = View.generateViewId()
+                text = ability
+                layoutParams =
+                    LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+                gravity = Gravity.CENTER
+                isSingleLine = true
+                isClickable = false
+                isFocusable = false
+                chipBackgroundColor = ColorStateList.valueOf(args.dominantColor)
+                binding.chipGroupPokemonAbilities.addView(this)
+                chipList.add(this)
+            }
+        }
+        binding.horizontalScroll.clipToOutline = true
+    }
+
+    private fun setImgFavoriteSelected() = lifecycleScope.launch {
+        binding.imgFavoriteAnim.isSelected = viewModel.isPokemonFavorite()
     }
     // endregion
 
@@ -152,6 +173,59 @@ class PokemonDetailsFragment : BaseFragment() {
             isDefaultImg = !isDefaultImg
         }
     }
+
+    // region onImageFavoriteClickListener
+    private fun onImageFavoriteClickListener() {
+        with(binding) {
+            imgFavoriteAnim.setOnClickListener {
+                if (!imgFavoriteAnim.isSelected) {
+                    showFavoritePokemonDialog()
+                    imgFavoriteAnim.likeAnimation()
+                }
+                imgFavoriteAnim.isSelected = !imgFavoriteAnim.isSelected
+
+
+            }
+        }
+    }
+
+    private fun showFavoritePokemonDialog() {
+        val input = TextInputEditText(requireContext())
+        val inputLayout: TextInputLayout = TextInputLayout(
+            requireContext(),
+            null,
+            R.style.TextInputLayout_OutlinedBox_Custom
+        ).apply {
+            hint = requireContext().getString(R.string.nickname_hint)
+            layoutParams =
+                LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+                    .apply { setMargins(15, 5, 15, 5) }
+            endIconMode = END_ICON_CLEAR_TEXT
+        }
+        inputLayout.addView(input)
+
+        val dialog = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog)
+            .setTitle(R.string.add_a_nickname_to_your_buddy)
+            .setView(inputLayout)
+            .setPositiveButton(R.string.save, null)
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
+                binding.imgFavoriteAnim.isSelected = !binding.imgFavoriteAnim.isSelected
+                dialog.cancel()
+            }
+            .setCancelable(false)
+            .show()
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+            if (input.text?.isNotEmpty()!!) {
+                viewModel.setBuddyPokemonName(args.pokemonName)
+                viewModel.setBuddyPokemonNickname(input.text.toString())
+                viewModel.setBuddyPokemonDominantColor(args.dominantColor)
+                dialog.dismiss()
+            } else {
+                inputLayout.error = getString(R.string.enter_nickname_error)
+            }
+        }
+    }
+    // endregion
     // endregion
 
     // region initObservers
@@ -162,53 +236,6 @@ class PokemonDetailsFragment : BaseFragment() {
             initUI(pokemonDetails)
             onPokemonImgLongClickListener(pokemonDetails)
         }
-    }
-
-    @SuppressLint("RestrictedApi")
-    private fun setTypesGroup(types: List<String>?) {
-        types?.forEach { type ->
-            MaterialButton(requireContext()).apply {
-                id = View.generateViewId()
-                text = type.capitalizeFirstLetter()
-                setTextColor(requireContext().getColorRes(R.color.black))
-                setAutoSizeTextTypeUniformWithConfiguration(12, 16, 1, TypedValue.COMPLEX_UNIT_SP)
-                maxLines = 1
-                layoutParams = LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f)
-                    .apply {
-                        setMargins(10, 5, 10, 5)
-                    }
-                setBackgroundColor(requireContext().getColorRes(parseTypeToColorRes(type)))
-                icon =
-                    AppCompatResources.getDrawable(requireContext(), parseTypeToDrawableRes(type))
-                iconTintMode = PorterDuff.Mode.MULTIPLY
-                iconSize = resources.getDimension(R.dimen.size_xxlarge).toInt()
-                iconGravity = MaterialButton.ICON_GRAVITY_TEXT_START
-                isClickable = false
-                isFocusable = false
-                isAllCaps = false
-                cornerRadius = resources.getDimension(R.dimen.radius_xlarge).toInt()
-                binding.groupPokemonTypes.addView(this)
-            }
-        }
-    }
-
-    private fun setAbilitiesGroup(abilities: List<String>?) {
-        abilities?.forEach { ability ->
-            Chip(requireContext()).apply {
-                id = View.generateViewId()
-                text = ability
-                layoutParams =
-                    LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-                gravity = Gravity.CENTER
-                isSingleLine = true
-                isClickable = false
-                isFocusable = false
-                chipBackgroundColor = ColorStateList.valueOf(args.dominantColor)
-                binding.chipGroupPokemonAbilities.addView(this)
-                chipList.add(this)
-            }
-        }
-        binding.horizontalScroll.clipToOutline = true
     }
     // endregion
 

@@ -8,7 +8,7 @@
         motion:duration="1000">
         <KeyFrameSet>
             <KeyAttribute
-                motion:motionTarget="@+id/chipGroupPokemonTypes"
+                motion:motionTarget="@+id/buddyGroupPokemonTypes"
                 motion:framePosition="0"
                 android:alpha="0" />
         </KeyFrameSet>
@@ -54,9 +54,17 @@
             motion:layout_constraintTop_toBottomOf="@+id/textPokemonNickname"
             android:layout_marginStart="@dimen/margin_padding_xxlarge" />
         <Constraint
-            android:id="@+id/chipGroupPokemonTypes"
+            android:id="@+id/buddyGroupPokemonTypes"
             android:alpha="0"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintBottom_toBottomOf="@id/buddy_pokemon_container"/>
+        <Constraint
+            android:id="@+id/groupPokemonTypes"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toEndOf="@id/imgPokemon"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintTop_toBottomOf="@id/textPokemonNickname"
+            android:visibility="gone" />
     </ConstraintSet>
 </MotionScene>
