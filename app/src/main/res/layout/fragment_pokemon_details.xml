@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:title="Pokemon name"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Pokemon name" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -59,6 +59,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/margin_padding_normal"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/pokemonNameAndId" />
@@ -117,18 +118,18 @@
         </LinearLayout>
 
         <ImageView
-            android:contentDescription="@string/pokemon_image"
             android:id="@+id/imgPokemon"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/pokemon_details_img_pokemon_height"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="@dimen/margin_padding_large"
             android:layout_marginTop="@dimen/margin_padding_large"
-            tools:src="@drawable/ic_pikachu_confused"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:contentDescription="@string/pokemon_image"
             android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"/>
-        
+            tools:src="@drawable/ic_pikachu_confused" />
+
         <uk.bandev.xplosion.XplosionView
             android:id="@+id/imgFavoriteAnim"
             android:layout_width="wrap_content"
@@ -138,12 +139,24 @@
             android:layout_marginEnd="@dimen/margin_padding_xlarge">
 
             <ImageView
-                android:contentDescription="@string/choose_as_favorite"
                 android:id="@+id/imgFavorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/heart_selector"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:contentDescription="@string/choose_as_favorite"
+                android:src="@drawable/heart_selector" />
         </uk.bandev.xplosion.XplosionView>
+
+        <ImageView
+            android:id="@+id/addToMyTeam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_padding_huge"
+            android:layout_marginTop="165dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:contentDescription="@string/add_to_my_team_title"
+            android:focusable="true"
+            android:src="@drawable/ic_pokeball_add" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

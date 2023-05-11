@@ -62,6 +62,8 @@
 
     <!-- region MyTeamFragment -->
     <string name="my_team">My Team</string>
+    <string name="remove_from_my_team_title">Remove from My Team</string>
+    <string name="remove_from_my_team_message">Do you want to remove this pokemon from your team?</string>
     <!-- endregion -->
 
     <!-- region HomeFragment -->
@@ -89,6 +91,10 @@
     <string name="choose_as_favorite">Choose as favorite!</string>
     <string name="pokemon_image">Pokemon image.</string>
     <string name="delete">Delete</string>
+    <string name="add_to_my_team_title">Add to My Team</string>
+    <string name="add_to_my_team_message">Do you want to add this pokemon to your team?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <!-- endregion -->
 
 </resources>

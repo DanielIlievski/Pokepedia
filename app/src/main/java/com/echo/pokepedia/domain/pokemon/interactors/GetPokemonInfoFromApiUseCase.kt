@@ -5,7 +5,7 @@ import com.echo.pokepedia.domain.pokemon.repository.PokemonRepository
 import com.echo.pokepedia.util.NetworkResult
 import javax.inject.Inject
 
-class GetPokemonInfoFromApiUserCase @Inject constructor(
+class GetPokemonInfoFromApiUseCase @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) {
 

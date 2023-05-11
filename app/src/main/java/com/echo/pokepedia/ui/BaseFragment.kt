@@ -1,5 +1,8 @@
 package com.echo.pokepedia.ui
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.widget.ImageView
@@ -32,6 +35,16 @@ open class BaseFragment : Fragment() {
         )
     }
 
+    fun getGradientBLTRBottomRounded(color1: Int, color2: Int): GradientDrawable {
+        return GradientDrawable(
+            GradientDrawable.Orientation.BL_TR,
+            intArrayOf(
+                color1,
+                color2
+            )
+        ).apply { cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, 60f, 60f, 60f, 60f) }
+    }
+
     fun getGradientBlackTop(color: Int): GradientDrawable {
         return GradientDrawable(
             GradientDrawable.Orientation.BOTTOM_TOP,
@@ -47,5 +60,23 @@ open class BaseFragment : Fragment() {
             .load(imgUrl)
             .placeholder(R.drawable.progress_spinner_anim)
             .into(imageView)
+    }
+
+    fun showSimpleAlertDialog(
+        context: Context,
+        title: Int?,
+        message: Int?,
+        positiveBtnText: Int?,
+        negativeBtnText: Int?,
+        onPositiveBtnClick: (dialog: DialogInterface, which: Int) -> Unit,
+        onNegativeBtnClick: (dialog: DialogInterface, which: Int) -> Unit
+    ) {
+        AlertDialog.Builder(context)
+            .setTitle(title?.let { getString(it) })
+            .setMessage(message?.let { getString(it) })
+            .setPositiveButton(positiveBtnText?.let { getString(it) }, DialogInterface.OnClickListener(onPositiveBtnClick))
+            .setNegativeButton(negativeBtnText?.let { getString(it) }, DialogInterface.OnClickListener(onNegativeBtnClick))
+            .create()
+            .show()
     }
 }

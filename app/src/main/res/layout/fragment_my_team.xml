@@ -21,22 +21,23 @@
             android:layout_height="match_parent"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
+            android:background="@color/grey_light"
             android:clickable="true"
             android:focusable="true"
             android:scaleType="fitCenter"
-            android:background="@color/grey_light"
             android:src="@drawable/ic_add_pokemon"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
 
         <ImageButton
-            android:contentDescription="@string/delete"
             android:id="@+id/btnDelete1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_marginTop="@dimen/margin_padding_tiny"
             android:layout_marginEnd="@dimen/margin_padding_tiny"
+            android:visibility="gone"
             android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/delete"
             android:src="@drawable/ic_delete" />
     </FrameLayout>
 
@@ -54,22 +55,23 @@
             android:layout_height="match_parent"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
+            android:background="@color/grey_light"
             android:clickable="true"
             android:focusable="true"
             android:scaleType="fitCenter"
-            android:background="@color/grey_light"
             android:src="@drawable/ic_add_pokemon"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
 
         <ImageButton
-            android:contentDescription="@string/delete"
             android:id="@+id/btnDelete2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_marginTop="@dimen/margin_padding_tiny"
             android:layout_marginEnd="@dimen/margin_padding_tiny"
+            android:visibility="gone"
             android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/delete"
             android:src="@drawable/ic_delete" />
     </FrameLayout>
 
@@ -87,22 +89,23 @@
             android:layout_height="match_parent"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
+            android:background="@color/grey_light"
             android:clickable="true"
             android:focusable="true"
             android:scaleType="fitCenter"
-            android:background="@color/grey_light"
             android:src="@drawable/ic_add_pokemon"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
 
         <ImageButton
-            android:contentDescription="@string/delete"
             android:id="@+id/btnDelete3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_marginTop="@dimen/margin_padding_tiny"
             android:layout_marginEnd="@dimen/margin_padding_tiny"
+            android:visibility="gone"
             android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/delete"
             android:src="@drawable/ic_delete" />
     </FrameLayout>
 
@@ -120,22 +123,23 @@
             android:layout_height="match_parent"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
+            android:background="@color/grey_light"
             android:clickable="true"
             android:focusable="true"
             android:scaleType="fitCenter"
-            android:background="@color/grey_light"
             android:src="@drawable/ic_add_pokemon"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
 
         <ImageButton
-            android:contentDescription="@string/delete"
             android:id="@+id/btnDelete4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_marginTop="@dimen/margin_padding_tiny"
             android:layout_marginEnd="@dimen/margin_padding_tiny"
+            android:visibility="gone"
             android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/delete"
             android:src="@drawable/ic_delete" />
     </FrameLayout>
 
@@ -153,22 +157,23 @@
             android:layout_height="match_parent"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
+            android:background="@color/grey_light"
             android:clickable="true"
             android:focusable="true"
             android:scaleType="fitCenter"
-            android:background="@color/grey_light"
             android:src="@drawable/ic_add_pokemon"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
 
         <ImageButton
-            android:contentDescription="@string/delete"
             android:id="@+id/btnDelete5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_marginTop="@dimen/margin_padding_tiny"
             android:layout_marginEnd="@dimen/margin_padding_tiny"
+            android:visibility="gone"
             android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/delete"
             android:src="@drawable/ic_delete" />
     </FrameLayout>
 
@@ -186,22 +191,23 @@
             android:layout_height="match_parent"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
+            android:background="@color/grey_light"
             android:clickable="true"
             android:focusable="true"
             android:scaleType="fitCenter"
-            android:background="@color/grey_light"
             android:src="@drawable/ic_add_pokemon"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
 
         <ImageButton
-            android:contentDescription="@string/delete"
             android:id="@+id/btnDelete6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_marginTop="@dimen/margin_padding_tiny"
             android:layout_marginEnd="@dimen/margin_padding_tiny"
+            android:visibility="gone"
             android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/delete"
             android:src="@drawable/ic_delete" />
     </FrameLayout>
 

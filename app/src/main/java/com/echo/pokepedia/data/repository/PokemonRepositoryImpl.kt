@@ -1,6 +1,8 @@
 package com.echo.pokepedia.data.repository
 
 import android.graphics.Color
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -17,8 +19,7 @@ import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.PAGE_SIZE
 import com.echo.pokepedia.util.UiText
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -26,6 +27,29 @@ class PokemonRepositoryImpl @Inject constructor(
     private val remotePokemonDataSource: RemotePokemonDataSource,
     private val glide: RequestManager
 ) : PokemonRepository {
+
+    private val _myTeamListFlow = MutableStateFlow<List<Pair<String, Int>>>(emptyList())
+    private val myTeamListFlow: Flow<List<Pair<String, Int>>> = _myTeamListFlow
+
+    override fun getMyTeamList(): Flow<List<Pair<String, Int>>> {
+        return myTeamListFlow
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun addPokemonToMyTeam(imgUrl: String, dominantColor: Int) {
+        val myTeamList = _myTeamListFlow.value.toMutableList()
+        if (myTeamList.none { it.first == imgUrl }) {
+            myTeamList.add(imgUrl to dominantColor)
+            _myTeamListFlow.value = myTeamList
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun removePokemonFromMyTeam(imgUrl: String) {
+        val myTeamList = _myTeamListFlow.value.toMutableList()
+        myTeamList.removeIf { it.first == imgUrl }
+        _myTeamListFlow.value = myTeamList
+    }
 
     override suspend fun getPokemonList(): Flow<PagingData<PokemonDTO>> {
         return Pager(

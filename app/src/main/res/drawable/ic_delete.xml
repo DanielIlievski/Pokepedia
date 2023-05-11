@@ -3,7 +3,7 @@
     android:viewportHeight="17" android:viewportWidth="17"
     android:width="20dp" xmlns:android="http://schemas.android.com/apk/res/android"
     tools:ignore="VectorRaster">
-    <path android:fillColor="#FFFF" android:fillType="evenOdd"
+    <path android:fillColor="#FFC80404" android:fillType="evenOdd"
         android:pathData="M12.566,8L15.611,4.956C16.031,4.535 16.031,3.853 15.611,3.434L12.566,0.389C12.146,-0.031 11.464,-0.031 11.043,0.389L7.999,3.433L4.955,0.389C4.534,-0.031 3.852,-0.031 3.432,0.389L0.388,3.434C-0.034,3.854 -0.034,4.536 0.387,4.956L3.431,8L0.387,11.044C-0.034,11.465 -0.034,12.147 0.388,12.567L3.432,15.611C3.852,16.032 4.534,16.032 4.955,15.611L7.999,12.567L11.043,15.611C11.464,16.032 12.146,16.032 12.566,15.611L15.611,12.567C16.031,12.146 16.031,11.464 15.611,11.044L12.566,8L12.566,8Z"
         android:strokeColor="#00000000" android:strokeWidth="1"/>
 </vector>

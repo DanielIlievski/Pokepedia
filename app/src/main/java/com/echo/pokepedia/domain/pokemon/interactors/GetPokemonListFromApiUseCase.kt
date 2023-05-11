@@ -6,7 +6,7 @@ import com.echo.pokepedia.domain.pokemon.repository.PokemonRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetPokemonListFromApiUserCase @Inject constructor(
+class GetPokemonListFromApiUseCase @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) {
 
