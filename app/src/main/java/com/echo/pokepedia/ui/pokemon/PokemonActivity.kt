@@ -1,6 +1,5 @@
 package com.echo.pokepedia.ui.pokemon
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -75,16 +74,12 @@ class PokemonActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("RestrictedApi")
     fun hideToolbar() {
         this.supportActionBar?.hide()
-        this.supportActionBar?.setShowHideAnimationEnabled(false)
     }
 
-    @SuppressLint("RestrictedApi")
     fun showToolbar() {
         this.supportActionBar?.show()
-        supportActionBar?.setShowHideAnimationEnabled(true)
     }
 
     private fun observeErrorObservable() = lifecycleScope.launch {

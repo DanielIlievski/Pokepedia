@@ -1,8 +1,6 @@
 package com.echo.pokepedia.data.repository
 
 import android.graphics.Color
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -19,7 +17,9 @@ import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.PAGE_SIZE
 import com.echo.pokepedia.util.UiText
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -35,18 +35,16 @@ class PokemonRepositoryImpl @Inject constructor(
         return myTeamListFlow
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun addPokemonToMyTeam(imgUrl: String, dominantColor: Int) {
         val myTeamList = _myTeamListFlow.value.toMutableList()
         myTeamList.add(imgUrl to dominantColor)
         _myTeamListFlow.value = myTeamList
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun removePokemonFromMyTeam(imgUrl: String) {
         val myTeamList = _myTeamListFlow.value.toMutableList()
-        myTeamList.removeIf { it.first == imgUrl }
-        _myTeamListFlow.value = myTeamList
+        val updatedList = myTeamList.filterNot { it.first == imgUrl }
+        _myTeamListFlow.value = updatedList
     }
 
     override suspend fun getPokemonList(): Flow<PagingData<PokemonDTO>> {
