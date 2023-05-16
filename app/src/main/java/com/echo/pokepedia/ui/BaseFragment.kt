@@ -74,6 +74,7 @@ open class BaseFragment : Fragment() {
         AlertDialog.Builder(context, R.style.CustomAlertDialog)
             .setTitle(title?.let { getString(it) })
             .setMessage(message?.let { getString(it) })
+            .setCancelable(false)
             .setPositiveButton(
                 positiveBtnText?.let { getString(it) },
                 onPositiveBtnClick?.let { DialogInterface.OnClickListener(it) }
