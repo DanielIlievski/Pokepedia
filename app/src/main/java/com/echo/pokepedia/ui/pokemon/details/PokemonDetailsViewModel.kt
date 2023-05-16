@@ -3,6 +3,7 @@ package com.echo.pokepedia.ui.pokemon.details
 import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.data.preferences.SettingsDataStore
 import com.echo.pokepedia.domain.pokemon.interactors.AddPokemonToMyTeamUseCase
+import com.echo.pokepedia.domain.pokemon.interactors.GetMyTeamListUseCase
 import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonInfoFromApiUseCase
 import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
 import com.echo.pokepedia.ui.BaseViewModel
@@ -11,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +20,7 @@ import javax.inject.Inject
 class PokemonDetailsViewModel @Inject constructor(
     private val getPokemonInfoFromApiUseCase: GetPokemonInfoFromApiUseCase,
     private val addPokemonToMyTeamUseCase: AddPokemonToMyTeamUseCase,
+    private val getMyTeamListUseCase: GetMyTeamListUseCase,
     private val settingsDataStore: SettingsDataStore
 ) : BaseViewModel() {
 
@@ -63,7 +66,22 @@ class PokemonDetailsViewModel @Inject constructor(
         return _buddyPokemonName.first() == _pokemonDetailsInfo.value.name
     }
 
-    fun addPokemonToMyTeam(imgUrl: String, dominantColor: Int) {
-        addPokemonToMyTeamUseCase.invoke(imgUrl, dominantColor)
+    suspend fun checkAddConditions(imgUrl: String?, dominantColor: Int): AddPokemonState {
+        val myTeamList = getMyTeamListUseCase.invoke().firstOrNull() ?: emptyList()
+        return when {
+            myTeamList.contains(imgUrl to dominantColor) -> AddPokemonState.AlreadyExists
+            myTeamList.size < 6 -> AddPokemonState.AddPokemon
+            else -> AddPokemonState.TeamFull
+        }
     }
+
+    fun addPokemonToMyTeam(imgUrl: String?, dominantColor: Int) {
+        imgUrl?.let { addPokemonToMyTeamUseCase.invoke(it, dominantColor) }
+    }
+}
+
+sealed class AddPokemonState {
+    object AddPokemon : AddPokemonState()
+    object AlreadyExists : AddPokemonState()
+    object TeamFull : AddPokemonState()
 }

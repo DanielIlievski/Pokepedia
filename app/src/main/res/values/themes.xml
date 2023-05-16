@@ -151,6 +151,15 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
+    <style name="TextView.Small.Blue.Clickable" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">@color/blue_pokemon</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
     <style name="TextView.Small.Grey.Clickable" parent="android:TextAppearance">
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColor">@color/grey</item>
@@ -205,8 +214,8 @@
     <!-- region AlertDialog -->
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowBackground">@drawable/rounded_shape</item>
-        <item name="android:buttonBarPositiveButtonStyle">@style/TextView.Normal.Grey.Clickable</item>
-        <item name="android:buttonBarNegativeButtonStyle">@style/TextView.Normal.Grey.Clickable</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/TextView.Small.Blue.Clickable</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/TextView.Small.Blue.Clickable</item>
     </style>
     <!-- endregion -->
 

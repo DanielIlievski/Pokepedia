@@ -2,15 +2,15 @@ package com.echo.pokepedia.ui.pokemon.myteam
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentMyTeamBinding
 import com.echo.pokepedia.ui.BaseFragment
@@ -27,9 +27,13 @@ class MyTeamFragment : BaseFragment() {
 
     private val viewModel: MyTeamViewModel by viewModels()
 
+    private val args by navArgs<MyTeamFragmentArgs>()
+
     private val myImageViewList = mutableListOf<ImageView>()
 
     private val myBtnDeleteList = mutableListOf<ImageButton>()
+
+    private var isTeamFull: Boolean = false
     // endregion
 
     // region fragment methods
@@ -43,12 +47,18 @@ class MyTeamFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewModel.initTeam()
+
+        isTeamFull = args.isTeamFull
+
         initImageViewList()
 
         initBtnDeleteList()
 
         initObservers()
+
+        initListeners()
     }
 
     override fun onDestroyView() {
@@ -74,150 +84,112 @@ class MyTeamFragment : BaseFragment() {
     }
 
     // region initObservers
+
+    // region observeMyTeamList
     private fun observeMyTeamList() = lifecycleScope.launch {
-        viewModel.myTeamList.asLiveData().observe(viewLifecycleOwner) { teamList ->
-            Log.d("HelloWorld444", "observeMyTeamList: $teamList")
-            initListeners(teamList)
+        viewModel.myTeamList.collect { teamList ->
             myBtnDeleteList.forEachIndexed { i, _ ->
                 if (i < teamList.size) {
-                    loadImage(teamList[i].first, myImageViewList[i])
                     myImageViewList[i].background = getGradientWhiteBottom(teamList[i].second)
+                    loadImage(teamList[i].first, myImageViewList[i])
+                    startShakeAnimation(myImageViewList[i])
                     myBtnDeleteList[i].visibility = View.VISIBLE
                 } else {
                     myBtnDeleteList[i].visibility = View.GONE
                     myImageViewList[i].backgroundTintList =
                         ColorStateList.valueOf(requireContext().getColorRes(R.color.grey_light))
                     myImageViewList[i].setImageResource(R.drawable.ic_add_pokemon)
-
+                    myImageViewList[i].animation = null
                 }
-
             }
         }
     }
+
+    private fun startShakeAnimation(view: View) {
+        view.animation =
+            if (args.isTeamFull)
+                AnimationUtils.loadAnimation(requireContext(), R.anim.shake)
+            else null
+    }
+
+    private fun stopAllShakeAnimation() {
+        myImageViewList.forEach { it.animation = null }
+    }
+    // endregion
     // endregion
 
-    private fun initListeners(teamList: List<Pair<String, Int>>) {
-        onBtnDelete1Clicked(teamList)
-        onBtnDelete2Clicked(teamList)
-        onBtnDelete3Clicked(teamList)
-        onBtnDelete4Clicked(teamList)
-        onBtnDelete5Clicked(teamList)
-        onBtnDelete6Clicked(teamList)
+    private fun initListeners() {
+        onBtnDelete1Clicked()
+        onBtnDelete2Clicked()
+        onBtnDelete3Clicked()
+        onBtnDelete4Clicked()
+        onBtnDelete5Clicked()
+        onBtnDelete6Clicked()
     }
 
     // region initListeners
-    private fun onBtnDelete1Clicked(teamList: List<Pair<String, Int>>) {
+    private fun onBtnDelete1Clicked() {
         binding.btnDelete1.setOnClickListener {
-            showSimpleAlertDialog(
-                requireContext(),
-                R.string.remove_from_my_team_title,
-                R.string.remove_from_my_team_message,
-                R.string.yes,
-                R.string.no,
-                { dialog, _ ->
-                    viewModel.removeFromMyTeam(teamList[0].first)
-                    dialog.dismiss()
-                },
-                { dialog, _ ->
-                    dialog.cancel()
-                }
-            )
+            alertDialogDeleteOnPosition(0)
         }
     }
 
-    private fun onBtnDelete2Clicked(teamList: List<Pair<String, Int>>) {
+    private fun onBtnDelete2Clicked() {
         binding.btnDelete2.setOnClickListener {
-            showSimpleAlertDialog(
-                requireContext(),
-                R.string.remove_from_my_team_title,
-                R.string.remove_from_my_team_message,
-                R.string.yes,
-                R.string.no,
-                { dialog, _ ->
-                    viewModel.removeFromMyTeam(teamList[1].first)
-                    dialog.dismiss()
-                },
-                { dialog, _ ->
-                    dialog.cancel()
-                }
-            )
+            alertDialogDeleteOnPosition(1)
         }
     }
 
-    private fun onBtnDelete3Clicked(teamList: List<Pair<String, Int>>) {
+    private fun onBtnDelete3Clicked() {
         binding.btnDelete3.setOnClickListener {
-            showSimpleAlertDialog(
-                requireContext(),
-                R.string.remove_from_my_team_title,
-                R.string.remove_from_my_team_message,
-                R.string.yes,
-                R.string.no,
-                { dialog, _ ->
-                    viewModel.removeFromMyTeam(teamList[2].first)
-                    dialog.dismiss()
-                },
-                { dialog, _ ->
-                    dialog.cancel()
-                }
-            )
+            alertDialogDeleteOnPosition(2)
         }
     }
 
-    private fun onBtnDelete4Clicked(teamList: List<Pair<String, Int>>) {
+    private fun onBtnDelete4Clicked() {
         binding.btnDelete4.setOnClickListener {
-            showSimpleAlertDialog(
-                requireContext(),
-                R.string.remove_from_my_team_title,
-                R.string.remove_from_my_team_message,
-                R.string.yes,
-                R.string.no,
-                { dialog, _ ->
-                    viewModel.removeFromMyTeam(teamList[3].first)
-                    dialog.dismiss()
-                },
-                { dialog, _ ->
-                    dialog.cancel()
-                }
-            )
+            alertDialogDeleteOnPosition(3)
         }
     }
 
-    private fun onBtnDelete5Clicked(teamList: List<Pair<String, Int>>) {
+    private fun onBtnDelete5Clicked() {
         binding.btnDelete5.setOnClickListener {
-            showSimpleAlertDialog(
-                requireContext(),
-                R.string.remove_from_my_team_title,
-                R.string.remove_from_my_team_message,
-                R.string.yes,
-                R.string.no,
-                { dialog, _ ->
-                    viewModel.removeFromMyTeam(teamList[4].first)
-                    dialog.dismiss()
-                },
-                { dialog, _ ->
-                    dialog.cancel()
-                }
-            )
+            alertDialogDeleteOnPosition(4)
         }
     }
 
-    private fun onBtnDelete6Clicked(teamList: List<Pair<String, Int>>) {
+    private fun onBtnDelete6Clicked() {
         binding.btnDelete6.setOnClickListener {
-            showSimpleAlertDialog(
-                requireContext(),
-                R.string.remove_from_my_team_title,
-                R.string.remove_from_my_team_message,
-                R.string.yes,
-                R.string.no,
-                { dialog, _ ->
-                    viewModel.removeFromMyTeam(teamList[5].first)
-                    dialog.dismiss()
-                },
-                { dialog, _ ->
-                    dialog.cancel()
-                }
-            )
+            alertDialogDeleteOnPosition(5)
         }
     }
     // endregion
+
+    private fun alertDialogDeleteOnPosition(position: Int) {
+        showSimpleAlertDialog(
+            context = requireContext(),
+            title = R.string.remove_from_my_team_title,
+            message = R.string.remove_from_my_team_message,
+            positiveBtnText = R.string.yes,
+            negativeBtnText = R.string.no,
+            onPositiveBtnClick = { dialog, _ ->
+                deleteOnPosition(position)
+                if (isTeamFull) {
+                    isTeamFull = false
+                    viewModel.addPokemonToMyTeam(args.imgUrl, args.dominantColor)
+                }
+                stopAllShakeAnimation()
+                dialog.dismiss()
+            },
+            onNegativeBtnClick = { dialog, _ ->
+                dialog.cancel()
+            }
+        )
+    }
+
+    private fun deleteOnPosition(position: Int) {
+        if (position in 0 until viewModel.getMyTeamList().size) {
+            viewModel.removeFromMyTeam(viewModel.getMyTeamList()[position].first)
+        }
+    }
 }

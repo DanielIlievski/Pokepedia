@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentPokemonDetailsBinding
@@ -199,8 +200,6 @@ class PokemonDetailsFragment : BaseFragment() {
                     imgFavoriteAnim.likeAnimation()
                 }
                 imgFavoriteAnim.isSelected = !imgFavoriteAnim.isSelected
-
-
             }
         }
     }
@@ -248,21 +247,67 @@ class PokemonDetailsFragment : BaseFragment() {
     //region onAddToMyTeamClickListener
     private fun onAddToMyTeamClickListener(pokemonDetails: PokemonDetailsDTO) {
         binding.addToMyTeam.setOnClickListener {
-            showSimpleAlertDialog(
-                requireContext(),
-                R.string.add_to_my_team_title,
-                R.string.add_to_my_team_message,
-                R.string.yes,
-                R.string.no,
-                { dialog, _ ->
-                    viewModel.addPokemonToMyTeam(pokemonDetails.imageDefault!!, args.dominantColor)
-                    dialog.dismiss()
-                },
-                { dialog, _ ->
-                    dialog.cancel()
-                })
-
+            lifecycleScope.launch {
+                when (
+                    viewModel.checkAddConditions(pokemonDetails.imageDefault, args.dominantColor)
+                ) {
+                    AddPokemonState.AlreadyExists -> showToastMessageShort(
+                        getString(
+                            R.string.already_exists_in_team,
+                            pokemonDetails.name?.capitalizeFirstLetter()
+                        )
+                    )
+                    AddPokemonState.TeamFull -> teamFullAlertDialog(pokemonDetails)
+                    AddPokemonState.AddPokemon -> addPokemonAlertDialog(pokemonDetails)
+                }
+            }
         }
+    }
+
+    private fun teamFullAlertDialog(pokemonDetails: PokemonDetailsDTO) {
+        showSimpleAlertDialog(
+            context = requireContext(),
+            title = R.string.team_full_title,
+            message = R.string.team_full_message,
+            positiveBtnText = R.string.yes,
+            negativeBtnText = R.string.no,
+            onPositiveBtnClick = { dialog, _ ->
+                val isTeamFull = true
+                val action =
+                    PokemonDetailsFragmentDirections.pokemonDetailsFragmentToMyTeamFragment(
+                        isTeamFull = isTeamFull,
+                        imgUrl = pokemonDetails.imageDefault,
+                        dominantColor = args.dominantColor
+                    )
+                findNavController().navigate(action)
+                dialog.dismiss()
+            },
+            onNegativeBtnClick = { dialog, _ ->
+                dialog.cancel()
+            }
+        )
+    }
+
+    private fun addPokemonAlertDialog(pokemonDetails: PokemonDetailsDTO) {
+        showSimpleAlertDialog(
+            context = requireContext(),
+            title = R.string.add_to_my_team_title,
+            message = R.string.add_to_my_team_message,
+            positiveBtnText = R.string.yes,
+            negativeBtnText = R.string.no,
+            onPositiveBtnClick = { dialog, _ ->
+                viewModel.addPokemonToMyTeam(pokemonDetails.imageDefault, args.dominantColor)
+                showToastMessageShort(
+                    getString(
+                        R.string.added_to_team_successfully,
+                        pokemonDetails.name?.capitalizeFirstLetter()
+                    )
+                )
+                dialog.dismiss()
+            },
+            onNegativeBtnClick = { dialog, _ ->
+                dialog.cancel()
+            })
     }
     //endregion
     // endregion

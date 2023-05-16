@@ -64,18 +64,24 @@ open class BaseFragment : Fragment() {
 
     fun showSimpleAlertDialog(
         context: Context,
-        title: Int?,
-        message: Int?,
-        positiveBtnText: Int?,
-        negativeBtnText: Int?,
-        onPositiveBtnClick: (dialog: DialogInterface, which: Int) -> Unit,
-        onNegativeBtnClick: (dialog: DialogInterface, which: Int) -> Unit
+        title: Int? = null,
+        message: Int? = null,
+        positiveBtnText: Int? = null,
+        negativeBtnText: Int? = null,
+        onPositiveBtnClick: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
+        onNegativeBtnClick: ((dialog: DialogInterface, which: Int) -> Unit)? = null
     ) {
-        AlertDialog.Builder(context)
+        AlertDialog.Builder(context, R.style.CustomAlertDialog)
             .setTitle(title?.let { getString(it) })
             .setMessage(message?.let { getString(it) })
-            .setPositiveButton(positiveBtnText?.let { getString(it) }, DialogInterface.OnClickListener(onPositiveBtnClick))
-            .setNegativeButton(negativeBtnText?.let { getString(it) }, DialogInterface.OnClickListener(onNegativeBtnClick))
+            .setPositiveButton(
+                positiveBtnText?.let { getString(it) },
+                onPositiveBtnClick?.let { DialogInterface.OnClickListener(it) }
+            )
+            .setNegativeButton(
+                negativeBtnText?.let { getString(it) },
+                onNegativeBtnClick?.let { DialogInterface.OnClickListener(it) }
+            )
             .create()
             .show()
     }

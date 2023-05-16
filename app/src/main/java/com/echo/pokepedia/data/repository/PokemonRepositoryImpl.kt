@@ -38,10 +38,8 @@ class PokemonRepositoryImpl @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.N)
     override fun addPokemonToMyTeam(imgUrl: String, dominantColor: Int) {
         val myTeamList = _myTeamListFlow.value.toMutableList()
-        if (myTeamList.none { it.first == imgUrl }) {
-            myTeamList.add(imgUrl to dominantColor)
-            _myTeamListFlow.value = myTeamList
-        }
+        myTeamList.add(imgUrl to dominantColor)
+        _myTeamListFlow.value = myTeamList
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
