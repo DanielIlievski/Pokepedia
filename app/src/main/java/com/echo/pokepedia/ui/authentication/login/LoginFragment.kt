@@ -70,6 +70,10 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // this is to avoid the Login every time
+        // ideally should check if the user is logged in and then navigate
+        navigateToHomeScreen()
+
         initObservers()
 
         initListeners()
@@ -136,7 +140,6 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
 
     private fun onSuccessfulLogin(user: FirebaseUser?) {
         showToastMessageShort(getString(R.string.sign_in_successful, user?.displayName))
-
         navigateToHomeScreen()
     }
 

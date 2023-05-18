@@ -2,8 +2,8 @@ package com.echo.pokepedia.ui.authentication.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.echo.pokepedia.domain.authentication.interactors.FacebookSignInUserCase
-import com.echo.pokepedia.domain.authentication.interactors.GoogleSignInUserUseCase
+import com.echo.pokepedia.domain.authentication.interactors.FacebookSignInUseCase
+import com.echo.pokepedia.domain.authentication.interactors.GoogleSignInUseCase
 import com.echo.pokepedia.domain.authentication.interactors.LoginUserUseCase
 import com.echo.pokepedia.domain.authentication.interactors.ResetPasswordUseCase
 import com.echo.pokepedia.util.NetworkResult
@@ -24,8 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUserUseCase: LoginUserUseCase,
-    private val googleSignInUserUseCase: GoogleSignInUserUseCase,
-    private val facebookSignInUserCase: FacebookSignInUserCase,
+    private val googleSignInUseCase: GoogleSignInUseCase,
+    private val facebookSignInUseCase: FacebookSignInUseCase,
     private val resetPasswordUseCase: ResetPasswordUseCase
 ) : ViewModel() {
 
@@ -56,11 +56,11 @@ class LoginViewModel @Inject constructor(
     }
 
     fun googleSignIn(task: Task<GoogleSignInAccount>) = viewModelScope.launch {
-        _signInUser.emit(googleSignInUserUseCase.invoke(task))
+        _signInUser.emit(googleSignInUseCase.invoke(task))
     }
 
     fun facebookSignIn(token: AccessToken) = viewModelScope.launch {
-        _signInUser.emit(facebookSignInUserCase.invoke(token))
+        _signInUser.emit(facebookSignInUseCase.invoke(token))
     }
 
     fun resetPassword(email: String) = viewModelScope.launch {

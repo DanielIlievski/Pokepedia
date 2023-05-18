@@ -19,6 +19,7 @@ import com.echo.pokepedia.util.PAGE_SIZE
 import com.echo.pokepedia.util.UiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -28,6 +29,25 @@ class PokemonRepositoryImpl @Inject constructor(
     private val localPokemonDataSource: LocalPokemonDataSource,
     private val glide: RequestManager
 ) : PokemonRepository {
+
+    private val _myTeamListFlow = MutableStateFlow<List<Pair<String, Int>>>(emptyList())
+    private val myTeamListFlow: Flow<List<Pair<String, Int>>> = _myTeamListFlow
+
+    override fun getMyTeamList(): Flow<List<Pair<String, Int>>> {
+        return myTeamListFlow
+    }
+
+    override fun addPokemonToMyTeam(imgUrl: String, dominantColor: Int) {
+        val myTeamList = _myTeamListFlow.value.toMutableList()
+        myTeamList.add(imgUrl to dominantColor)
+        _myTeamListFlow.value = myTeamList
+    }
+
+    override fun removePokemonFromMyTeam(imgUrl: String) {
+        val myTeamList = _myTeamListFlow.value.toMutableList()
+        val updatedList = myTeamList.filterNot { it.first == imgUrl }
+        _myTeamListFlow.value = updatedList
+    }
 
     override suspend fun getPokemonList(): Flow<PagingData<PokemonDTO>> {
         return Pager(

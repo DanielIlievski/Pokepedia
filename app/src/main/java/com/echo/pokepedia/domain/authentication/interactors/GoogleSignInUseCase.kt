@@ -7,7 +7,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
 
-class GoogleSignInUserUseCase @Inject constructor(
+class GoogleSignInUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
 

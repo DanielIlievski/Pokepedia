@@ -11,4 +11,10 @@ interface PokemonRepository {
     suspend fun getPokemonList(): Flow<PagingData<PokemonDTO>>
 
     suspend fun getPokemonInfoFromApi(name: String): NetworkResult<PokemonDetailsDTO>
+
+    fun getMyTeamList(): Flow<List<Pair<String, Int>>>
+
+    fun addPokemonToMyTeam(imgUrl: String, dominantColor: Int)
+
+    fun removePokemonFromMyTeam(imgUrl: String)
 }

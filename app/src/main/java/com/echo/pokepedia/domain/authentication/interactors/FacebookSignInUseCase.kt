@@ -6,7 +6,7 @@ import com.facebook.AccessToken
 import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
 
-class FacebookSignInUserCase @Inject constructor(
+class FacebookSignInUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
 
