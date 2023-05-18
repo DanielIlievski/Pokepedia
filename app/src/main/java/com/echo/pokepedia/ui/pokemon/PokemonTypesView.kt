@@ -11,6 +11,7 @@ import com.echo.pokepedia.util.capitalizeFirstLetter
 import com.echo.pokepedia.util.getColorRes
 import com.echo.pokepedia.util.parseTypeToColorRes
 import com.echo.pokepedia.util.parseTypeToDrawableRes
+import com.google.android.material.button.MaterialButton
 
 class PokemonTypesView @JvmOverloads constructor(
     context: Context,
@@ -23,38 +24,27 @@ class PokemonTypesView @JvmOverloads constructor(
         binding = ViewPokemonTypesBinding.inflate(LayoutInflater.from(context), this)
     }
 
-    fun render(types: List<String>, orientation: Int) {
+    fun render(types: List<String>, orientation: Int, visibility: Int) {
         setOrientation(orientation)
         if (types.size == 2) {
-            with(binding.type1) {
-                text = types[0].capitalizeFirstLetter()
-                icon = AppCompatResources.getDrawable(
-                    binding.root.context,
-                    parseTypeToDrawableRes(types[0])
-                )
-                setBackgroundColor(rootView.context.getColorRes(parseTypeToColorRes(types[0])))
-            }
-
-            with(binding.type2) {
-                text = types[1].capitalizeFirstLetter()
-                icon = AppCompatResources.getDrawable(
-                    binding.root.context,
-                    parseTypeToDrawableRes(types[1])
-                )
-                setBackgroundColor(rootView.context.getColorRes(parseTypeToColorRes(types[1])))
-            }
+            initProperties(binding.type1, types[0], visibility)
+            initProperties(binding.type2, types[1], visibility)
         } else {
             setOrientation(orientation)
-            with(binding.type1) {
-                text = types[0].capitalizeFirstLetter()
-                icon = AppCompatResources.getDrawable(
-                    binding.root.context,
-                    parseTypeToDrawableRes(types[0])
-                )
-                setBackgroundColor(rootView.context.getColorRes(parseTypeToColorRes(types[0])))
-            }
-
+            initProperties(binding.type1, types[0], visibility)
             binding.type2.visibility = View.GONE
+        }
+    }
+
+    private fun initProperties(button: MaterialButton, type: String, visibility: Int) {
+        with(button) {
+            text = type.capitalizeFirstLetter()
+            icon = AppCompatResources.getDrawable(
+                binding.root.context,
+                parseTypeToDrawableRes(type)
+            )
+            setBackgroundColor(rootView.context.getColorRes(parseTypeToColorRes(type)))
+            this.visibility = visibility
         }
     }
 }

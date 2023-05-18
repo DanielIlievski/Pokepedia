@@ -29,7 +29,7 @@ class RetrofitPokemonDataSource @Inject constructor(
         return try {
             val pokemon = pokemonDbApi.getPokemonInfo(name)
 
-            if (pokemon.isSuccessful && pokemon.body() != null) {
+            if (pokemon.isSuccessful) {
                 NetworkResult.Success(pokemon.body()!!)
             } else {
                 NetworkResult.Failure(UiText.StringResource(R.string.fetch_unsuccessful))

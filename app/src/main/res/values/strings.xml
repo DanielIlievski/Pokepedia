@@ -88,6 +88,8 @@
     <string name="enter_nickname_error">Please enter a nickname.</string>
     <string name="choose_as_favorite">Choose as favorite!</string>
     <string name="pokemon_image">Pokemon image.</string>
+    <string name="pikachu">Pikachu</string>
+    <string name="pika">Pika</string>
     <!-- endregion -->
 
 </resources>

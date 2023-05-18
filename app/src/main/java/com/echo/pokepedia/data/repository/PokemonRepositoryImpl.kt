@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.RequestManager
+import com.echo.pokepedia.data.database.LocalPokemonDataSource
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
 import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
@@ -24,6 +25,7 @@ import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
     private val remotePokemonDataSource: RemotePokemonDataSource,
+    private val localPokemonDataSource: LocalPokemonDataSource,
     private val glide: RequestManager
 ) : PokemonRepository {
 

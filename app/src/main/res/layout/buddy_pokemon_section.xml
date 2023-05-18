@@ -39,7 +39,7 @@
         app:layout_constraintEnd_toEndOf="@id/buddy_pokemon_container"
         app:layout_constraintStart_toEndOf="@id/imgPokemon"
         app:layout_constraintTop_toTopOf="@id/buddy_pokemon_container"
-        tools:text="Bulbasaur" />
+        android:text="@string/pikachu" />
 
     <TextView
         android:id="@+id/textPokemonNickname"
@@ -53,7 +53,7 @@
         app:layout_constraintEnd_toEndOf="@id/buddy_pokemon_container"
         app:layout_constraintStart_toEndOf="@id/imgPokemon"
         app:layout_constraintTop_toBottomOf="@id/textPokemonName"
-        tools:text="Bulbi" />
+        android:text="@string/pika" />
 
     <com.echo.pokepedia.ui.pokemon.PokemonTypesView
         android:id="@+id/groupPokemonTypes"

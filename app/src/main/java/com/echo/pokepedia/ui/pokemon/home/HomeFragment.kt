@@ -72,7 +72,7 @@ class HomeFragment : BaseFragment() {
     private fun initObservers() {
         observePokemonList()
         observeBuddyPokemonNickname()
-        observePokemonInfo()
+        observeBuddyPokemonDetails()
         observeBuddyPokemonDominantColor()
     }
 
@@ -147,7 +147,7 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun observePokemonInfo() = lifecycleScope.launch {
+    private fun observeBuddyPokemonDetails() = lifecycleScope.launch {
         viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.buddyPokemonDetails.collect { pokemon ->
                 if (pokemon != null) {
@@ -156,8 +156,8 @@ class HomeFragment : BaseFragment() {
                             .load(pokemon.imageDefault)
                             .placeholder(R.drawable.progress_spinner_anim)
                             .into(imgPokemon)
-                        textPokemonName.text = pokemon.name!!.capitalizeFirstLetter()
-                        pokemon.types?.let { groupPokemonTypes.render(it, LinearLayout.VERTICAL) }
+                        textPokemonName.text = pokemon.name?.capitalizeFirstLetter()
+                        pokemon.types?.let { groupPokemonTypes.render(it, LinearLayout.VERTICAL, View.VISIBLE) }
                     }
                 }
             }
@@ -166,11 +166,13 @@ class HomeFragment : BaseFragment() {
 
     private fun observeBuddyPokemonDominantColor() = lifecycleScope.launch {
         viewModel.buddyPokemonDominantColor.observe(viewLifecycleOwner) { dominantColor ->
-            val gradientDrawable = GradientDrawable(
-                GradientDrawable.Orientation.BL_TR,
-                intArrayOf(dominantColor, Color.WHITE)
-            ).apply { cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, 60f, 60f, 60f, 60f) }
-            binding.buddyPokemonSection.buddyPokemonContainer.background = gradientDrawable
+            if (dominantColor != Color.WHITE) {
+                val gradientDrawable = GradientDrawable(
+                    GradientDrawable.Orientation.BL_TR,
+                    intArrayOf(dominantColor, Color.WHITE)
+                ).apply { cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, 60f, 60f, 60f, 60f) }
+                binding.buddyPokemonSection.buddyPokemonContainer.background = gradientDrawable
+            }
         }
     }
     // endregion

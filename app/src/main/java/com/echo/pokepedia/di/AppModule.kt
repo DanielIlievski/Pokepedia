@@ -1,8 +1,14 @@
 package com.echo.pokepedia.di
 
 import android.content.Context
+import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.echo.pokepedia.data.database.LocalPokemonDataSource
+import com.echo.pokepedia.data.database.room.PokemonDao
+import com.echo.pokepedia.data.database.room.PokepediaDatabase
+import com.echo.pokepedia.data.database.room.RoomPokemonDataSource
+import com.echo.pokepedia.data.database.room.StatDao
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.data.network.retrofit.PokemonDbApi
 import com.echo.pokepedia.data.network.retrofit.RetrofitPokemonDataSource
@@ -75,6 +81,7 @@ object AppModule {
             .build()
             .create(PokemonDbApi::class.java)
     }
+
     @Provides
     @Singleton
     fun provideGlideInstance(@ApplicationContext context: Context): RequestManager {
@@ -85,4 +92,26 @@ object AppModule {
     @Provides
     fun provideRemotePokemonDataSource(retrofitPokemonDataSource: RetrofitPokemonDataSource):
             RemotePokemonDataSource = retrofitPokemonDataSource
+
+    @Singleton
+    @Provides
+    fun provideLocalPokemonDataSource(roomPokemonDataSource: RoomPokemonDataSource):
+            LocalPokemonDataSource = roomPokemonDataSource
+
+    @Singleton
+    @Provides
+    fun providePokemonDao(database: PokepediaDatabase): PokemonDao = database.pokemonDao()
+
+    @Singleton
+    @Provides
+    fun provideStatDao(database: PokepediaDatabase): StatDao = database.statDao()
+
+    @Singleton
+    @Provides
+    fun providePokepediaDb(@ApplicationContext context: Context): PokepediaDatabase =
+        Room.databaseBuilder(
+            context,
+            PokepediaDatabase::class.java,
+            "pokepedia_db"
+        ).build()
 }

@@ -105,7 +105,7 @@ class PokemonDetailsFragment : BaseFragment() {
                 pokemonDetails.name.capitalizeFirstLetter()
             )
         }
-        pokemonDetails.types?.let { binding.groupPokemonTypes.render(it, LinearLayout.HORIZONTAL) }
+        pokemonDetails.types?.let { binding.groupPokemonTypes.render(it, LinearLayout.HORIZONTAL, View.VISIBLE) }
         setAbilitiesGroup(pokemonDetails.abilities)
     }
 

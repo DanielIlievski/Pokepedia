@@ -84,6 +84,12 @@ dependencies {
     implementation Retrofit.okhttp
     implementation Retrofit.loggingInterceptor
 
+    // Room
+    implementation Room.room
+    kapt Room.annotationProcessor
+    annotationProcessor Room.annotationProcessor
+    implementation Room.roomKtx
+
     // Chucker
     debugImplementation Chucker.chuckerDebugImplementation
     releaseImplementation Chucker.chuckerReleaseImplementation
