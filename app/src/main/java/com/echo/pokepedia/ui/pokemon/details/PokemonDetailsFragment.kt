@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentPokemonDetailsBinding
@@ -66,11 +67,11 @@ class PokemonDetailsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.getPokemonDetails(args.pokemonName)
+
         initObservers()
 
-        onImageFavoriteClickListener()
-
-        viewModel.getPokemonDetails(args.pokemonName)
+        initListeners()
     }
 
     override fun onDestroyView() {
@@ -87,26 +88,35 @@ class PokemonDetailsFragment : BaseFragment() {
         observePokemonStats()
     }
 
+    private fun initListeners() {
+        onImageFavoriteClickListener()
+    }
+
     // region init UI
     private fun initUI(pokemonDetails: PokemonDetailsDTO) {
         activity?.window?.statusBarColor = requireContext().getColorRes(R.color.black)
-        initViews(pokemonDetails)
         initToolbar()
         setImgFavoriteSelected()
+        initViews(pokemonDetails)
     }
 
     private fun initViews(pokemonDetails: PokemonDetailsDTO) {
-        binding.root.background = getGradientWhiteBottom(args.dominantColor)
-        loadImage(pokemonDetails.imageDefault, binding.imgPokemon)
-        if (pokemonDetails.id != null && pokemonDetails.name != null) {
-            binding.pokemonNameAndId.text = requireContext().getString(
-                R.string.pokemon_id_name,
-                pokemonDetails.id,
-                pokemonDetails.name.capitalizeFirstLetter()
-            )
+        with(binding) {
+            root.background = getGradientWhiteBottom(args.dominantColor)
+            loadImage(pokemonDetails.imageDefault, imgPokemon)
+            if (pokemonDetails.id != null && pokemonDetails.name != null) {
+                pokemonNameAndId.text = requireContext().getString(
+                    R.string.pokemon_id_name,
+                    pokemonDetails.id,
+                    pokemonDetails.name.capitalizeFirstLetter()
+                )
+            }
+            pokemonDetails.types?.let {
+                groupPokemonTypes.render(it, LinearLayout.HORIZONTAL)
+                groupPokemonTypes.visibility = View.VISIBLE
+            }
+            setAbilitiesGroup(pokemonDetails.abilities)
         }
-        pokemonDetails.types?.let { binding.groupPokemonTypes.render(it, LinearLayout.HORIZONTAL) }
-        setAbilitiesGroup(pokemonDetails.abilities)
     }
 
     private fun initToolbar() {
@@ -115,7 +125,11 @@ class PokemonDetailsFragment : BaseFragment() {
             setTitleTextColor(Color.WHITE)
             elevation = 0f
             title =
-                getString(R.string.pokemon_id_name, args.pokemonId, args.pokemonName.capitalizeFirstLetter())
+                getString(
+                    R.string.pokemon_id_name,
+                    args.pokemonId,
+                    args.pokemonName.capitalizeFirstLetter()
+                )
             navigationIcon =
                 AppCompatResources.getDrawable(requireContext(), R.drawable.ic_back_arrow)
             setNavigationOnClickListener {
@@ -149,6 +163,8 @@ class PokemonDetailsFragment : BaseFragment() {
     // endregion
 
     // region initListeners
+
+    // region onPokemonImgLongClickListener
     private fun onPokemonImgLongClickListener(pokemonDetails: PokemonDetailsDTO) {
         binding.imgPokemon.setOnLongClickListener {
             toggleDefaultOrShinyImg(pokemonDetails)
@@ -173,6 +189,7 @@ class PokemonDetailsFragment : BaseFragment() {
             isDefaultImg = !isDefaultImg
         }
     }
+    // endregion
 
     // region onImageFavoriteClickListener
     private fun onImageFavoriteClickListener() {
@@ -183,8 +200,6 @@ class PokemonDetailsFragment : BaseFragment() {
                     imgFavoriteAnim.likeAnimation()
                 }
                 imgFavoriteAnim.isSelected = !imgFavoriteAnim.isSelected
-
-
             }
         }
     }
@@ -209,7 +224,9 @@ class PokemonDetailsFragment : BaseFragment() {
             .setView(inputLayout)
             .setPositiveButton(R.string.save, null)
             .setNegativeButton(R.string.cancel) { dialog, _ ->
-                binding.imgFavoriteAnim.isSelected = !binding.imgFavoriteAnim.isSelected
+                lifecycleScope.launch {
+                    binding.imgFavoriteAnim.isSelected = viewModel.isPokemonFavorite()
+                }
                 dialog.cancel()
             }
             .setCancelable(false)
@@ -226,6 +243,73 @@ class PokemonDetailsFragment : BaseFragment() {
         }
     }
     // endregion
+
+    //region onAddToMyTeamClickListener
+    private fun onAddToMyTeamClickListener(pokemonDetails: PokemonDetailsDTO) {
+        binding.addToMyTeam.setOnClickListener {
+            lifecycleScope.launch {
+                when (
+                    viewModel.checkAddConditions(pokemonDetails.imageDefault, args.dominantColor)
+                ) {
+                    AddPokemonState.AlreadyExists -> showToastMessageShort(
+                        getString(
+                            R.string.already_exists_in_team,
+                            pokemonDetails.name?.capitalizeFirstLetter()
+                        )
+                    )
+                    AddPokemonState.TeamFull -> teamFullAlertDialog(pokemonDetails)
+                    AddPokemonState.AddPokemon -> addPokemonAlertDialog(pokemonDetails)
+                }
+            }
+        }
+    }
+
+    private fun teamFullAlertDialog(pokemonDetails: PokemonDetailsDTO) {
+        showSimpleAlertDialog(
+            context = requireContext(),
+            title = R.string.team_full_title,
+            message = R.string.team_full_message,
+            positiveBtnText = R.string.yes,
+            negativeBtnText = R.string.no,
+            onPositiveBtnClick = { dialog, _ ->
+                val isTeamFull = true
+                val action =
+                    PokemonDetailsFragmentDirections.pokemonDetailsFragmentToMyTeamFragment(
+                        isTeamFull = isTeamFull,
+                        imgUrl = pokemonDetails.imageDefault,
+                        dominantColor = args.dominantColor
+                    )
+                findNavController().navigate(action)
+                dialog.dismiss()
+            },
+            onNegativeBtnClick = { dialog, _ ->
+                dialog.cancel()
+            }
+        )
+    }
+
+    private fun addPokemonAlertDialog(pokemonDetails: PokemonDetailsDTO) {
+        showSimpleAlertDialog(
+            context = requireContext(),
+            title = R.string.add_to_my_team_title,
+            message = R.string.add_to_my_team_message,
+            positiveBtnText = R.string.yes,
+            negativeBtnText = R.string.no,
+            onPositiveBtnClick = { dialog, _ ->
+                viewModel.addPokemonToMyTeam(pokemonDetails.imageDefault, args.dominantColor)
+                showToastMessageShort(
+                    getString(
+                        R.string.added_to_team_successfully,
+                        pokemonDetails.name?.capitalizeFirstLetter()
+                    )
+                )
+                dialog.dismiss()
+            },
+            onNegativeBtnClick = { dialog, _ ->
+                dialog.cancel()
+            })
+    }
+    //endregion
     // endregion
 
     // region initObservers
@@ -235,6 +319,7 @@ class PokemonDetailsFragment : BaseFragment() {
         viewModel.pokemonDetailsInfo.collect { pokemonDetails ->
             initUI(pokemonDetails)
             onPokemonImgLongClickListener(pokemonDetails)
+            onAddToMyTeamClickListener(pokemonDetails)
         }
     }
     // endregion

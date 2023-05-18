@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.echo.pokepedia.data.preferences.SettingsDataStore
-import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonInfoFromApiUserCase
-import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonListFromApiUserCase
+import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonInfoFromApiUseCase
+import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonListFromApiUseCase
 import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
 import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
 import com.echo.pokepedia.ui.BaseViewModel
@@ -21,8 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getPokemonListFromApiUserCase: GetPokemonListFromApiUserCase,
-    private val getPokemonInfoFromApiUserCase: GetPokemonInfoFromApiUserCase,
+    private val getPokemonListFromApiUseCase: GetPokemonListFromApiUseCase,
+    private val getPokemonInfoFromApiUseCase: GetPokemonInfoFromApiUseCase,
     settingsDataStore: SettingsDataStore
 ) : BaseViewModel() {
 
@@ -48,7 +48,7 @@ class HomeViewModel @Inject constructor(
 
     private fun getPokemonListPaginated() {
         viewModelScope.launch(Dispatchers.IO) {
-            getPokemonListFromApiUserCase.invoke()
+            getPokemonListFromApiUseCase.invoke()
                 .cachedIn(viewModelScope)
                 .collect {
                     _pokemonList.emit(it)
@@ -57,7 +57,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getPokemonInfo() = viewModelScope.launch {
-        val response = getPokemonInfoFromApiUserCase.invoke(_buddyPokemonName.first())
+        val response = getPokemonInfoFromApiUseCase.invoke(_buddyPokemonName.first())
         when (response) {
             is NetworkResult.Success -> _buddyPokemonDetails.value = response.result
             is NetworkResult.Failure -> _errorObservable.value = response.exception!!

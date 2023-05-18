@@ -1,7 +1,6 @@
 package com.echo.pokepedia.ui.pokemon.home
 
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
@@ -14,7 +13,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentHomeBinding
 import com.echo.pokepedia.ui.BaseFragment
@@ -152,10 +150,7 @@ class HomeFragment : BaseFragment() {
             viewModel.buddyPokemonDetails.collect { pokemon ->
                 if (pokemon != null) {
                     with(binding.buddyPokemonSection) {
-                        Glide.with(this.root)
-                            .load(pokemon.imageDefault)
-                            .placeholder(R.drawable.progress_spinner_anim)
-                            .into(imgPokemon)
+                        loadImage(pokemon.imageDefault, imgPokemon)
                         textPokemonName.text = pokemon.name!!.capitalizeFirstLetter()
                         pokemon.types?.let { groupPokemonTypes.render(it, LinearLayout.VERTICAL) }
                     }
@@ -166,11 +161,8 @@ class HomeFragment : BaseFragment() {
 
     private fun observeBuddyPokemonDominantColor() = lifecycleScope.launch {
         viewModel.buddyPokemonDominantColor.observe(viewLifecycleOwner) { dominantColor ->
-            val gradientDrawable = GradientDrawable(
-                GradientDrawable.Orientation.BL_TR,
-                intArrayOf(dominantColor, Color.WHITE)
-            ).apply { cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, 60f, 60f, 60f, 60f) }
-            binding.buddyPokemonSection.buddyPokemonContainer.background = gradientDrawable
+            binding.buddyPokemonSection.buddyPokemonContainer.background =
+                getGradientBLTRBottomRounded(dominantColor, Color.WHITE)
         }
     }
     // endregion

@@ -20,7 +20,24 @@
         android:id="@+id/myTeamFragment"
         android:name="com.echo.pokepedia.ui.pokemon.myteam.MyTeamFragment"
         android:label="@string/my_team"
-        tools:layout="@layout/fragment_my_team" />
+        tools:layout="@layout/fragment_my_team">
+
+        <argument
+            android:name="isTeamFull"
+            android:defaultValue="false"
+            app:argType="boolean" />
+
+        <argument
+            android:name="imgUrl"
+            android:defaultValue=""
+            app:argType="string"
+            app:nullable="true" />
+
+        <argument
+            android:name="dominantColor"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/settingsFragment"
@@ -36,17 +53,20 @@
         <argument
             android:name="pokemonId"
             app:argType="integer" />
-
         <argument
             android:name="pokemonName"
             app:argType="string" />
-
         <argument
             android:name="dominantColor"
-            app:argType="integer"/>
-
+            app:argType="integer" />
         <argument
             android:name="dominantColorShiny"
-            app:argType="integer"/>
+            app:argType="integer" />
+
+        <action
+            android:id="@+id/pokemonDetailsFragment_to_myTeamFragment"
+            app:destination="@id/myTeamFragment"
+            app:popUpTo="@id/nav_graph_home"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

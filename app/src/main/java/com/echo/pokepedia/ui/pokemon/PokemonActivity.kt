@@ -1,10 +1,9 @@
 package com.echo.pokepedia.ui.pokemon
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -27,36 +26,36 @@ class PokemonActivity : BaseActivity() {
     private lateinit var binding: ActivityPokemonBinding
 
     private val viewModel: BaseViewModel by viewModels()
+
+    private lateinit var navHostFragment: NavHostFragment
+
+    private lateinit var navController: NavController
     // endregion
 
     // region activity methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPokemonBinding.inflate(layoutInflater)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         setContentView(binding.root)
+
+        initNavController()
 
         initBottomNavigationView()
 
         observeErrorObservable()
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressedDispatcher.onBackPressed()
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
+        handleControllerOnBackPressed()
     }
     // endregion
 
-    private fun initBottomNavigationView() {
-        val navHostFragment =
+    private fun initNavController() {
+        navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_activity_pokemon) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
+    }
+
+    private fun initBottomNavigationView() {
         binding.bottomNavigationView.setupWithNavController(navController)
 
         showHideNavigation(navController)
@@ -75,16 +74,12 @@ class PokemonActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("RestrictedApi")
     fun hideToolbar() {
         this.supportActionBar?.hide()
-        this.supportActionBar?.setShowHideAnimationEnabled(false)
     }
 
-    @SuppressLint("RestrictedApi")
     fun showToolbar() {
         this.supportActionBar?.show()
-        supportActionBar?.setShowHideAnimationEnabled(true)
     }
 
     private fun observeErrorObservable() = lifecycleScope.launch {
@@ -94,5 +89,20 @@ class PokemonActivity : BaseActivity() {
                 showToastMessage(exceptionMessage.asString(this@PokemonActivity), Toast.LENGTH_LONG)
             }
         }
+    }
+
+    private fun handleControllerOnBackPressed() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                when (navController.currentDestination?.id) {
+                    R.id.homeFragment -> finish()
+                    R.id.myTeamFragment ->
+                        binding.bottomNavigationView.selectedItemId = R.id.homeFragment
+                    R.id.settingsFragment ->
+                        binding.bottomNavigationView.selectedItemId = R.id.homeFragment
+                    else -> navController.popBackStack()
+                }
+            }
+        })
     }
 }

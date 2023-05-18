@@ -10,6 +10,6 @@ import javax.inject.Inject
 @HiltViewModel
 open class BaseViewModel @Inject constructor() : ViewModel() {
 
-    protected var _errorObservable  = MutableStateFlow<UiText>(UiText.DynamicString())
-    val errorObservable : StateFlow<UiText> get() = _errorObservable
+    protected var _errorObservable = MutableStateFlow<UiText>(UiText.DynamicString())
+    val errorObservable: StateFlow<UiText> get() = _errorObservable
 }
