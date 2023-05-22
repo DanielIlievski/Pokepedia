@@ -136,12 +136,13 @@
             android:layout_height="@dimen/xplosion_view_height"
             android:layout_gravity="end"
             android:layout_marginTop="@dimen/img_favorite_pokemon_margin_top"
-            android:layout_marginEnd="@dimen/margin_padding_xlarge">
+            android:layout_marginEnd="@dimen/margin_padding_xlarge"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/imgFavorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/img_favorite_width"
+                android:layout_height="@dimen/img_favorite_height"
                 android:layout_gravity="center"
                 android:contentDescription="@string/choose_as_favorite"
                 android:src="@drawable/heart_selector" />
@@ -157,6 +158,7 @@
             android:clickable="true"
             android:contentDescription="@string/add_to_my_team_title"
             android:focusable="true"
-            android:src="@drawable/ic_pokeball_add" />
+            android:src="@drawable/ic_pokeball_add"
+            android:visibility="gone" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

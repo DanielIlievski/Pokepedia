@@ -13,6 +13,6 @@ data class StatEntity(
     val maxBaseStat: Int,
     @ColumnInfo("pokemon_id")
     val pokemonId: Int,
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 )

@@ -2,6 +2,7 @@ package com.echo.pokepedia.data.repository
 
 import androidx.paging.*
 import com.bumptech.glide.RequestManager
+import com.echo.pokepedia.R
 import com.echo.pokepedia.data.database.LocalPokemonDataSource
 import com.echo.pokepedia.data.database.room.PokepediaDatabase
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
@@ -10,13 +11,12 @@ import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
 import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
 import com.echo.pokepedia.domain.pokemon.model.network.PokemonDetailsResponse
 import com.echo.pokepedia.domain.pokemon.repository.PokemonRepository
+import com.echo.pokepedia.util.NetworkConnectivity
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.PAGE_SIZE
 import com.echo.pokepedia.util.UiText
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
@@ -24,7 +24,8 @@ class PokemonRepositoryImpl @Inject constructor(
     private val localPokemonDataSource: LocalPokemonDataSource,
     private val pokemonDb: PokepediaDatabase,
     private val dispatcher: CoroutineDispatcher,
-    private val glide: RequestManager
+    private val glide: RequestManager,
+    private val networkConnectivity: NetworkConnectivity
 ) : PokemonRepository {
 
     private val _myTeamListFlow = MutableStateFlow<List<Pair<String, Int>>>(emptyList())
@@ -61,7 +62,7 @@ class PokemonRepositoryImpl @Inject constructor(
                 dispatcher = dispatcher,
                 glide = glide
             )
-        ).flow.map {pagingData ->
+        ).flow.map { pagingData ->
             pagingData.map { pokemonEntity -> pokemonEntity.toPokemonDTO() }
         }
     }
@@ -69,11 +70,20 @@ class PokemonRepositoryImpl @Inject constructor(
     override suspend fun getPokemonInfoFromApi(
         name: String
     ): NetworkResult<PokemonDetailsDTO> {
-        val pokemonResult = remotePokemonDataSource.getPokemonInfo(name)
 
-        return when (pokemonResult) {
-            is NetworkResult.Failure -> onFailedPokemonFetch(pokemonResult.exception)
-            is NetworkResult.Success -> onSuccessfulPokemonFetch(pokemonResult.result)
+        return if (!networkConnectivity.isNetworkAvailable) {
+            val localPokemonDetails = localPokemonDataSource.getPokemonDetails(name).firstOrNull()
+            if (localPokemonDetails != null) {
+                NetworkResult.Success(localPokemonDetails.toPokemonDetailsDTO())
+            } else {
+                NetworkResult.Failure(UiText.StringResource(R.string.no_internet_connection))
+            }
+        } else {
+            val pokemonResult = remotePokemonDataSource.getPokemonInfo(name)
+            when (pokemonResult) {
+                is NetworkResult.Failure -> onFailedPokemonFetch(pokemonResult.exception)
+                is NetworkResult.Success -> onSuccessfulPokemonFetch(pokemonResult.result)
+            }
         }
     }
 
@@ -81,7 +91,16 @@ class PokemonRepositoryImpl @Inject constructor(
         return NetworkResult.Failure(exception)
     }
 
-    private fun onSuccessfulPokemonFetch(result: PokemonDetailsResponse?): NetworkResult<PokemonDetailsDTO> {
-        return NetworkResult.Success(result!!.toPokemonDetailsDTO())
+    private suspend fun onSuccessfulPokemonFetch(result: PokemonDetailsResponse?): NetworkResult<PokemonDetailsDTO> {
+        val pokemonDetailsDto = result!!.toPokemonDetailsDTO()
+        writePokemonDetailsToDatabase(pokemonDetailsDto)
+        return NetworkResult.Success(result.toPokemonDetailsDTO())
+    }
+
+    private suspend fun writePokemonDetailsToDatabase(pokemonDetailsDto: PokemonDetailsDTO) {
+        localPokemonDataSource.insertPokemonDetails(pokemonDetailsDto.toPokemonDetailsEntity())
+        pokemonDetailsDto.toStatEntityList().forEach { statEntity ->
+            localPokemonDataSource.insertStat(statEntity)
+        }
     }
 }

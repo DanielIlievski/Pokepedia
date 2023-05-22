@@ -19,7 +19,7 @@ interface LocalPokemonDataSource {
 
     suspend fun insertPokemonDetails(pokemonDetails: PokemonDetailsEntity)
 
-    fun getPokemonDetails(pokemonId: Int): Flow<PokemonDetailsWithStats>
+    fun getPokemonDetails(pokemonName: String): Flow<PokemonDetailsWithStats>
 
     suspend fun insertStat(stat: StatEntity)
 

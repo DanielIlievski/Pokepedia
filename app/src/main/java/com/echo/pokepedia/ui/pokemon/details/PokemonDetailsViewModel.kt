@@ -1,5 +1,6 @@
 package com.echo.pokepedia.ui.pokemon.details
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.data.preferences.SettingsDataStore
 import com.echo.pokepedia.domain.pokemon.interactors.AddPokemonToMyTeamUseCase
@@ -41,7 +42,10 @@ class PokemonDetailsViewModel @Inject constructor(
                 _pokemonDetailsInfo.value = response.result
                 _pokemonStats.value = response.result.stats
             }
-            is NetworkResult.Failure -> _errorObservable.value = response.exception!!
+            is NetworkResult.Failure -> {
+                _errorObservable.value = response.exception!!
+                Log.d("HelloWorld3", "getPokemonDetails: EXCEPTION")
+            }
         }
     }
 

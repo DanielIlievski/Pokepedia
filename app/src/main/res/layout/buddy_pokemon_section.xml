@@ -36,10 +36,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_padding_tiny"
         android:layout_marginVertical="@dimen/margin_padding_normal"
+        android:text="@string/pikachu"
         app:layout_constraintEnd_toEndOf="@id/buddy_pokemon_container"
         app:layout_constraintStart_toEndOf="@id/imgPokemon"
-        app:layout_constraintTop_toTopOf="@id/buddy_pokemon_container"
-        android:text="@string/pikachu" />
+        app:layout_constraintTop_toTopOf="@id/buddy_pokemon_container" />
 
     <TextView
         android:id="@+id/textPokemonNickname"
@@ -49,11 +49,11 @@
         android:layout_marginHorizontal="@dimen/margin_padding_tiny"
         android:layout_marginVertical="@dimen/margin_padding_normal"
         android:gravity="center_horizontal"
+        android:text="@string/pika"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="@id/buddy_pokemon_container"
         app:layout_constraintStart_toEndOf="@id/imgPokemon"
-        app:layout_constraintTop_toBottomOf="@id/textPokemonName"
-        android:text="@string/pika" />
+        app:layout_constraintTop_toBottomOf="@id/textPokemonName" />
 
     <com.echo.pokepedia.ui.pokemon.PokemonTypesView
         android:id="@+id/groupPokemonTypes"

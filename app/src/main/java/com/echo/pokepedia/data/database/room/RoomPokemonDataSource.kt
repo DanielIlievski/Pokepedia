@@ -34,8 +34,8 @@ class RoomPokemonDataSource @Inject constructor(
         pokemonDao.upsertPokemonDetails(pokemonDetails)
     }
 
-    override fun getPokemonDetails(pokemonId: Int): Flow<PokemonDetailsWithStats> {
-        return pokemonDao.getPokemonDetails(pokemonId)
+    override fun getPokemonDetails(pokemonName: String): Flow<PokemonDetailsWithStats> {
+        return pokemonDao.getPokemonDetails(pokemonName)
     }
 
     override suspend fun insertStat(stat: StatEntity) {
