@@ -5,10 +5,7 @@ import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.echo.pokepedia.data.database.LocalPokemonDataSource
-import com.echo.pokepedia.data.database.room.PokemonDao
-import com.echo.pokepedia.data.database.room.PokepediaDatabase
-import com.echo.pokepedia.data.database.room.RoomPokemonDataSource
-import com.echo.pokepedia.data.database.room.StatDao
+import com.echo.pokepedia.data.database.room.*
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.data.network.retrofit.PokemonDbApi
 import com.echo.pokepedia.data.network.retrofit.RetrofitPokemonDataSource
@@ -26,6 +23,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -114,4 +112,8 @@ object AppModule {
             PokepediaDatabase::class.java,
             "pokepedia_db"
         ).build()
+
+    @Singleton
+    @Provides
+    fun provideDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }

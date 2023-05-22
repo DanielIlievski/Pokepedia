@@ -6,4 +6,6 @@ object Room {
     const val roomKtx = "androidx.room:room-ktx:$roomVersion"
 
     const val annotationProcessor = "androidx.room:room-compiler:$roomVersion"
+
+    const val roomPaging = "androidx.room:room-paging:$roomVersion"
 }

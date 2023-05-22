@@ -112,8 +112,7 @@ class HomeFragment : BaseFragment() {
         }
         adapter.let {
             val footerAdapter = PokemonLoadStateAdapter { it?.retry() }
-            binding.pokemonRecyclerView.adapter =
-                it?.withLoadStateFooter(footerAdapter)
+            binding.pokemonRecyclerView.adapter = it?.withLoadStateFooter(footerAdapter)
             binding.pokemonRecyclerView.layoutManager =
                 GridLayoutManager(requireContext(), 2).apply {
                     spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {

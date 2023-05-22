@@ -1,5 +1,6 @@
 package com.echo.pokepedia.data.database.room
 
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonDetailsEntity
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonEntity
@@ -19,7 +20,10 @@ interface PokemonDao {
     fun getPokemon(pokemonId: Int): Flow<PokemonEntity>
 
     @Query("SELECT * FROM pokemon")
-    fun getAllPokemons(): Flow<List<PokemonEntity>>
+    fun getAllPokemons(): PagingSource<Int, PokemonEntity>
+
+    @Query("DELETE FROM pokemon")
+    fun deleteAllPokemon()
 
     @Upsert
     suspend fun upsertPokemonDetails(pokemonDetails: PokemonDetailsEntity)

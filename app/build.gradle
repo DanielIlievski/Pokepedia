@@ -87,7 +87,7 @@ dependencies {
     // Room
     implementation Room.room
     kapt Room.annotationProcessor
-    annotationProcessor Room.annotationProcessor
+    implementation Room.roomPaging
     implementation Room.roomKtx
 
     // Chucker

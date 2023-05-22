@@ -1,5 +1,6 @@
 package com.echo.pokepedia.data.database
 
+import androidx.paging.PagingSource
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonDetailsEntity
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonEntity
 import com.echo.pokepedia.domain.pokemon.model.database.StatEntity
@@ -14,7 +15,7 @@ interface LocalPokemonDataSource {
 
     fun getPokemon(pokemonId: Int): Flow<PokemonEntity>
 
-    fun getAllPokemons(): Flow<List<PokemonEntity>>
+    fun getAllPokemons(): PagingSource<Int, PokemonEntity>
 
     suspend fun insertPokemonDetails(pokemonDetails: PokemonDetailsEntity)
 

@@ -1,5 +1,6 @@
 package com.echo.pokepedia.data.database.room
 
+import androidx.paging.PagingSource
 import com.echo.pokepedia.data.database.LocalPokemonDataSource
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonDetailsEntity
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonEntity
@@ -25,7 +26,7 @@ class RoomPokemonDataSource @Inject constructor(
         return pokemonDao.getPokemon(pokemonId)
     }
 
-    override fun getAllPokemons(): Flow<List<PokemonEntity>> {
+    override fun getAllPokemons(): PagingSource<Int, PokemonEntity> {
         return pokemonDao.getAllPokemons()
     }
 
