@@ -5,13 +5,16 @@ import com.echo.pokepedia.data.database.LocalPokemonDataSource
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonDetailsEntity
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonEntity
 import com.echo.pokepedia.domain.pokemon.model.database.StatEntity
+import com.echo.pokepedia.domain.pokemon.model.database.TeamMemberEntity
+import com.echo.pokepedia.domain.pokemon.model.database.relation.PokemonAndTeamMember
 import com.echo.pokepedia.domain.pokemon.model.database.relation.PokemonDetailsWithStats
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RoomPokemonDataSource @Inject constructor(
     private val pokemonDao: PokemonDao,
-    private val statDao: StatDao
+    private val statDao: StatDao,
+    private val teamMemberDao: TeamMemberDao
 ) : LocalPokemonDataSource {
 
     override suspend fun insertPokemon(pokemon: PokemonEntity) {
@@ -20,10 +23,6 @@ class RoomPokemonDataSource @Inject constructor(
 
     override suspend fun insertAllPokemons(pokemonList: List<PokemonEntity>) {
         pokemonDao.upsertAllPokemons(pokemonList)
-    }
-
-    override fun getPokemon(pokemonId: Int): Flow<PokemonEntity> {
-        return pokemonDao.getPokemon(pokemonId)
     }
 
     override fun getAllPokemons(): PagingSource<Int, PokemonEntity> {
@@ -42,11 +41,15 @@ class RoomPokemonDataSource @Inject constructor(
         statDao.upsertStat(stat)
     }
 
-    override fun getStat(statId: Int): Flow<StatEntity> {
-        return statDao.getStat(statId)
+    override suspend fun insertTeamMember(teamMember: TeamMemberEntity) {
+        teamMemberDao.upsertTeamMember(teamMember)
     }
 
-    override fun getStatsWithPokemonId(pokemonId: Int): Flow<List<StatEntity>> {
-        return statDao.getStatsWithPokemonId(pokemonId)
+    override fun getAllTeamMembers(): Flow<List<PokemonAndTeamMember>> {
+        return teamMemberDao.getAllTeamMembers()
+    }
+
+    override suspend fun deleteTeamMember(pokemonId: Int) {
+        teamMemberDao.deleteTeamMember(pokemonId)
     }
 }

@@ -2,7 +2,6 @@ package com.echo.pokepedia.data.preferences
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
@@ -65,7 +64,6 @@ class SettingsDataStore @Inject constructor(
             }
         }
         .map { preferences ->
-            Log.d("HelloWorld45", ":${preferences[BUDDY_POKEMON_NAME]} ")
             preferences[BUDDY_POKEMON_NAME] ?: ""
         }
     // endregion

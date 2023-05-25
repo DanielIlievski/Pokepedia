@@ -7,7 +7,7 @@ class AddPokemonToMyTeamUseCase @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) {
 
-    operator fun invoke(imgUrl: String, dominantColor: Int) {
-        pokemonRepository.addPokemonToMyTeam(imgUrl, dominantColor)
+    suspend operator fun invoke(pokemonId: Int) {
+        pokemonRepository.addPokemonToMyTeam(pokemonId)
     }
 }

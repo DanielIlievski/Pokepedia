@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.domain.pokemon.interactors.AddPokemonToMyTeamUseCase
 import com.echo.pokepedia.domain.pokemon.interactors.GetMyTeamListUseCase
 import com.echo.pokepedia.domain.pokemon.interactors.RemovePokemonFromMyTeamUseCase
+import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
 import com.echo.pokepedia.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -18,9 +19,9 @@ class MyTeamViewModel @Inject constructor(
     private val addPokemonToMyTeamUseCase: AddPokemonToMyTeamUseCase
 ) : BaseViewModel() {
 
-    private var _myTeamList: MutableStateFlow<List<Pair<String, Int>>> =
+    private var _myTeamList: MutableStateFlow<List<PokemonDTO>> =
         MutableStateFlow(emptyList())
-    val myTeamList: Flow<List<Pair<String, Int>>> get() = _myTeamList
+    val myTeamList: Flow<List<PokemonDTO>> get() = _myTeamList
 
     fun initTeam() {
         viewModelScope.launch {
@@ -30,15 +31,13 @@ class MyTeamViewModel @Inject constructor(
         }
     }
 
-    fun getMyTeamList(): List<Pair<String, Int>> {
-        return _myTeamList.value
+    fun removeFromMyTeam(pokemonId: Int?) = viewModelScope.launch {
+        pokemonId?.let { removePokemonFromMyTeamUseCase.invoke(it) }
     }
 
-    fun removeFromMyTeam(imgUrl: String) {
-        removePokemonFromMyTeamUseCase.invoke(imgUrl)
-    }
-
-    fun addPokemonToMyTeam(imgUrl: String?, dominantColor: Int) {
-        imgUrl?.let { addPokemonToMyTeamUseCase.invoke(it, dominantColor) }
+    fun addPokemonToMyTeam(pokemonId: Int?) = viewModelScope.launch {
+        if (pokemonId != null) {
+            addPokemonToMyTeamUseCase.invoke(pokemonId)
+        }
     }
 }

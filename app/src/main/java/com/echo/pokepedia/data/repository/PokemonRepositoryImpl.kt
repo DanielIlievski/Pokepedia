@@ -9,6 +9,7 @@ import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.data.paging.PokemonRemoteMediator
 import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
 import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
+import com.echo.pokepedia.domain.pokemon.model.database.TeamMemberEntity
 import com.echo.pokepedia.domain.pokemon.model.network.PokemonDetailsResponse
 import com.echo.pokepedia.domain.pokemon.repository.PokemonRepository
 import com.echo.pokepedia.util.NetworkConnectivity
@@ -28,23 +29,21 @@ class PokemonRepositoryImpl @Inject constructor(
     private val networkConnectivity: NetworkConnectivity
 ) : PokemonRepository {
 
-    private val _myTeamListFlow = MutableStateFlow<List<Pair<String, Int>>>(emptyList())
-    private val myTeamListFlow: Flow<List<Pair<String, Int>>> = _myTeamListFlow
-
-    override fun getMyTeamList(): Flow<List<Pair<String, Int>>> {
-        return myTeamListFlow
+    override suspend fun getMyTeamList(): Flow<List<PokemonDTO>> {
+        val localTeamMembers = localPokemonDataSource.getAllTeamMembers().map { list ->
+            list.filter { it.teamMember != null }.map { it.pokemon.toPokemonDTO() }
+        }
+        return localTeamMembers
     }
 
-    override fun addPokemonToMyTeam(imgUrl: String, dominantColor: Int) {
-        val myTeamList = _myTeamListFlow.value.toMutableList()
-        myTeamList.add(imgUrl to dominantColor)
-        _myTeamListFlow.value = myTeamList
+    override suspend fun addPokemonToMyTeam(pokemonId: Int) {
+        localPokemonDataSource.insertTeamMember(
+            TeamMemberEntity(pokemonId)
+        )
     }
 
-    override fun removePokemonFromMyTeam(imgUrl: String) {
-        val myTeamList = _myTeamListFlow.value.toMutableList()
-        val updatedList = myTeamList.filterNot { it.first == imgUrl }
-        _myTeamListFlow.value = updatedList
+    override suspend fun removePokemonFromMyTeam(pokemonId: Int) {
+        localPokemonDataSource.deleteTeamMember(pokemonId)
     }
 
     @OptIn(ExperimentalPagingApi::class)
@@ -67,7 +66,7 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPokemonInfoFromApi(
+    override suspend fun getPokemonDetails(
         name: String
     ): NetworkResult<PokemonDetailsDTO> {
 

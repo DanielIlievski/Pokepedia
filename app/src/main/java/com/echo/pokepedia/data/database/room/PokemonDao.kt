@@ -16,9 +16,6 @@ interface PokemonDao {
     @Upsert
     suspend fun upsertAllPokemons(pokemonList: List<PokemonEntity>)
 
-    @Query("SELECT * FROM pokemon WHERE id IS :pokemonId")
-    fun getPokemon(pokemonId: Int): Flow<PokemonEntity>
-
     @Query("SELECT * FROM pokemon")
     fun getAllPokemons(): PagingSource<Int, PokemonEntity>
 

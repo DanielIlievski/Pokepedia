@@ -106,6 +106,10 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideTeamMemberDao(database: PokepediaDatabase): TeamMemberDao = database.teamMemberDao()
+
+    @Singleton
+    @Provides
     fun providePokepediaDb(@ApplicationContext context: Context): PokepediaDatabase =
         Room.databaseBuilder(
             context,

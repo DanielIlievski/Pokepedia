@@ -224,8 +224,6 @@
     </style>
 
     <style name="MyTeam.ShapeableImageView" parent="">
-        <item name="android:layout_rowWeight">1</item>
-        <item name="android:layout_columnWeight">1</item>
         <item name="android:background">@color/grey_light</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.App.CornerSize10Percent</item>
@@ -241,6 +239,5 @@
         <item name="android:focusable">true</item>
         <item name="android:src">@drawable/ic_delete</item>
         <item name="android:contentDescription">@string/delete</item>
-        <item name="android:visibility">gone</item>
     </style>
 </resources>

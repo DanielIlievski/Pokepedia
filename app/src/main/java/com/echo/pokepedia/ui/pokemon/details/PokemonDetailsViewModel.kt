@@ -1,6 +1,5 @@
 package com.echo.pokepedia.ui.pokemon.details
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.data.preferences.SettingsDataStore
 import com.echo.pokepedia.domain.pokemon.interactors.AddPokemonToMyTeamUseCase
@@ -44,7 +43,6 @@ class PokemonDetailsViewModel @Inject constructor(
             }
             is NetworkResult.Failure -> {
                 _errorObservable.value = response.exception!!
-                Log.d("HelloWorld3", "getPokemonDetails: EXCEPTION")
             }
         }
     }
@@ -70,17 +68,19 @@ class PokemonDetailsViewModel @Inject constructor(
         return _buddyPokemonName.first() == _pokemonDetailsInfo.value.name
     }
 
-    suspend fun checkAddConditions(imgUrl: String?, dominantColor: Int): AddPokemonState {
+    suspend fun checkAddConditions(pokemonId: Int?): AddPokemonState {
         val myTeamList = getMyTeamListUseCase.invoke().firstOrNull() ?: emptyList()
         return when {
-            myTeamList.contains(imgUrl to dominantColor) -> AddPokemonState.AlreadyExists
+            myTeamList.any { it.id == pokemonId } -> AddPokemonState.AlreadyExists
             myTeamList.size < 6 -> AddPokemonState.AddPokemon
             else -> AddPokemonState.TeamFull
         }
     }
 
-    fun addPokemonToMyTeam(imgUrl: String?, dominantColor: Int) {
-        imgUrl?.let { addPokemonToMyTeamUseCase.invoke(it, dominantColor) }
+    fun addPokemonToMyTeam(pokemonId: Int?) = viewModelScope.launch {
+        if (pokemonId != null) {
+            addPokemonToMyTeamUseCase.invoke(pokemonId)
+        }
     }
 }
 
