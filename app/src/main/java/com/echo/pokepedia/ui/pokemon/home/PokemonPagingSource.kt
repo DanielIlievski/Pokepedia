@@ -2,6 +2,7 @@ package com.echo.pokepedia.ui.pokemon.home
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.echo.pokepedia.data.mappers.toPokemonDTO
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
 import com.echo.pokepedia.util.NetworkResult
@@ -24,7 +25,7 @@ class PokemonPagingSource(
             val response = remotePokemonDataSource.getPokemonList(PAGE_SIZE, nextPageNumber)
             lateinit var data : List<PokemonDTO>
             when (response) {
-                is NetworkResult.Success -> data = response.result!!.results.map { it.toPokemonDTO() }
+                is NetworkResult.Success -> data = response.result.results.map { it.toPokemonDTO() }
                 is NetworkResult.Failure -> return LoadResult.Error(Exception(response.exception.toString()))
             }
             val prevKey = if (nextPageNumber == STARTING_PAGE_INDEX) null else nextPageNumber - PAGE_SIZE
