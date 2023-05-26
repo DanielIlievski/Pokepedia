@@ -4,7 +4,6 @@ import androidx.paging.*
 import com.bumptech.glide.RequestManager
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.database.LocalPokemonDataSource
-import com.echo.pokepedia.data.database.room.PokepediaDatabase
 import com.echo.pokepedia.data.mappers.toPokemonDTO
 import com.echo.pokepedia.data.mappers.toPokemonDetailsDTO
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
@@ -25,7 +24,6 @@ import javax.inject.Inject
 class PokemonRepositoryImpl @Inject constructor(
     private val remotePokemonDataSource: RemotePokemonDataSource,
     private val localPokemonDataSource: LocalPokemonDataSource,
-    private val pokemonDb: PokepediaDatabase,
     private val dispatcher: CoroutineDispatcher,
     private val glide: RequestManager,
     private val networkConnectivity: NetworkConnectivity
@@ -58,7 +56,7 @@ class PokemonRepositoryImpl @Inject constructor(
                 localPokemonDataSource.getAllPokemons()
             },
             remoteMediator = PokemonRemoteMediator(
-                pokemonDb = pokemonDb,
+                localPokemonDataSource = localPokemonDataSource,
                 remotePokemonDataSource = remotePokemonDataSource,
                 dispatcher = dispatcher,
                 glide = glide
