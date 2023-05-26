@@ -9,6 +9,7 @@ import androidx.palette.graphics.Palette
 import androidx.room.withTransaction
 import com.bumptech.glide.RequestManager
 import com.echo.pokepedia.data.database.room.PokepediaDatabase
+import com.echo.pokepedia.data.mappers.toPokemonDTO
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonEntity
 import com.echo.pokepedia.util.NetworkResult
@@ -58,10 +59,10 @@ class PokemonRemoteMediator @Inject constructor(
                         Exception(pokemonListResponse.exception.toString())
                     )
                     is NetworkResult.Success -> {
-                        val endOfPagination = pokemonListResponse.result?.results?.isEmpty()
+                        val endOfPagination = pokemonListResponse.result.results.isEmpty()
 
                         val pokemonDtos =
-                            pokemonListResponse.result?.results?.map { it.toPokemonDTO() }?.map {
+                            pokemonListResponse.result.results.map { it.toPokemonDTO() }.map {
                                 it.overrideColors(
                                     getDominantColor(it.url ?: ""),
                                     getDominantColor(it.urlShiny ?: "")
@@ -73,10 +74,10 @@ class PokemonRemoteMediator @Inject constructor(
                                 pokemonDb.pokemonDao().deleteAllPokemon()
                             }
                             val pokemonEntities =
-                                pokemonDtos?.map { it.toPokemonEntity() }
-                            pokemonDb.pokemonDao().upsertAllPokemons(pokemonEntities!!)
+                                pokemonDtos.map { it.toPokemonEntity() }
+                            pokemonDb.pokemonDao().upsertAllPokemons(pokemonEntities)
                         }
-                        MediatorResult.Success(endOfPaginationReached = endOfPagination!!)
+                        MediatorResult.Success(endOfPaginationReached = endOfPagination)
                     }
                 }
             }

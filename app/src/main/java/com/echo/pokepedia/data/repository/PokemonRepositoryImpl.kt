@@ -4,8 +4,9 @@ import androidx.paging.*
 import com.bumptech.glide.RequestManager
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.database.LocalPokemonDataSource
-import com.echo.pokepedia.data.mappers.toPokemonDetailsDTO
 import com.echo.pokepedia.data.database.room.PokepediaDatabase
+import com.echo.pokepedia.data.mappers.toPokemonDTO
+import com.echo.pokepedia.data.mappers.toPokemonDetailsDTO
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.data.paging.PokemonRemoteMediator
 import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
