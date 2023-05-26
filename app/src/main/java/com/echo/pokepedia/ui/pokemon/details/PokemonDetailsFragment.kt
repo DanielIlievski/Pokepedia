@@ -112,8 +112,7 @@ class PokemonDetailsFragment : BaseFragment() {
                 )
             }
             pokemonDetails.types?.let {
-                groupPokemonTypes.render(it, LinearLayout.HORIZONTAL)
-                groupPokemonTypes.visibility = View.VISIBLE
+                groupPokemonTypes.render(it, LinearLayout.HORIZONTAL, View.VISIBLE)
             }
             setAbilitiesGroup(pokemonDetails.abilities)
         }

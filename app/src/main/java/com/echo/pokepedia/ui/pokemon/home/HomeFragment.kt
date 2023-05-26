@@ -70,7 +70,7 @@ class HomeFragment : BaseFragment() {
     private fun initObservers() {
         observePokemonList()
         observeBuddyPokemonNickname()
-        observePokemonInfo()
+        observeBuddyPokemonDetails()
         observeBuddyPokemonDominantColor()
     }
 
@@ -145,14 +145,14 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun observePokemonInfo() = lifecycleScope.launch {
+    private fun observeBuddyPokemonDetails() = lifecycleScope.launch {
         viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.buddyPokemonDetails.collect { pokemon ->
                 if (pokemon != null) {
                     with(binding.buddyPokemonSection) {
                         loadImage(pokemon.imageDefault, imgPokemon)
-                        textPokemonName.text = pokemon.name!!.capitalizeFirstLetter()
-                        pokemon.types?.let { groupPokemonTypes.render(it, LinearLayout.VERTICAL) }
+                        textPokemonName.text = pokemon.name?.capitalizeFirstLetter()
+                        pokemon.types?.let { groupPokemonTypes.render(it, LinearLayout.VERTICAL, View.VISIBLE) }
                     }
                 }
             }
@@ -161,8 +161,10 @@ class HomeFragment : BaseFragment() {
 
     private fun observeBuddyPokemonDominantColor() = lifecycleScope.launch {
         viewModel.buddyPokemonDominantColor.observe(viewLifecycleOwner) { dominantColor ->
-            binding.buddyPokemonSection.buddyPokemonContainer.background =
-                getGradientBLTRBottomRounded(dominantColor, Color.WHITE)
+            if (dominantColor != Color.WHITE) {
+                binding.buddyPokemonSection.buddyPokemonContainer.background =
+                    getGradientBLTRBottomRounded(dominantColor, Color.WHITE)
+            }
         }
     }
     // endregion

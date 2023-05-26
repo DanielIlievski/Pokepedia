@@ -10,6 +10,7 @@
         style="@style/MaterialButton.PokemonType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginHorizontal="@dimen/margin_padding_xtiny"
         android:layout_marginVertical="@dimen/margin_padding_xxtiny" />
 
@@ -18,6 +19,7 @@
         style="@style/MaterialButton.PokemonType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginHorizontal="@dimen/margin_padding_xtiny"
         android:layout_marginVertical="@dimen/margin_padding_xxtiny" />
 

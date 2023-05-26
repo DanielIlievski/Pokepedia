@@ -57,10 +57,14 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getPokemonInfo() = viewModelScope.launch {
-        val response = getPokemonInfoFromApiUseCase.invoke(_buddyPokemonName.first())
-        when (response) {
-            is NetworkResult.Success -> _buddyPokemonDetails.value = response.result
-            is NetworkResult.Failure -> _errorObservable.value = response.exception!!
+        _buddyPokemonName.collect {
+            if (it.isNotEmpty()) {
+                val response = getPokemonInfoFromApiUseCase.invoke(_buddyPokemonName.first())
+                when (response) {
+                    is NetworkResult.Success -> _buddyPokemonDetails.value = response.result
+                    is NetworkResult.Failure -> _errorObservable.value = response.exception
+                }
+            }
         }
     }
 

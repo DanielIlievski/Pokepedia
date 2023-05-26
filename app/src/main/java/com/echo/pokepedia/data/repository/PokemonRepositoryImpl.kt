@@ -7,6 +7,8 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.RequestManager
+import com.echo.pokepedia.data.database.LocalPokemonDataSource
+import com.echo.pokepedia.data.mappers.toPokemonDetailsDTO
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
 import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
@@ -25,6 +27,7 @@ import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
     private val remotePokemonDataSource: RemotePokemonDataSource,
+    private val localPokemonDataSource: LocalPokemonDataSource,
     private val glide: RequestManager
 ) : PokemonRepository {
 
@@ -71,17 +74,17 @@ class PokemonRepositoryImpl @Inject constructor(
         val pokemonResult = remotePokemonDataSource.getPokemonInfo(name)
 
         return when (pokemonResult) {
-            is NetworkResult.Failure -> onFailedPokemonFetch(pokemonResult.exception)
             is NetworkResult.Success -> onSuccessfulPokemonFetch(pokemonResult.result)
+            is NetworkResult.Failure -> onFailedPokemonFetch(pokemonResult.exception)
         }
     }
 
-    private fun onFailedPokemonFetch(exception: UiText?): NetworkResult.Failure {
+    private fun onFailedPokemonFetch(exception: UiText): NetworkResult.Failure {
         return NetworkResult.Failure(exception)
     }
 
-    private fun onSuccessfulPokemonFetch(result: PokemonDetailsResponse?): NetworkResult<PokemonDetailsDTO> {
-        return NetworkResult.Success(result!!.toPokemonDetailsDTO())
+    private fun onSuccessfulPokemonFetch(result: PokemonDetailsResponse): NetworkResult<PokemonDetailsDTO> {
+        return NetworkResult.Success(result.toPokemonDetailsDTO())
     }
 
     private suspend fun getDominantColor(imageUrl: String): Int {

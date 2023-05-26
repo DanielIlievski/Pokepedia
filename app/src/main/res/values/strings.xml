@@ -90,6 +90,8 @@
     <string name="enter_nickname_error">Please enter a nickname.</string>
     <string name="choose_as_favorite">Choose as favorite!</string>
     <string name="pokemon_image">Pokemon image.</string>
+    <string name="pikachu">Pikachu</string>
+    <string name="pika">Pika</string>
     <string name="delete">Delete</string>
     <string name="add_to_my_team_title">Add to My Team</string>
     <string name="add_to_my_team_message">Do you want to add this pokemon to your team?</string>
@@ -99,6 +101,7 @@
     <string name="team_full_message">Do you want to remove another pokemon?</string>
     <string name="added_to_team_successfully">%s was added to your team!</string>
     <string name="already_exists_in_team">%s is already in your team!</string>
+    <string name="pokemon_details_empty">There are no details for this pokemon</string>
     <!-- endregion -->
 
 </resources>

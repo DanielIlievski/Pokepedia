@@ -132,8 +132,8 @@
 
         <uk.bandev.xplosion.XplosionView
             android:id="@+id/imgFavoriteAnim"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/xplosion_view_width"
+            android:layout_height="@dimen/xplosion_view_height"
             android:layout_gravity="end"
             android:layout_marginTop="@dimen/img_favorite_pokemon_margin_top"
             android:layout_marginEnd="@dimen/margin_padding_xlarge">
