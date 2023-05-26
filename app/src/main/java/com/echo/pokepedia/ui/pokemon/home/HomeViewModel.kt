@@ -62,7 +62,7 @@ class HomeViewModel @Inject constructor(
                 val response = getPokemonInfoFromApiUseCase.invoke(_buddyPokemonName.first())
                 when (response) {
                     is NetworkResult.Success -> _buddyPokemonDetails.value = response.result
-                    is NetworkResult.Failure -> _errorObservable.value = response.exception!!
+                    is NetworkResult.Failure -> _errorObservable.value = response.exception
                 }
             }
         }

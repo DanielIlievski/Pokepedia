@@ -4,6 +4,7 @@ import androidx.paging.*
 import com.bumptech.glide.RequestManager
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.database.LocalPokemonDataSource
+import com.echo.pokepedia.data.mappers.toPokemonDetailsDTO
 import com.echo.pokepedia.data.database.room.PokepediaDatabase
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.data.paging.PokemonRemoteMediator
@@ -86,12 +87,12 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun onFailedPokemonFetch(exception: UiText?): NetworkResult.Failure {
+    private fun onFailedPokemonFetch(exception: UiText): NetworkResult.Failure {
         return NetworkResult.Failure(exception)
     }
 
-    private suspend fun onSuccessfulPokemonFetch(result: PokemonDetailsResponse?): NetworkResult<PokemonDetailsDTO> {
-        val pokemonDetailsDto = result!!.toPokemonDetailsDTO()
+    private suspend fun onSuccessfulPokemonFetch(result: PokemonDetailsResponse): NetworkResult<PokemonDetailsDTO> {
+        val pokemonDetailsDto = result.toPokemonDetailsDTO()
         writePokemonDetailsToDatabase(pokemonDetailsDto)
         return NetworkResult.Success(result.toPokemonDetailsDTO())
     }

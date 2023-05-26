@@ -12,7 +12,10 @@ class RetrofitPokemonDataSource @Inject constructor(
     private val pokemonDbApi: PokemonDbApi
 ) : RemotePokemonDataSource {
 
-    override suspend fun getPokemonList(limit: Int, offset: Int): NetworkResult<PokemonListResponse> {
+    override suspend fun getPokemonList(
+        limit: Int,
+        offset: Int
+    ): NetworkResult<PokemonListResponse> {
         return try {
             val pokemonList = pokemonDbApi.getPokemonList(limit, offset)
             if (pokemonList.isSuccessful && pokemonList.body() != null) {
@@ -30,7 +33,11 @@ class RetrofitPokemonDataSource @Inject constructor(
             val pokemon = pokemonDbApi.getPokemonInfo(name)
 
             if (pokemon.isSuccessful) {
-                NetworkResult.Success(pokemon.body()!!)
+                if (pokemon.body() != null) {
+                    NetworkResult.Success(pokemon.body()!!)
+                } else {
+                    NetworkResult.Failure(UiText.StringResource(R.string.pokemon_details_empty))
+                }
             } else {
                 NetworkResult.Failure(UiText.StringResource(R.string.fetch_unsuccessful))
             }
