@@ -64,6 +64,8 @@
     <string name="my_team">My Team</string>
     <string name="remove_from_my_team_title">Remove from My Team</string>
     <string name="remove_from_my_team_message">Do you want to remove this pokemon from your team?</string>
+    <string name="pokemon_id">#%d</string>
+    <string name="pokemon_name">%s</string>
     <!-- endregion -->
 
     <!-- region HomeFragment -->

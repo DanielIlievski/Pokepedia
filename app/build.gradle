@@ -105,6 +105,9 @@ dependencies {
 
     // Xplosion anim
     implementation Xplosion.xplosion
+
+    // EasyFlipView
+    implementation EasyFlipView.easyFlipView
 }
 
 kapt {
