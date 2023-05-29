@@ -6,9 +6,9 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.palette.graphics.Palette
-import androidx.room.withTransaction
 import com.bumptech.glide.RequestManager
-import com.echo.pokepedia.data.database.room.PokepediaDatabase
+import com.echo.pokepedia.data.database.LocalPokemonDataSource
+import com.echo.pokepedia.data.mappers.toPokemonDTO
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonEntity
 import com.echo.pokepedia.util.NetworkResult
@@ -23,7 +23,7 @@ import kotlin.math.ceil
 
 @OptIn(ExperimentalPagingApi::class)
 class PokemonRemoteMediator @Inject constructor(
-    private val pokemonDb: PokepediaDatabase,
+    private val localPokemonDataSource: LocalPokemonDataSource,
     private val remotePokemonDataSource: RemotePokemonDataSource,
     private val dispatcher: CoroutineDispatcher,
     private val glide: RequestManager
@@ -58,25 +58,22 @@ class PokemonRemoteMediator @Inject constructor(
                         Exception(pokemonListResponse.exception.toString())
                     )
                     is NetworkResult.Success -> {
-                        val endOfPagination = pokemonListResponse.result?.results?.isEmpty()
+                        val endOfPagination = pokemonListResponse.result.results.isEmpty()
 
                         val pokemonDtos =
-                            pokemonListResponse.result?.results?.map { it.toPokemonDTO() }?.map {
+                            pokemonListResponse.result.results.map { it.toPokemonDTO() }.map {
                                 it.overrideColors(
                                     getDominantColor(it.url ?: ""),
                                     getDominantColor(it.urlShiny ?: "")
                                 )
                             }
 
-                        pokemonDb.withTransaction {
-                            if (loadType == LoadType.REFRESH) {
-                                pokemonDb.pokemonDao().deleteAllPokemon()
-                            }
-                            val pokemonEntities =
-                                pokemonDtos?.map { it.toPokemonEntity() }
-                            pokemonDb.pokemonDao().upsertAllPokemons(pokemonEntities!!)
+                        val pokemonEntities = pokemonDtos.map { it.toPokemonEntity() }
+                        if (loadType == LoadType.REFRESH) {
+                            localPokemonDataSource.deleteAllAndInsertNew(pokemonEntities)
                         }
-                        MediatorResult.Success(endOfPaginationReached = endOfPagination!!)
+                        localPokemonDataSource.insertAllPokemons(pokemonEntities)
+                        MediatorResult.Success(endOfPaginationReached = endOfPagination)
                     }
                 }
             }

@@ -17,6 +17,10 @@ interface LocalPokemonDataSource {
 
     fun getAllPokemons(): PagingSource<Int, PokemonEntity>
 
+    suspend fun deleteAll()
+
+    suspend fun deleteAllAndInsertNew(pokemonList: List<PokemonEntity>)
+
     suspend fun insertPokemonDetails(pokemonDetails: PokemonDetailsEntity)
 
     fun getPokemonDetails(pokemonName: String): Flow<PokemonDetailsWithStats>

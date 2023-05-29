@@ -22,6 +22,12 @@ interface PokemonDao {
     @Query("DELETE FROM pokemon")
     fun deleteAllPokemon()
 
+    @Transaction
+    suspend fun deleteAllAndInsertNewPokemons(pokemonList: List<PokemonEntity>) {
+        deleteAllPokemon()
+        upsertAllPokemons(pokemonList)
+    }
+
     @Upsert
     suspend fun upsertPokemonDetails(pokemonDetails: PokemonDetailsEntity)
 

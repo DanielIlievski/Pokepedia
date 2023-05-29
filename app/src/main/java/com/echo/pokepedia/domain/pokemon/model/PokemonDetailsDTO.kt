@@ -14,23 +14,23 @@ data class PokemonDetailsDTO(
 ) {
     fun toPokemonDetailsEntity(): PokemonDetailsEntity {
         return PokemonDetailsEntity(
-            id = id!!,
-            name = name!!,
-            types = types!!,
-            abilities = abilities!!,
-            imageDefault = imageDefault!!,
-            imageShiny = imageShiny!!
+            id = id ?: -1,
+            name = name.orEmpty(),
+            types = types ?: emptyList(),
+            abilities = abilities ?: emptyList(),
+            imageDefault = imageDefault.orEmpty(),
+            imageShiny = imageShiny.orEmpty()
         )
     }
 
     fun toStatEntityList(): List<StatEntity> {
-        return stats!!.map { stat ->
+        return stats?.map { stat ->
             StatEntity(
                 name = stat.first,
                 baseStat = stat.second,
                 maxBaseStat = stat.third,
-                pokemonId = id!!
+                pokemonId = id ?: -1
             )
-        }
+        } ?: emptyList()
     }
 }

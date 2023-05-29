@@ -29,6 +29,14 @@ class RoomPokemonDataSource @Inject constructor(
         return pokemonDao.getAllPokemons()
     }
 
+    override suspend fun deleteAll() {
+        pokemonDao.deleteAllPokemon()
+    }
+
+    override suspend fun deleteAllAndInsertNew(pokemonList: List<PokemonEntity>) {
+        pokemonDao.deleteAllAndInsertNewPokemons(pokemonList)
+    }
+
     override suspend fun insertPokemonDetails(pokemonDetails: PokemonDetailsEntity) {
         pokemonDao.upsertPokemonDetails(pokemonDetails)
     }

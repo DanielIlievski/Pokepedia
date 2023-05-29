@@ -6,7 +6,7 @@ import com.echo.pokepedia.util.NetworkResult
 
 interface RemotePokemonDataSource {
 
-    suspend fun getPokemonList(limit: Int, offset: Int): NetworkResult<PokemonListResponse?>
+    suspend fun getPokemonList(limit: Int, offset: Int): NetworkResult<PokemonListResponse>
 
-    suspend fun getPokemonInfo(name: String): NetworkResult<PokemonDetailsResponse?>
+    suspend fun getPokemonInfo(name: String): NetworkResult<PokemonDetailsResponse>
 }

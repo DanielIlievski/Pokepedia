@@ -103,6 +103,7 @@
     <string name="team_full_message">Do you want to remove another pokemon?</string>
     <string name="added_to_team_successfully">%s was added to your team!</string>
     <string name="already_exists_in_team">%s is already in your team!</string>
+    <string name="pokemon_details_empty">There are no details for this pokemon</string>
     <!-- endregion -->
 
 </resources>
