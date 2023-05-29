@@ -113,6 +113,9 @@ class PokemonDetailsFragment : BaseFragment() {
             }
             pokemonDetails.types?.let {
                 groupPokemonTypes.render(it, LinearLayout.HORIZONTAL, View.VISIBLE)
+                groupPokemonTypes.visibility = View.VISIBLE
+                imgFavoriteAnim.visibility = View.VISIBLE
+                addToMyTeam.visibility = View.VISIBLE
             }
             setAbilitiesGroup(pokemonDetails.abilities)
         }
@@ -247,9 +250,7 @@ class PokemonDetailsFragment : BaseFragment() {
     private fun onAddToMyTeamClickListener(pokemonDetails: PokemonDetailsDTO) {
         binding.addToMyTeam.setOnClickListener {
             lifecycleScope.launch {
-                when (
-                    viewModel.checkAddConditions(pokemonDetails.imageDefault, args.dominantColor)
-                ) {
+                when (viewModel.checkAddConditions(pokemonDetails.id)) {
                     AddPokemonState.AlreadyExists -> showToastMessageShort(
                         getString(
                             R.string.already_exists_in_team,
@@ -274,6 +275,7 @@ class PokemonDetailsFragment : BaseFragment() {
                 val isTeamFull = true
                 val action =
                     PokemonDetailsFragmentDirections.pokemonDetailsFragmentToMyTeamFragment(
+                        pokemonId = args.pokemonId,
                         isTeamFull = isTeamFull,
                         imgUrl = pokemonDetails.imageDefault,
                         dominantColor = args.dominantColor
@@ -295,7 +297,7 @@ class PokemonDetailsFragment : BaseFragment() {
             positiveBtnText = R.string.yes,
             negativeBtnText = R.string.no,
             onPositiveBtnClick = { dialog, _ ->
-                viewModel.addPokemonToMyTeam(pokemonDetails.imageDefault, args.dominantColor)
+                viewModel.addPokemonToMyTeam(pokemonDetails.id)
                 showToastMessageShort(
                     getString(
                         R.string.added_to_team_successfully,

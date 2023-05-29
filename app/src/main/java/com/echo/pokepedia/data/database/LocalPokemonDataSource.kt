@@ -1,8 +1,11 @@
 package com.echo.pokepedia.data.database
 
+import androidx.paging.PagingSource
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonDetailsEntity
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonEntity
 import com.echo.pokepedia.domain.pokemon.model.database.StatEntity
+import com.echo.pokepedia.domain.pokemon.model.database.TeamMemberEntity
+import com.echo.pokepedia.domain.pokemon.model.database.relation.PokemonAndTeamMember
 import com.echo.pokepedia.domain.pokemon.model.database.relation.PokemonDetailsWithStats
 import kotlinx.coroutines.flow.Flow
 
@@ -12,17 +15,21 @@ interface LocalPokemonDataSource {
 
     suspend fun insertAllPokemons(pokemonList: List<PokemonEntity>)
 
-    fun getPokemon(pokemonId: Int): Flow<PokemonEntity>
+    fun getAllPokemons(): PagingSource<Int, PokemonEntity>
 
-    fun getAllPokemons(): Flow<List<PokemonEntity>>
+    suspend fun deleteAll()
+
+    suspend fun deleteAllAndInsertNew(pokemonList: List<PokemonEntity>)
 
     suspend fun insertPokemonDetails(pokemonDetails: PokemonDetailsEntity)
 
-    fun getPokemonDetails(pokemonId: Int): Flow<PokemonDetailsWithStats>
+    fun getPokemonDetails(pokemonName: String): Flow<PokemonDetailsWithStats>
 
     suspend fun insertStat(stat: StatEntity)
 
-    fun getStat(statId: Int): Flow<StatEntity>
+    suspend fun insertTeamMember(teamMember: TeamMemberEntity)
 
-    fun getStatsWithPokemonId(pokemonId: Int): Flow<List<StatEntity>>
+    fun getAllTeamMembers(): Flow<List<PokemonAndTeamMember>>
+
+    suspend fun deleteTeamMember(pokemonId: Int)
 }

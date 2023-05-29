@@ -7,7 +7,7 @@ class RemovePokemonFromMyTeamUseCase @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) {
 
-    operator fun invoke(imgUrl: String) {
-        pokemonRepository.removePokemonFromMyTeam(imgUrl)
+    suspend operator fun invoke(pokemonId: Int) {
+        pokemonRepository.removePokemonFromMyTeam(pokemonId)
     }
 }

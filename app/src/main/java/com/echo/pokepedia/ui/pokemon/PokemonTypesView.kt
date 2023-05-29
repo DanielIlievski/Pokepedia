@@ -30,7 +30,6 @@ class PokemonTypesView @JvmOverloads constructor(
             initProperties(binding.type1, types[0], visibility)
             initProperties(binding.type2, types[1], visibility)
         } else {
-            setOrientation(orientation)
             initProperties(binding.type1, types[0], visibility)
             binding.type2.visibility = View.GONE
         }

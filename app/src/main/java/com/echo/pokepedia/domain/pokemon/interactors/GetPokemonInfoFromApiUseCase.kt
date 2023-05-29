@@ -10,6 +10,6 @@ class GetPokemonInfoFromApiUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(name: String): NetworkResult<PokemonDetailsDTO> {
-        return pokemonRepository.getPokemonInfoFromApi(name)
+        return pokemonRepository.getPokemonDetails(name)
     }
 }

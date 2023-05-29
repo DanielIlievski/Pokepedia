@@ -1,7 +1,6 @@
 package com.echo.pokepedia.ui.pokemon.home
 
 import android.graphics.drawable.GradientDrawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
@@ -47,7 +46,6 @@ class PokemonAdapter(
                 cardPokemon.background = gradientDrawable
 
                 cardPokemon.setOnClickListener {
-                    Log.d("HelloWorld2", "bind: $pokemon")
                     onItemClicked(pokemon)
                 }
             }

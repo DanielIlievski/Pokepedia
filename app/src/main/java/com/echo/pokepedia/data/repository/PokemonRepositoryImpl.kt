@@ -1,81 +1,88 @@
 package com.echo.pokepedia.data.repository
 
-import android.graphics.Color
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.map
-import androidx.palette.graphics.Palette
+import androidx.paging.*
 import com.bumptech.glide.RequestManager
+import com.echo.pokepedia.R
 import com.echo.pokepedia.data.database.LocalPokemonDataSource
+import com.echo.pokepedia.data.mappers.toPokemonDTO
 import com.echo.pokepedia.data.mappers.toPokemonDetailsDTO
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
+import com.echo.pokepedia.data.paging.PokemonRemoteMediator
 import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
 import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
+import com.echo.pokepedia.domain.pokemon.model.database.TeamMemberEntity
 import com.echo.pokepedia.domain.pokemon.model.network.PokemonDetailsResponse
 import com.echo.pokepedia.domain.pokemon.repository.PokemonRepository
-import com.echo.pokepedia.ui.pokemon.home.PokemonPagingSource
+import com.echo.pokepedia.util.NetworkConnectivity
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.PAGE_SIZE
 import com.echo.pokepedia.util.UiText
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
     private val remotePokemonDataSource: RemotePokemonDataSource,
     private val localPokemonDataSource: LocalPokemonDataSource,
-    private val glide: RequestManager
+    private val dispatcher: CoroutineDispatcher,
+    private val glide: RequestManager,
+    private val networkConnectivity: NetworkConnectivity
 ) : PokemonRepository {
 
-    private val _myTeamListFlow = MutableStateFlow<List<Pair<String, Int>>>(emptyList())
-    private val myTeamListFlow: Flow<List<Pair<String, Int>>> = _myTeamListFlow
-
-    override fun getMyTeamList(): Flow<List<Pair<String, Int>>> {
-        return myTeamListFlow
+    override suspend fun getMyTeamList(): Flow<List<PokemonDTO>> {
+        val localTeamMembers = localPokemonDataSource.getAllTeamMembers().map { list ->
+            list.filter { it.teamMember != null }.map { it.pokemon.toPokemonDTO() }
+        }
+        return localTeamMembers
     }
 
-    override fun addPokemonToMyTeam(imgUrl: String, dominantColor: Int) {
-        val myTeamList = _myTeamListFlow.value.toMutableList()
-        myTeamList.add(imgUrl to dominantColor)
-        _myTeamListFlow.value = myTeamList
+    override suspend fun addPokemonToMyTeam(pokemonId: Int) {
+        localPokemonDataSource.insertTeamMember(
+            TeamMemberEntity(pokemonId)
+        )
     }
 
-    override fun removePokemonFromMyTeam(imgUrl: String) {
-        val myTeamList = _myTeamListFlow.value.toMutableList()
-        val updatedList = myTeamList.filterNot { it.first == imgUrl }
-        _myTeamListFlow.value = updatedList
+    override suspend fun removePokemonFromMyTeam(pokemonId: Int) {
+        localPokemonDataSource.deleteTeamMember(pokemonId)
     }
 
+    @OptIn(ExperimentalPagingApi::class)
     override suspend fun getPokemonList(): Flow<PagingData<PokemonDTO>> {
         return Pager(
             config = PagingConfig(
-                PAGE_SIZE,
-                enablePlaceholders = false
+                pageSize = PAGE_SIZE
+            ),
+            pagingSourceFactory = {
+                localPokemonDataSource.getAllPokemons()
+            },
+            remoteMediator = PokemonRemoteMediator(
+                localPokemonDataSource = localPokemonDataSource,
+                remotePokemonDataSource = remotePokemonDataSource,
+                dispatcher = dispatcher,
+                glide = glide
             )
-        ) {
-            PokemonPagingSource(remotePokemonDataSource)
-        }.flow.map {
-            it.map { pokemonDTO ->
-                pokemonDTO.overrideColors(
-                    getDominantColor(pokemonDTO.url ?: ""),
-                    getDominantColor(pokemonDTO.urlShiny ?: "")
-                )
-            }
+        ).flow.map { pagingData ->
+            pagingData.map { pokemonEntity -> pokemonEntity.toPokemonDTO() }
         }
     }
 
-    override suspend fun getPokemonInfoFromApi(
+    override suspend fun getPokemonDetails(
         name: String
     ): NetworkResult<PokemonDetailsDTO> {
-        val pokemonResult = remotePokemonDataSource.getPokemonInfo(name)
 
-        return when (pokemonResult) {
-            is NetworkResult.Success -> onSuccessfulPokemonFetch(pokemonResult.result)
-            is NetworkResult.Failure -> onFailedPokemonFetch(pokemonResult.exception)
+        return if (!networkConnectivity.isNetworkAvailable) {
+            val localPokemonDetails = localPokemonDataSource.getPokemonDetails(name).firstOrNull()
+            if (localPokemonDetails != null) {
+                NetworkResult.Success(localPokemonDetails.toPokemonDetailsDTO())
+            } else {
+                NetworkResult.Failure(UiText.StringResource(R.string.no_internet_connection))
+            }
+        } else {
+            val pokemonResult = remotePokemonDataSource.getPokemonInfo(name)
+            when (pokemonResult) {
+                is NetworkResult.Failure -> onFailedPokemonFetch(pokemonResult.exception)
+                is NetworkResult.Success -> onSuccessfulPokemonFetch(pokemonResult.result)
+            }
         }
     }
 
@@ -83,20 +90,16 @@ class PokemonRepositoryImpl @Inject constructor(
         return NetworkResult.Failure(exception)
     }
 
-    private fun onSuccessfulPokemonFetch(result: PokemonDetailsResponse): NetworkResult<PokemonDetailsDTO> {
+    private suspend fun onSuccessfulPokemonFetch(result: PokemonDetailsResponse): NetworkResult<PokemonDetailsDTO> {
+        val pokemonDetailsDto = result.toPokemonDetailsDTO()
+        writePokemonDetailsToDatabase(pokemonDetailsDto)
         return NetworkResult.Success(result.toPokemonDetailsDTO())
     }
 
-    private suspend fun getDominantColor(imageUrl: String): Int {
-        return withContext(Dispatchers.IO) {
-            val bitmap = glide
-                .asBitmap()
-                .load(imageUrl)
-                .submit()
-                .get()
-
-            val palette = Palette.from(bitmap).generate()
-            palette.getDominantColor(Color.WHITE)
+    private suspend fun writePokemonDetailsToDatabase(pokemonDetailsDto: PokemonDetailsDTO) {
+        localPokemonDataSource.insertPokemonDetails(pokemonDetailsDto.toPokemonDetailsEntity())
+        pokemonDetailsDto.toStatEntityList().forEach { statEntity ->
+            localPokemonDataSource.insertStat(statEntity)
         }
     }
 }

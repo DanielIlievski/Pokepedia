@@ -1,16 +1,20 @@
 package com.echo.pokepedia.data.database.room
 
+import androidx.paging.PagingSource
 import com.echo.pokepedia.data.database.LocalPokemonDataSource
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonDetailsEntity
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonEntity
 import com.echo.pokepedia.domain.pokemon.model.database.StatEntity
+import com.echo.pokepedia.domain.pokemon.model.database.TeamMemberEntity
+import com.echo.pokepedia.domain.pokemon.model.database.relation.PokemonAndTeamMember
 import com.echo.pokepedia.domain.pokemon.model.database.relation.PokemonDetailsWithStats
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RoomPokemonDataSource @Inject constructor(
     private val pokemonDao: PokemonDao,
-    private val statDao: StatDao
+    private val statDao: StatDao,
+    private val teamMemberDao: TeamMemberDao
 ) : LocalPokemonDataSource {
 
     override suspend fun insertPokemon(pokemon: PokemonEntity) {
@@ -21,31 +25,39 @@ class RoomPokemonDataSource @Inject constructor(
         pokemonDao.upsertAllPokemons(pokemonList)
     }
 
-    override fun getPokemon(pokemonId: Int): Flow<PokemonEntity> {
-        return pokemonDao.getPokemon(pokemonId)
+    override fun getAllPokemons(): PagingSource<Int, PokemonEntity> {
+        return pokemonDao.getAllPokemons()
     }
 
-    override fun getAllPokemons(): Flow<List<PokemonEntity>> {
-        return pokemonDao.getAllPokemons()
+    override suspend fun deleteAll() {
+        pokemonDao.deleteAllPokemon()
+    }
+
+    override suspend fun deleteAllAndInsertNew(pokemonList: List<PokemonEntity>) {
+        pokemonDao.deleteAllAndInsertNewPokemons(pokemonList)
     }
 
     override suspend fun insertPokemonDetails(pokemonDetails: PokemonDetailsEntity) {
         pokemonDao.upsertPokemonDetails(pokemonDetails)
     }
 
-    override fun getPokemonDetails(pokemonId: Int): Flow<PokemonDetailsWithStats> {
-        return pokemonDao.getPokemonDetails(pokemonId)
+    override fun getPokemonDetails(pokemonName: String): Flow<PokemonDetailsWithStats> {
+        return pokemonDao.getPokemonDetails(pokemonName)
     }
 
     override suspend fun insertStat(stat: StatEntity) {
         statDao.upsertStat(stat)
     }
 
-    override fun getStat(statId: Int): Flow<StatEntity> {
-        return statDao.getStat(statId)
+    override suspend fun insertTeamMember(teamMember: TeamMemberEntity) {
+        teamMemberDao.upsertTeamMember(teamMember)
     }
 
-    override fun getStatsWithPokemonId(pokemonId: Int): Flow<List<StatEntity>> {
-        return statDao.getStatsWithPokemonId(pokemonId)
+    override fun getAllTeamMembers(): Flow<List<PokemonAndTeamMember>> {
+        return teamMemberDao.getAllTeamMembers()
+    }
+
+    override suspend fun deleteTeamMember(pokemonId: Int) {
+        teamMemberDao.deleteTeamMember(pokemonId)
     }
 }

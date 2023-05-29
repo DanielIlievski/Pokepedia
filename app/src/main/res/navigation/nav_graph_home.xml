@@ -23,6 +23,11 @@
         tools:layout="@layout/fragment_my_team">
 
         <argument
+            android:name="pokemonId"
+            app:argType="integer"
+            android:defaultValue="-1"/>
+
+        <argument
             android:name="isTeamFull"
             android:defaultValue="false"
             app:argType="boolean" />

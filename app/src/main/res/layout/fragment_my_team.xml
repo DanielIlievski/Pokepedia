@@ -1,135 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:columnCount="2"
-    android:padding="16dp"
-    android:rowCount="3">
+    android:layout_height="match_parent">
 
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginEnd="@dimen/margin_padding_tiny"
-        android:layout_marginBottom="@dimen/margin_padding_tiny">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myTeamRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:spanCount="2"
+        tools:itemCount="6"
+        tools:listitem="@layout/list_item_team_member" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgPokemon1"
-            style="@style/MyTeam.ShapeableImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ImageButton
-            android:id="@+id/btnDelete1"
-            style="@style/MyTeam.ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginEnd="@dimen/margin_padding_tiny"
-        android:layout_marginBottom="@dimen/margin_padding_tiny">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgPokemon2"
-            style="@style/MyTeam.ShapeableImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ImageButton
-            android:id="@+id/btnDelete2"
-            style="@style/MyTeam.ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginEnd="@dimen/margin_padding_tiny"
-        android:layout_marginBottom="@dimen/margin_padding_tiny">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgPokemon3"
-            style="@style/MyTeam.ShapeableImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ImageButton
-            android:id="@+id/btnDelete3"
-            style="@style/MyTeam.ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginEnd="@dimen/margin_padding_tiny"
-        android:layout_marginBottom="@dimen/margin_padding_tiny">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgPokemon4"
-            style="@style/MyTeam.ShapeableImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ImageButton
-            android:id="@+id/btnDelete4"
-            style="@style/MyTeam.ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginEnd="@dimen/margin_padding_tiny"
-        android:layout_marginBottom="@dimen/margin_padding_tiny">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgPokemon5"
-            style="@style/MyTeam.ShapeableImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ImageButton
-            android:id="@+id/btnDelete5"
-            style="@style/MyTeam.ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginEnd="@dimen/margin_padding_tiny"
-        android:layout_marginBottom="@dimen/margin_padding_tiny">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgPokemon6"
-            style="@style/MyTeam.ShapeableImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ImageButton
-            android:id="@+id/btnDelete6"
-            style="@style/MyTeam.ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
-
-</GridLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

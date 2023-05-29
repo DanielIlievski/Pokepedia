@@ -102,23 +102,22 @@ class HomeFragment : BaseFragment() {
     private fun setPokemonAdapter() {
         adapter = PokemonAdapter { pokemon ->
             val action = HomeFragmentDirections.homeFragmentToPokemonDetailsFragment(
-                pokemon.id!!,
-                pokemon.name!!,
-                pokemon.dominantColor!!,
-                pokemon.dominantColorShiny!!
+                pokemon.id ?: -1,
+                pokemon.name.orEmpty(),
+                pokemon.dominantColor ?: Color.WHITE,
+                pokemon.dominantColorShiny ?: Color.WHITE
             )
 
             findNavController().navigate(action)
         }
-        adapter.let {
-            val footerAdapter = PokemonLoadStateAdapter { it?.retry() }
-            binding.pokemonRecyclerView.adapter =
-                it?.withLoadStateFooter(footerAdapter)
+        adapter.let { pokemonAdapter ->
+            val footerAdapter = PokemonLoadStateAdapter { pokemonAdapter?.retry() }
+            binding.pokemonRecyclerView.adapter = pokemonAdapter?.withLoadStateFooter(footerAdapter)
             binding.pokemonRecyclerView.layoutManager =
                 GridLayoutManager(requireContext(), 2).apply {
                     spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int): Int {
-                            return if (position == adapter!!.itemCount && footerAdapter.itemCount > 0) {
+                            return if (position == pokemonAdapter?.itemCount && footerAdapter.itemCount > 0) {
                                 2
                             } else {
                                 1
@@ -152,7 +151,13 @@ class HomeFragment : BaseFragment() {
                     with(binding.buddyPokemonSection) {
                         loadImage(pokemon.imageDefault, imgPokemon)
                         textPokemonName.text = pokemon.name?.capitalizeFirstLetter()
-                        pokemon.types?.let { groupPokemonTypes.render(it, LinearLayout.VERTICAL, View.VISIBLE) }
+                        pokemon.types?.let {
+                            groupPokemonTypes.render(
+                                it,
+                                LinearLayout.VERTICAL,
+                                View.VISIBLE
+                            )
+                        }
                     }
                 }
             }

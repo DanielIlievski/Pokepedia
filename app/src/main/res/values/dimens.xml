@@ -82,6 +82,8 @@
     <dimen name="img_favorite_pokemon_margin_top">140dp</dimen>
     <dimen name="xplosion_view_width">80dp</dimen>
     <dimen name="xplosion_view_height">80dp</dimen>
+    <dimen name="img_favorite_height">32dp</dimen>
+    <dimen name="img_favorite_width">32dp</dimen>
     <!-- endregion -->
 
     <!-- region elevation -->
