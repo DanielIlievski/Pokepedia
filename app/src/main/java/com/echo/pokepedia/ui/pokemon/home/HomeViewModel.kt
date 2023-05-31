@@ -27,49 +27,45 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     // region viewModel variables
-    private var _pokemonList = MutableSharedFlow<PagingData<PokemonDTO>>()
+    private val _pokemonList = MutableSharedFlow<PagingData<PokemonDTO>>()
     val pokemonList: SharedFlow<PagingData<PokemonDTO>> get() = _pokemonList
 
-    private var _buddyPokemonDetails = MutableStateFlow<PokemonDetailsDTO?>(null)
+    private val _buddyPokemonDetails = MutableStateFlow<PokemonDetailsDTO?>(null)
     val buddyPokemonDetails: StateFlow<PokemonDetailsDTO?> get() = _buddyPokemonDetails
 
-    private var _buddyPokemonName = settingsDataStore.buddyPokemonNameFlow
+    private val _buddyPokemonName = settingsDataStore.buddyPokemonNameFlow
 
-    private var _buddyPokemonNickname = settingsDataStore.buddyPokemonNicknameFlow
+    private val _buddyPokemonNickname = settingsDataStore.buddyPokemonNicknameFlow
     val buddyPokemonNickname get() = _buddyPokemonNickname.asLiveData()
 
-    private var _buddyPokemonDominantColor = settingsDataStore.buddyPokemonDominantColorFlow
+    private val _buddyPokemonDominantColor = settingsDataStore.buddyPokemonDominantColorFlow
     val buddyPokemonDominantColor get() = _buddyPokemonDominantColor.asLiveData()
 
-    private var _queriedPokemonList = MutableSharedFlow<List<PokemonDTO>>()
+    private val _queriedPokemonList = MutableSharedFlow<List<PokemonDTO>>()
     val queriedPokemonList: SharedFlow<List<PokemonDTO>> get() = _queriedPokemonList
 
-    private var _homeViewState = MutableSharedFlow<HomeViewState>()
+    private val _homeViewState = MutableSharedFlow<HomeViewState>()
     val homeViewState: SharedFlow<HomeViewState> get() = _homeViewState
 
-    private var _emptyViewState = MutableSharedFlow<EmptyViewState>()
+    private val _emptyViewState = MutableSharedFlow<EmptyViewState>()
     val emptyViewState: SharedFlow<EmptyViewState> get() = _emptyViewState
     // endregion
 
-    fun getPokemonListPaginated() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getPokemonListFromApiUseCase.invoke()
-                .cachedIn(viewModelScope)
-                .collect {
-                    _pokemonList.emit(it)
-                }
-        }
-    }
-
-    private fun getQueriedPokemonList(query: String) {
-        viewModelScope.launch {
-            searchPokemonsByNameOrIdUseCase.invoke(query).collect {
-                _queriedPokemonList.emit(it)
+    fun getPokemonListPaginated() = viewModelScope.launch(Dispatchers.IO) {
+        getPokemonListFromApiUseCase.invoke()
+            .cachedIn(viewModelScope)
+            .collect {
+                _pokemonList.emit(it)
             }
+    }
+
+    private fun getQueriedPokemonList(query: String) = viewModelScope.launch(Dispatchers.IO) {
+        searchPokemonsByNameOrIdUseCase.invoke(query).collect {
+            _queriedPokemonList.emit(it)
         }
     }
 
-    fun getPokemonInfo() = viewModelScope.launch {
+    fun getPokemonInfo() = viewModelScope.launch(Dispatchers.IO) {
         _buddyPokemonName.collect {
             if (it.isNotEmpty()) {
                 val response = getPokemonInfoFromApiUseCase.invoke(_buddyPokemonName.first())
@@ -85,7 +81,7 @@ class HomeViewModel @Inject constructor(
         _buddyPokemonDetails.value = null
     }
 
-    fun searchPokemonList(query: String) = viewModelScope.launch {
+    fun searchPokemonList(query: String) = viewModelScope.launch(Dispatchers.IO) {
         if (query.isEmpty()) {
             _homeViewState.emit(HomeViewState.ShowPokemonListPaginated)
             getPokemonListPaginated()

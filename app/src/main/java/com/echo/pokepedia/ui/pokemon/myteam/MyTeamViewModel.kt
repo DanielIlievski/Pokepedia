@@ -19,7 +19,7 @@ class MyTeamViewModel @Inject constructor(
     private val addPokemonToMyTeamUseCase: AddPokemonToMyTeamUseCase
 ) : BaseViewModel() {
 
-    private var _myTeamList: MutableStateFlow<List<PokemonDTO>> =
+    private val _myTeamList: MutableStateFlow<List<PokemonDTO>> =
         MutableStateFlow(emptyList())
     val myTeamList: Flow<List<PokemonDTO>> get() = _myTeamList
 

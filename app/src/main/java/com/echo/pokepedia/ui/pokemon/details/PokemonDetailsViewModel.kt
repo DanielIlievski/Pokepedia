@@ -9,6 +9,7 @@ import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
 import com.echo.pokepedia.ui.BaseViewModel
 import com.echo.pokepedia.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -25,16 +26,16 @@ class PokemonDetailsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     // region viewModel variables
-    private var _pokemonDetailsInfo = MutableStateFlow<PokemonDetailsDTO>(PokemonDetailsDTO())
+    private val _pokemonDetailsInfo = MutableStateFlow<PokemonDetailsDTO>(PokemonDetailsDTO())
     val pokemonDetailsInfo: StateFlow<PokemonDetailsDTO> get() = _pokemonDetailsInfo
 
-    private var _pokemonStats = MutableStateFlow<List<Triple<String, Int, Int>>?>(emptyList())
+    private val _pokemonStats = MutableStateFlow<List<Triple<String, Int, Int>>?>(emptyList())
     val pokemonStats: StateFlow<List<Triple<String, Int, Int>>?> get() = _pokemonStats
 
-    private var _buddyPokemonName = settingsDataStore.buddyPokemonNameFlow
+    private val _buddyPokemonName = settingsDataStore.buddyPokemonNameFlow
     // endregion
 
-    fun getPokemonDetails(name: String) = viewModelScope.launch {
+    fun getPokemonDetails(name: String) = viewModelScope.launch(Dispatchers.IO) {
         val response = getPokemonInfoFromApiUseCase.invoke(name)
         when (response) {
             is NetworkResult.Success -> {
@@ -50,15 +51,15 @@ class PokemonDetailsViewModel @Inject constructor(
         _pokemonStats.value = _pokemonDetailsInfo.value.stats
     }
 
-    fun setBuddyPokemonName(pokemonName: String) = viewModelScope.launch {
+    fun setBuddyPokemonName(pokemonName: String) = viewModelScope.launch(Dispatchers.IO) {
         settingsDataStore.saveBuddyPokemonIdToPreferencesStore(pokemonName)
     }
 
-    fun setBuddyPokemonNickname(pokemonNickname: String) = viewModelScope.launch {
+    fun setBuddyPokemonNickname(pokemonNickname: String) = viewModelScope.launch(Dispatchers.IO) {
         settingsDataStore.saveBuddyPokemonNicknameToPreferencesStore(pokemonNickname)
     }
 
-    fun setBuddyPokemonDominantColor(pokemonDominantColor: Int) = viewModelScope.launch {
+    fun setBuddyPokemonDominantColor(pokemonDominantColor: Int) = viewModelScope.launch(Dispatchers.IO) {
         settingsDataStore.saveBuddyPokemonDominantColorToPreferencesStore(pokemonDominantColor)
     }
 
@@ -75,7 +76,7 @@ class PokemonDetailsViewModel @Inject constructor(
         }
     }
 
-    fun addPokemonToMyTeam(pokemonId: Int?) = viewModelScope.launch {
+    fun addPokemonToMyTeam(pokemonId: Int?) = viewModelScope.launch(Dispatchers.IO) {
         if (pokemonId != null) {
             addPokemonToMyTeamUseCase.invoke(pokemonId)
         }
