@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentSettingsBinding
 import com.echo.pokepedia.domain.authentication.model.User
@@ -38,7 +39,7 @@ class SettingsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observeCurrentUser()
+        initObservers()
 
         initListeners()
     }
@@ -49,20 +50,9 @@ class SettingsFragment : BaseFragment() {
     }
     // endregion
 
-    private fun observeCurrentUser() = lifecycleScope.launch {
-        viewModel.currentUser.collectLatest { user ->
-            initUi(user)
-        }
-    }
-
-    private fun initUi(user: User) {
-        with(binding) {
-            loadImage(user.profilePicture, imgProfile)
-            textNameSurname.text = user.fullName
-            textEmail.text = user.email
-            textStartDate.text =
-                getString(R.string.start_date, user.date?.toDDMMMYYYY())
-        }
+    private fun initObservers() {
+        observeCurrentUser()
+        observeSettingsViewState()
     }
 
     private fun initListeners() {
@@ -71,10 +61,49 @@ class SettingsFragment : BaseFragment() {
         onChangePasswordClickListener()
     }
 
+    // region initObservers
+
+    // region observeCurrentUser
+    private fun observeCurrentUser() = lifecycleScope.launch {
+        viewModel.currentUser.collectLatest { user ->
+            initUI(user)
+        }
+    }
+
+    private fun initUI(user: User) {
+        with(binding) {
+            loadImage(user.profilePicture, imgProfile)
+            textNameSurname.text = user.fullName
+            textEmail.text = user.email
+            textStartDate.text =
+                getString(R.string.start_date, user.date?.toDDMMMYYYY())
+        }
+    }
+    // endregion
+
+    private fun observeSettingsViewState() = lifecycleScope.launch {
+        viewModel.settingsViewState.collect { viewState ->
+            when (viewState) {
+                SettingsViewState.LogoutSuccessful -> {
+                    showToastMessageShort(getString(R.string.logout_successful))
+                    val action = SettingsFragmentDirections.settingsFragmentToAuthActivity()
+                    findNavController().navigate(action)
+                    activity?.finish()
+                }
+                SettingsViewState.EmptyViewState -> {}
+            }
+        }
+    }
+    // endregion
+
     // region initListeners
     private fun onImageEditClickListener() {}
 
-    private fun onLogoutClickListener() {}
+    private fun onLogoutClickListener() {
+        binding.btnLogout.setOnClickListener {
+            viewModel.logout()
+        }
+    }
 
     private fun onChangePasswordClickListener() {}
     // endregion

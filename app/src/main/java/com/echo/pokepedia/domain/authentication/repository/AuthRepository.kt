@@ -11,6 +11,8 @@ interface AuthRepository {
 
     suspend fun getCurrentUser(): NetworkResult<User>
 
+    fun isUserAuthenticated(): Boolean
+
     suspend fun login(email: String, password: String): NetworkResult<FirebaseUser>
 
     suspend fun googleSignIn(task: Task<GoogleSignInAccount>): NetworkResult<FirebaseUser?>

@@ -70,6 +70,10 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (viewModel.isUserAuthenticated()) {
+            navigateToHomeScreen()
+        }
+
         initObservers()
 
         initListeners()

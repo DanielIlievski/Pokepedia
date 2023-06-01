@@ -2,10 +2,7 @@ package com.echo.pokepedia.ui.authentication.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.echo.pokepedia.domain.authentication.interactors.FacebookSignInUseCase
-import com.echo.pokepedia.domain.authentication.interactors.GoogleSignInUseCase
-import com.echo.pokepedia.domain.authentication.interactors.LoginUserUseCase
-import com.echo.pokepedia.domain.authentication.interactors.ResetPasswordUseCase
+import com.echo.pokepedia.domain.authentication.interactors.*
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.isEmailFieldEmpty
 import com.echo.pokepedia.util.isPasswordFieldEmpty
@@ -26,7 +23,8 @@ class LoginViewModel @Inject constructor(
     private val loginUserUseCase: LoginUserUseCase,
     private val googleSignInUseCase: GoogleSignInUseCase,
     private val facebookSignInUseCase: FacebookSignInUseCase,
-    private val resetPasswordUseCase: ResetPasswordUseCase
+    private val resetPasswordUseCase: ResetPasswordUseCase,
+    private val isUserAuthenticatedUseCase: IsUserAuthenticatedUseCase
 ) : ViewModel() {
 
     // region viewModel variables
@@ -65,6 +63,10 @@ class LoginViewModel @Inject constructor(
 
     fun resetPassword(email: String) = viewModelScope.launch {
         _resetPassword.emit(resetPasswordUseCase.invoke(email))
+    }
+
+    fun isUserAuthenticated(): Boolean {
+        return isUserAuthenticatedUseCase.invoke()
     }
 
 }

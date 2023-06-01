@@ -38,6 +38,10 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun isUserAuthenticated(): Boolean {
+        return firebaseAuth.currentUser != null
+    }
+
     override suspend fun login(email: String, password: String): NetworkResult<FirebaseUser> {
         return try {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
@@ -64,8 +68,11 @@ class AuthRepositoryImpl @Inject constructor(
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 val result = firebaseAuth.signInWithCredential(credential).await()
                 val firebaseUser = result.user
+                val isUserNew = !users.document(firebaseUser?.uid ?: "").get().await().exists()
                 if (firebaseUser != null) {
-                    addUserToFirestore(firebaseUser.toUser())
+                    if (isUserNew) {
+                        addUserToFirestore(firebaseUser.toUser())
+                    }
                     addUserToDatabase(firebaseUser.toUser())
                     NetworkResult.Success(firebaseUser)
                 } else {
@@ -84,8 +91,11 @@ class AuthRepositoryImpl @Inject constructor(
             val credential = FacebookAuthProvider.getCredential(token.token)
             val result = firebaseAuth.signInWithCredential(credential).await()
             val firebaseUser = result.user
+            val isUserNew = !users.document(firebaseUser?.uid ?: "").get().await().exists()
             if (firebaseUser != null) {
-                addUserToFirestore(firebaseUser.toUser())
+                if (isUserNew) {
+                    addUserToFirestore(firebaseUser.toUser())
+                }
                 addUserToDatabase(firebaseUser.toUser())
                 NetworkResult.Success(firebaseUser)
             } else {
