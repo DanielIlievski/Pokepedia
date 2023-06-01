@@ -1,0 +1,33 @@
+package com.echo.pokepedia.ui.pokemon.settings
+
+import androidx.lifecycle.viewModelScope
+import com.echo.pokepedia.domain.authentication.interactors.GetCurrentUserUseCase
+import com.echo.pokepedia.domain.authentication.model.User
+import com.echo.pokepedia.ui.BaseViewModel
+import com.echo.pokepedia.util.NetworkResult
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    private val getCurrentUserUseCase: GetCurrentUserUseCase
+) : BaseViewModel() {
+
+    private var _currentUser = MutableStateFlow<User>(User())
+    val currentUser: StateFlow<User> get() = _currentUser
+
+    init {
+        getUser()
+    }
+
+    private fun getUser() = viewModelScope.launch {
+        val userResult = getCurrentUserUseCase.invoke()
+        when (userResult) {
+            is NetworkResult.Success -> _currentUser.value = userResult.result
+            is NetworkResult.Failure -> _errorObservable.value = userResult.exception
+        }
+    }
+}

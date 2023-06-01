@@ -4,8 +4,12 @@ import android.content.Context
 import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.echo.pokepedia.data.database.LocalAuthenticationDataSource
 import com.echo.pokepedia.data.database.LocalPokemonDataSource
 import com.echo.pokepedia.data.database.room.*
+import com.echo.pokepedia.data.database.room.authentication.LocalAuthenticationDataSourceImpl
+import com.echo.pokepedia.data.database.room.authentication.UserDao
+import com.echo.pokepedia.data.database.room.pokemon.*
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.data.network.retrofit.PokemonDbApi
 import com.echo.pokepedia.data.network.retrofit.RetrofitPokemonDataSource
@@ -98,6 +102,11 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideLocalAuthenticationDataSource(localAuthenticationDataSourceImpl: LocalAuthenticationDataSourceImpl):
+            LocalAuthenticationDataSource = localAuthenticationDataSourceImpl
+
+    @Singleton
+    @Provides
     fun providePokemonDao(database: PokepediaDatabase): PokemonDao = database.pokemonDao()
 
     @Singleton
@@ -107,6 +116,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideTeamMemberDao(database: PokepediaDatabase): TeamMemberDao = database.teamMemberDao()
+
+    @Singleton
+    @Provides
+    fun provideUserDao(database: PokepediaDatabase): UserDao = database.userDao()
 
     @Singleton
     @Provides

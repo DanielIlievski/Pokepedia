@@ -106,6 +106,7 @@
     <string name="change_password">Change password</string>
     <string name="edit_image">Edit image.</string>
     <string name="date_joined">Date joined</string>
+    <string name="logout">Logout</string>
     <!-- endregion -->
 
 </resources>
