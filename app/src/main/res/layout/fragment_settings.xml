@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            tools:text="daniel.ilievski@echo.com.mk"/>
+            tools:text="daniel.ilievski@echo.com.mk" />
 
         <TextView
             android:id="@+id/textStartDate"
@@ -68,37 +68,18 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/margin_padding_normal"
             android:drawablePadding="@dimen/margin_padding_xxsmall"
+            android:gravity="center_vertical"
             android:textSize="@dimen/text_size_xnormal"
             app:drawableStartCompat="@drawable/ic_time"
             tools:text="@string/start_date" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnChangePassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginHorizontal="@dimen/margin_padding_large"
-            android:layout_marginTop="@dimen/margin_padding_normal"
-            android:text="@string/change_password"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            app:cornerRadius="@dimen/radius_xlarge" />
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/MaterialButton.Logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="@dimen/margin_padding_large"
-            android:layout_marginTop="@dimen/margin_padding_normal"
-            android:text="@string/logout"
-            android:textAllCaps="false"
-            android:textColor="@color/red_error"
-            android:textStyle="bold"
-            app:cornerRadius="@dimen/radius_xlarge"
-            app:rippleColor="@color/red_error_light"
-            app:strokeColor="@color/red_error"
-            app:strokeWidth="2dp" />
+            android:layout_marginTop="@dimen/margin_padding_normal" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

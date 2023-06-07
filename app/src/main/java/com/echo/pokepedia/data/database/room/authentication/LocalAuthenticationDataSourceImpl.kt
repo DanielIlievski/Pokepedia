@@ -14,6 +14,10 @@ class LocalAuthenticationDataSourceImpl @Inject constructor(
         userDao.upsertUser(user.toUserEntity())
     }
 
+    override suspend fun updateUser(user: User) {
+        userDao.upsertUser(user.toUserEntity())
+    }
+
     override suspend fun getUser(): User {
         return userDao.getUser().toUser()
     }

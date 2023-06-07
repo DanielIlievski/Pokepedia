@@ -1,8 +1,10 @@
 package com.echo.pokepedia.ui.pokemon.settings
 
+import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.domain.authentication.interactors.GetCurrentUserUseCase
 import com.echo.pokepedia.domain.authentication.interactors.LogoutUserUseCase
+import com.echo.pokepedia.domain.authentication.interactors.UpdateUserProfilePhotoUseCase
 import com.echo.pokepedia.domain.authentication.model.User
 import com.echo.pokepedia.ui.BaseViewModel
 import com.echo.pokepedia.util.NetworkResult
@@ -15,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
-    private val logoutUserUseCase: LogoutUserUseCase
+    private val logoutUserUseCase: LogoutUserUseCase,
+    private val updateUserProfilePhotoUseCase: UpdateUserProfilePhotoUseCase
 ) : BaseViewModel() {
 
     // region viewModel variables
@@ -49,6 +52,11 @@ class SettingsViewModel @Inject constructor(
                 _errorObservable.value = logoutResult.exception
             }
         }
+    }
+
+    fun updateProfilePhoto(imgUri: Uri?) = viewModelScope.launch {
+        updateUserProfilePhotoUseCase.invoke(imgUri)
+        getUser()
     }
 }
 

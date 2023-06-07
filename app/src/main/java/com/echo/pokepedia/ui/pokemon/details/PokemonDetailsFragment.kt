@@ -103,7 +103,7 @@ class PokemonDetailsFragment : BaseFragment() {
     private fun initViews(pokemonDetails: PokemonDetailsDTO) {
         with(binding) {
             root.background = getGradientWhiteBottom(args.dominantColor)
-            loadImage(pokemonDetails.imageDefault, imgPokemon)
+            loadImage(pokemonDetails.imageDefault, imgPokemon, R.drawable.progress_spinner_anim)
             if (pokemonDetails.id != null && pokemonDetails.name != null) {
                 pokemonNameAndId.text = requireContext().getString(
                     R.string.pokemon_id_name,
@@ -180,7 +180,7 @@ class PokemonDetailsFragment : BaseFragment() {
                 if (isDefaultImg) pokemonDetails.imageShiny else pokemonDetails.imageDefault
             val color = if (isDefaultImg) args.dominantColorShiny else args.dominantColor
 
-            loadImage(imgUrl, imgPokemon)
+            loadImage(imgUrl, imgPokemon, R.drawable.progress_spinner_anim)
             root.background = getGradientWhiteBottom(color)
             viewModel.refreshStats()
 

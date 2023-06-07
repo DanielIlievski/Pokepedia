@@ -1,5 +1,6 @@
 package com.echo.pokepedia.domain.authentication.repository
 
+import android.net.Uri
 import com.echo.pokepedia.domain.authentication.model.User
 import com.echo.pokepedia.util.NetworkResult
 import com.facebook.AccessToken
@@ -12,6 +13,8 @@ interface AuthRepository {
     suspend fun getCurrentUser(): NetworkResult<User>
 
     fun isUserAuthenticated(): Boolean
+
+    suspend fun updateUserProfilePhoto(imgUri: Uri?)
 
     suspend fun login(email: String, password: String): NetworkResult<FirebaseUser>
 

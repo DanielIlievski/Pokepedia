@@ -1,5 +1,6 @@
 package com.echo.pokepedia.ui.pokemon.settings
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +14,10 @@ import com.echo.pokepedia.domain.authentication.model.User
 import com.echo.pokepedia.ui.BaseFragment
 import com.echo.pokepedia.util.toDDMMMYYYY
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SettingsFragment : BaseFragment() {
+class SettingsFragment : BaseFragment(), EditPhotoBottomSheetListener {
 
     // region fragment variables
     private var _binding: FragmentSettingsBinding? = null
@@ -58,21 +58,20 @@ class SettingsFragment : BaseFragment() {
     private fun initListeners() {
         onImageEditClickListener()
         onLogoutClickListener()
-        onChangePasswordClickListener()
     }
 
     // region initObservers
 
     // region observeCurrentUser
     private fun observeCurrentUser() = lifecycleScope.launch {
-        viewModel.currentUser.collectLatest { user ->
+        viewModel.currentUser.collect { user ->
             initUI(user)
         }
     }
 
     private fun initUI(user: User) {
         with(binding) {
-            loadImage(user.profilePicture, imgProfile)
+            loadImage(user.profilePicture, imgProfile, R.drawable.profile_placeholder)
             textNameSurname.text = user.fullName
             textEmail.text = user.email
             textStartDate.text =
@@ -97,14 +96,28 @@ class SettingsFragment : BaseFragment() {
     // endregion
 
     // region initListeners
-    private fun onImageEditClickListener() {}
+
+    // region onImageEditClickListener
+    private fun onImageEditClickListener() {
+        binding.imgProfileEdit.setOnClickListener {
+            val bottomSheet = EditPhotoBottomSheetFragment(this)
+            bottomSheet.show(childFragmentManager, "Edit photo")
+        }
+    }
+    // endregion
 
     private fun onLogoutClickListener() {
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
         }
     }
-
-    private fun onChangePasswordClickListener() {}
     // endregion
+
+    override fun onTakenOrSelectedPhoto(imgUri: Uri?) {
+        viewModel.updateProfilePhoto(imgUri)
+    }
+
+    override fun onRemovePhoto() {
+        viewModel.updateProfilePhoto(null)
+    }
 }

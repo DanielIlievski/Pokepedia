@@ -1,11 +1,11 @@
 package com.echo.pokepedia.data.repository
 
+import android.net.Uri
 import android.util.Log
 import com.echo.pokepedia.R
 import com.echo.pokepedia.data.database.room.authentication.LocalAuthenticationDataSourceImpl
 import com.echo.pokepedia.data.mappers.toUser
 import com.echo.pokepedia.domain.authentication.model.User
-import com.echo.pokepedia.domain.authentication.model.database.UserEntity
 import com.echo.pokepedia.domain.authentication.repository.AuthRepository
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.USERS_COLLECTION
@@ -39,7 +39,14 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun isUserAuthenticated(): Boolean {
-        return firebaseAuth.currentUser != null
+        return firebaseAuth.currentUser != null && firebaseAuth.currentUser?.isEmailVerified == true
+    }
+
+    override suspend fun updateUserProfilePhoto(imgUri: Uri?) {
+        val user =
+            localAuthenticationDataSourceImpl.getUser().copy(profilePicture = imgUri.toString())
+        addUserToFirestore(user)
+        localAuthenticationDataSourceImpl.updateUser(user)
     }
 
     override suspend fun login(email: String, password: String): NetworkResult<FirebaseUser> {
@@ -47,7 +54,7 @@ class AuthRepositoryImpl @Inject constructor(
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             if (result.user != null) {
                 if (result.user!!.isEmailVerified) {
-                    addUserToDatabase(result!!.user?.toUser())
+                    addUserToDatabase(result.user!!)
                     NetworkResult.Success(result.user!!)
                 } else {
                     NetworkResult.Failure(UiText.StringResource(R.string.verify_email))
@@ -73,7 +80,7 @@ class AuthRepositoryImpl @Inject constructor(
                     if (isUserNew) {
                         addUserToFirestore(firebaseUser.toUser())
                     }
-                    addUserToDatabase(firebaseUser.toUser())
+                    addUserToDatabase(firebaseUser)
                     NetworkResult.Success(firebaseUser)
                 } else {
                     NetworkResult.Failure(UiText.StringResource(R.string.user_is_null))
@@ -96,7 +103,7 @@ class AuthRepositoryImpl @Inject constructor(
                 if (isUserNew) {
                     addUserToFirestore(firebaseUser.toUser())
                 }
-                addUserToDatabase(firebaseUser.toUser())
+                addUserToDatabase(firebaseUser)
                 NetworkResult.Success(firebaseUser)
             } else {
                 NetworkResult.Failure(UiText.StringResource(R.string.user_is_null))
@@ -137,7 +144,6 @@ class AuthRepositoryImpl @Inject constructor(
             if (isEmailPasswordProvider) {
                 val result = firebaseAuth.sendPasswordResetEmail(email)
                 result.await()
-
                 if (result.isSuccessful) {
                     NetworkResult.Success(true)
                 } else {
@@ -169,7 +175,7 @@ class AuthRepositoryImpl @Inject constructor(
         email: String,
         password: String
     ): FirebaseUser? {
-        val username = firstName + lastName
+        val username = "$firstName $lastName"
         val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
         result?.user?.updateProfile(
             UserProfileChangeRequest.Builder().setDisplayName(username).build()
@@ -181,18 +187,17 @@ class AuthRepositoryImpl @Inject constructor(
         users.document(user.firebaseId!!).set(user).await()
     }
 
-    private suspend fun addUserToDatabase(user: User?) {
+    private suspend fun addUserToDatabase(firebaseUser: FirebaseUser) {
         try {
-            val userDocument = users.document(user!!.firebaseId ?: "").get().await().data
-            val userEntity = UserEntity(
+            val userDocument = users.document(firebaseUser.uid).get().await().data
+            val user = User(
                 fullName = userDocument?.get("fullName").toString(),
                 email = userDocument?.get("email").toString(),
                 profilePicture = userDocument?.get("profilePicture").toString(),
                 firebaseId = userDocument?.get("firebaseId").toString(),
                 date = (userDocument?.get("date") as Timestamp).toDate(),
             )
-            Log.d("HelloWorld", "addUserToDatabase: $userEntity")
-            localAuthenticationDataSourceImpl.insertUser(userEntity.toUser())
+            localAuthenticationDataSourceImpl.insertUser(user)
 
         } catch (e: Exception) {
             Log.d("HelloWorld", "addUserToDatabase: ${e.message}")

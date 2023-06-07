@@ -149,7 +149,7 @@ class HomeFragment : BaseFragment() {
             viewModel.buddyPokemonDetails.collect { pokemon ->
                 if (pokemon != null) {
                     with(binding.buddyPokemonSection) {
-                        loadImage(pokemon.imageDefault, imgPokemon)
+                        loadImage(pokemon.imageDefault, imgPokemon, R.drawable.progress_spinner_anim)
                         textPokemonName.text = pokemon.name?.capitalizeFirstLetter()
                         pokemon.types?.let {
                             groupPokemonTypes.render(

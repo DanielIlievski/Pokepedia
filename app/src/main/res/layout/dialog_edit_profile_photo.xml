@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/top_rounded"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textPickAction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_padding_normal"
+        android:layout_marginTop="@dimen/margin_padding_normal"
+        android:text="@string/pick_an_action"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_xmedium" />
+
+    <TextView
+        android:id="@+id/txtBtnCamera"
+        style="@style/TextView.Medium.CenterVertical.Clickable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_padding_normal"
+        android:layout_marginTop="@dimen/margin_padding_normal"
+        android:drawablePadding="@dimen/margin_padding_normal"
+        android:text="@string/camera"
+        app:drawableStartCompat="@drawable/ic_camera" />
+
+    <TextView
+        android:id="@+id/txtBtnGallery"
+        style="@style/TextView.Medium.CenterVertical.Clickable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_padding_normal"
+        android:layout_marginTop="@dimen/margin_padding_normal"
+        android:drawablePadding="@dimen/margin_padding_normal"
+        android:text="@string/gallery"
+        app:drawableStartCompat="@drawable/ic_gallery" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRemovePhoto"
+        style="@style/MaterialButton.Normal.Caps.Radius"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_padding_normal"
+        android:layout_marginTop="@dimen/text_size_normal"
+        android:layout_marginBottom="@dimen/margin_padding_normal"
+        android:text="@string/remove_photo"
+        android:textColor="@color/yellow_pokemon"
+        app:backgroundTint="@color/blue_pokemon" />
+</LinearLayout>
