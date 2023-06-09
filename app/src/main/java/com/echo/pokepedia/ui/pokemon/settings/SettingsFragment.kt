@@ -95,6 +95,13 @@ class SettingsFragment : BaseFragment(), EditPhotoBottomSheetListener {
                     findNavController().navigate(action)
                     activity?.finish()
                 }
+                SettingsViewState.UpdatePhotoSuccessful -> {
+                    binding.progressCircular.visibility = View.GONE
+                    showToastMessageLong(getString(R.string.update_photo_successful))
+                }
+                SettingsViewState.LoadingState -> {
+                    binding.progressCircular.visibility = View.VISIBLE
+                }
                 SettingsViewState.EmptyViewState -> {}
             }
         }

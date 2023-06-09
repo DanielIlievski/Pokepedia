@@ -84,6 +84,7 @@
     <string name="logout_successful">Logout was successful</string>
     <string name="remove_photo_title">Remove photo</string>
     <string name="remove_photo_message">Are you sure you want to remove the photo?</string>
+    <string name="update_photo_successful">Photo updated successfully</string>
     <!-- endregion -->
 
     <!-- region PokemonDetailsFragment -->

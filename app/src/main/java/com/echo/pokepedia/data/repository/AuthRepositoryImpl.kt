@@ -42,17 +42,28 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun isUserAuthenticated(): Boolean {
-        return firebaseAuth.currentUser != null && firebaseAuth.currentUser?.isEmailVerified == true
+        return if (firebaseAuth.currentUser != null) {
+            if (isEmailPasswordProvider() && firebaseAuth.currentUser!!.isEmailVerified) {
+                true
+            } else !isEmailPasswordProvider()
+        } else {
+            false
+        }
     }
 
-    override suspend fun updateUserProfilePhoto(imgUri: Uri?) {
-        if (imgUri != null) {
-            uploadPhotoToFirebaseStorage(imgUri)
-            val storageImg = getProfilePhotoFromFirebaseStorage()
-            updateProfilePhotoInFirestoreAndDb(storageImg)
-        } else {
-            deletePhotoFromFirebaseStorage()
-            updateProfilePhotoInFirestoreAndDb("")
+    override suspend fun updateUserProfilePhoto(imgUri: Uri?): NetworkResult<Boolean> {
+        return try {
+            if (imgUri != null) {
+                uploadPhotoToFirebaseStorage(imgUri)
+                val storageImg = getProfilePhotoFromFirebaseStorage()
+                updateProfilePhotoInFirestoreAndDb(storageImg)
+            } else {
+                deletePhotoFromFirebaseStorage()
+                updateProfilePhotoInFirestoreAndDb("")
+            }
+            NetworkResult.Success(true)
+        } catch (e: Exception) {
+            NetworkResult.Failure(UiText.DynamicString(e.localizedMessage))
         }
     }
 
@@ -145,10 +156,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun sendPasswordResetEmail(email: String): NetworkResult<Boolean> {
         return try {
-            val isEmailPasswordProvider =
-                firebaseAuth.currentUser?.providerData?.any { it.providerId == "password" } ?: false
-
-            if (isEmailPasswordProvider) {
+            if (isEmailPasswordProvider()) {
                 val result = firebaseAuth.sendPasswordResetEmail(email)
                 result.await()
                 if (result.isSuccessful) {
@@ -191,7 +199,12 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     private suspend fun addUserToFirestore(user: User) {
-        users.document(user.firebaseId!!).set(user).await()
+        try {
+            users.document(user.firebaseId!!).set(user).await()
+        } catch (e: Exception) {
+            Log.d("HelloWorld", "addUserToFirestore: ${e.message}")
+            throw e
+        }
     }
 
     private suspend fun addUserToDatabase(firebaseUser: FirebaseUser) {
@@ -202,11 +215,17 @@ class AuthRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             Log.d("HelloWorld", "addUserToDatabase: ${e.message}")
+            throw e
         }
     }
 
     private suspend fun uploadPhotoToFirebaseStorage(imgUri: Uri) {
-        storageRef().putFile(imgUri).await()
+        try {
+            storageRef().putFile(imgUri).await()
+        } catch (e: Exception) {
+            Log.d("HelloWorld", "uploadPhotoToFirebaseStorage: ${e.localizedMessage}")
+            throw e
+        }
     }
 
     private suspend fun deletePhotoFromFirebaseStorage() {
@@ -214,6 +233,7 @@ class AuthRepositoryImpl @Inject constructor(
             storageRef().delete().await()
         } catch (e: Exception) {
             Log.d("HelloWorld", "deletePhotoFromFirebaseStorage: ${e.localizedMessage}")
+            throw e
         }
     }
 
@@ -223,17 +243,26 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     private suspend fun updateProfilePhotoInFirestoreAndDb(imgUrl: String) {
-        val user = localAuthenticationDataSource.getUser().firstOrNull()
-            ?.copy(profilePicture = imgUrl)
-        if (user != null) {
-            addUserToFirestore(user)
-            localAuthenticationDataSource.updateProfilePhoto(user)
+        try {
+            val user = localAuthenticationDataSource.getUser().firstOrNull()
+                ?.copy(profilePicture = imgUrl)
+            if (user != null) {
+                addUserToFirestore(user)
+                localAuthenticationDataSource.updateProfilePhoto(user)
+            }
+        } catch (e: Exception) {
+            Log.d("HelloWorld", "updateProfilePhotoInFirestoreAndDb: ${e.localizedMessage}")
+            throw e
         }
     }
 
     private fun storageRef(): StorageReference {
         val userId = firebaseAuth.currentUser?.uid
         return firebaseStorageReference.child("$userId/profile_photo/$userId")
+    }
+
+    private fun isEmailPasswordProvider(): Boolean {
+        return firebaseAuth.currentUser?.providerData?.any { it.providerId == "password" } ?: false
     }
     // endregion
 

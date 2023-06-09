@@ -86,7 +86,7 @@ class PokemonActivity : BaseActivity() {
         viewModel.errorObservable.collect { exceptionMessage ->
             val msg = exceptionMessage.asString(this@PokemonActivity)
             if (msg.isNotEmpty()) {
-                showToastMessage(exceptionMessage.asString(this@PokemonActivity), Toast.LENGTH_LONG)
+                showToastMessage(msg, Toast.LENGTH_LONG)
             }
         }
     }

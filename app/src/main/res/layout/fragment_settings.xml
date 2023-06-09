@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.pokemon.settings.SettingsFragment">
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/margin_padding_xxmedium"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

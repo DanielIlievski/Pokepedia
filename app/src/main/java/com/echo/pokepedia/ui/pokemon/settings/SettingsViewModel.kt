@@ -58,11 +58,19 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun updateProfilePhoto(imgUri: Uri?) = viewModelScope.launch(Dispatchers.IO) {
-        updateUserProfilePhotoUseCase.invoke(imgUri)
+        _settingsViewState.value = SettingsViewState.LoadingState
+        val updatePhotoResult = updateUserProfilePhotoUseCase.invoke(imgUri)
+        when (updatePhotoResult) {
+            is NetworkResult.Success -> _settingsViewState.value =
+                SettingsViewState.UpdatePhotoSuccessful
+            is NetworkResult.Failure -> _errorObservable.value = updatePhotoResult.exception
+        }
     }
 }
 
 sealed class SettingsViewState {
     object LogoutSuccessful : SettingsViewState()
     object EmptyViewState : SettingsViewState()
+    object UpdatePhotoSuccessful : SettingsViewState()
+    object LoadingState : SettingsViewState()
 }

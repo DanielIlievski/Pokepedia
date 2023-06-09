@@ -15,7 +15,7 @@ interface AuthRepository {
 
     fun isUserAuthenticated(): Boolean
 
-    suspend fun updateUserProfilePhoto(imgUri: Uri?)
+    suspend fun updateUserProfilePhoto(imgUri: Uri?): NetworkResult<Boolean>
 
     suspend fun login(email: String, password: String): NetworkResult<FirebaseUser>
 
