@@ -1,14 +1,15 @@
 package com.echo.pokepedia.data.database
 
 import com.echo.pokepedia.domain.authentication.model.User
+import kotlinx.coroutines.flow.Flow
 
 interface LocalAuthenticationDataSource {
 
     suspend fun insertUser(user: User)
 
-    suspend fun updateUser(user: User)
+    fun getUser(): Flow<User>
 
-    suspend fun getUser(): User
+    suspend fun updateProfilePhoto(user: User)
 
     suspend fun deleteUser()
 }

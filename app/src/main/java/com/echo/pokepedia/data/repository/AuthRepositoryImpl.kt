@@ -3,20 +3,23 @@ package com.echo.pokepedia.data.repository
 import android.net.Uri
 import android.util.Log
 import com.echo.pokepedia.R
-import com.echo.pokepedia.data.database.room.authentication.LocalAuthenticationDataSourceImpl
+import com.echo.pokepedia.data.database.LocalAuthenticationDataSource
 import com.echo.pokepedia.data.mappers.toUser
 import com.echo.pokepedia.domain.authentication.model.User
 import com.echo.pokepedia.domain.authentication.repository.AuthRepository
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.USERS_COLLECTION
 import com.echo.pokepedia.util.UiText
+import com.echo.pokepedia.util.getUsername
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
@@ -24,14 +27,14 @@ import javax.inject.Named
 
 class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val localAuthenticationDataSourceImpl: LocalAuthenticationDataSourceImpl,
+    private val localAuthenticationDataSource: LocalAuthenticationDataSource,
+    private val firebaseStorageReference: StorageReference,
     @Named(USERS_COLLECTION) private val users: CollectionReference
 ) : AuthRepository {
 
-    override suspend fun getCurrentUser(): NetworkResult<User> {
+    override suspend fun getCurrentUser(): NetworkResult<Flow<User>> {
         return try {
-            val currentUser = localAuthenticationDataSourceImpl.getUser()
-            NetworkResult.Success(currentUser)
+            NetworkResult.Success(localAuthenticationDataSource.getUser())
         } catch (e: Exception) {
             e.printStackTrace()
             NetworkResult.Failure(UiText.DynamicString(e.localizedMessage))
@@ -43,10 +46,14 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateUserProfilePhoto(imgUri: Uri?) {
-        val user =
-            localAuthenticationDataSourceImpl.getUser().copy(profilePicture = imgUri.toString())
-        addUserToFirestore(user)
-        localAuthenticationDataSourceImpl.updateUser(user)
+        if (imgUri != null) {
+            uploadPhotoToFirebaseStorage(imgUri)
+            val storageImg = getProfilePhotoFromFirebaseStorage()
+            updateProfilePhotoInFirestoreAndDb(storageImg)
+        } else {
+            deletePhotoFromFirebaseStorage()
+            updateProfilePhotoInFirestoreAndDb("")
+        }
     }
 
     override suspend fun login(email: String, password: String): NetworkResult<FirebaseUser> {
@@ -161,7 +168,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun logout(): NetworkResult<Boolean> {
         return try {
             firebaseAuth.signOut()
-            localAuthenticationDataSourceImpl.deleteUser()
+            localAuthenticationDataSource.deleteUser()
             NetworkResult.Success(true)
         } catch (e: Exception) {
             NetworkResult.Failure(UiText.DynamicString(e.localizedMessage))
@@ -175,7 +182,7 @@ class AuthRepositoryImpl @Inject constructor(
         email: String,
         password: String
     ): FirebaseUser? {
-        val username = "$firstName $lastName"
+        val username = getUsername(firstName, lastName)
         val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
         result?.user?.updateProfile(
             UserProfileChangeRequest.Builder().setDisplayName(username).build()
@@ -189,19 +196,44 @@ class AuthRepositoryImpl @Inject constructor(
 
     private suspend fun addUserToDatabase(firebaseUser: FirebaseUser) {
         try {
-            val userDocument = users.document(firebaseUser.uid).get().await().data
-            val user = User(
-                fullName = userDocument?.get("fullName").toString(),
-                email = userDocument?.get("email").toString(),
-                profilePicture = userDocument?.get("profilePicture").toString(),
-                firebaseId = userDocument?.get("firebaseId").toString(),
-                date = (userDocument?.get("date") as Timestamp).toDate(),
-            )
-            localAuthenticationDataSourceImpl.insertUser(user)
-
+            val user = users.document(firebaseUser.uid).get().await().toObject(User::class.java)
+            if (user != null) {
+                localAuthenticationDataSource.insertUser(user)
+            }
         } catch (e: Exception) {
             Log.d("HelloWorld", "addUserToDatabase: ${e.message}")
         }
+    }
+
+    private suspend fun uploadPhotoToFirebaseStorage(imgUri: Uri) {
+        storageRef().putFile(imgUri).await()
+    }
+
+    private suspend fun deletePhotoFromFirebaseStorage() {
+        try {
+            storageRef().delete().await()
+        } catch (e: Exception) {
+            Log.d("HelloWorld", "deletePhotoFromFirebaseStorage: ${e.localizedMessage}")
+        }
+    }
+
+    private suspend fun getProfilePhotoFromFirebaseStorage(): String {
+        val imgUri = storageRef().downloadUrl.await()
+        return imgUri.toString()
+    }
+
+    private suspend fun updateProfilePhotoInFirestoreAndDb(imgUrl: String) {
+        val user = localAuthenticationDataSource.getUser().firstOrNull()
+            ?.copy(profilePicture = imgUrl)
+        if (user != null) {
+            addUserToFirestore(user)
+            localAuthenticationDataSource.updateProfilePhoto(user)
+        }
+    }
+
+    private fun storageRef(): StorageReference {
+        val userId = firebaseAuth.currentUser?.uid
+        return firebaseStorageReference.child("$userId/profile_photo/$userId")
     }
     // endregion
 

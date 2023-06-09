@@ -9,8 +9,10 @@ import com.echo.pokepedia.domain.authentication.model.User
 import com.echo.pokepedia.ui.BaseViewModel
 import com.echo.pokepedia.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,8 +24,8 @@ class SettingsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     // region viewModel variables
-    private val _currentUser = MutableStateFlow<User>(User())
-    val currentUser: StateFlow<User> get() = _currentUser
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> get() = _currentUser
 
     private val _settingsViewState =
         MutableStateFlow<SettingsViewState>(SettingsViewState.EmptyViewState)
@@ -34,15 +36,16 @@ class SettingsViewModel @Inject constructor(
         getUser()
     }
 
-    private fun getUser() = viewModelScope.launch {
-        val userResult = getCurrentUserUseCase.invoke()
-        when (userResult) {
-            is NetworkResult.Success -> _currentUser.value = userResult.result
-            is NetworkResult.Failure -> _errorObservable.value = userResult.exception
+    private fun getUser() = viewModelScope.launch(Dispatchers.IO) {
+        val result = getCurrentUserUseCase.invoke()
+        when (result) {
+            is NetworkResult.Success -> result.result.collectLatest { _currentUser.value = it }
+            is NetworkResult.Failure -> _errorObservable.value = result.exception
         }
+
     }
 
-    fun logout() = viewModelScope.launch {
+    fun logout() = viewModelScope.launch(Dispatchers.IO) {
         val logoutResult = logoutUserUseCase.invoke()
         when (logoutResult) {
             is NetworkResult.Success -> {
@@ -54,9 +57,8 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun updateProfilePhoto(imgUri: Uri?) = viewModelScope.launch {
+    fun updateProfilePhoto(imgUri: Uri?) = viewModelScope.launch(Dispatchers.IO) {
         updateUserProfilePhotoUseCase.invoke(imgUri)
-        getUser()
     }
 }
 

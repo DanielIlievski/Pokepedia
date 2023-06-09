@@ -7,10 +7,11 @@ import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
 
-    suspend fun getCurrentUser(): NetworkResult<User>
+    suspend fun getCurrentUser(): NetworkResult<Flow<User>>
 
     fun isUserAuthenticated(): Boolean
 

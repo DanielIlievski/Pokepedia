@@ -4,6 +4,8 @@ import com.echo.pokepedia.data.database.LocalAuthenticationDataSource
 import com.echo.pokepedia.data.mappers.toUser
 import com.echo.pokepedia.data.mappers.toUserEntity
 import com.echo.pokepedia.domain.authentication.model.User
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LocalAuthenticationDataSourceImpl @Inject constructor(
@@ -14,12 +16,12 @@ class LocalAuthenticationDataSourceImpl @Inject constructor(
         userDao.upsertUser(user.toUserEntity())
     }
 
-    override suspend fun updateUser(user: User) {
-        userDao.upsertUser(user.toUserEntity())
+    override fun getUser(): Flow<User> {
+        return userDao.getUser().map { it.toUser() }
     }
 
-    override suspend fun getUser(): User {
-        return userDao.getUser().toUser()
+    override suspend fun updateProfilePhoto(user: User) {
+        userDao.updateProfilePhoto(user.toUserEntity())
     }
 
     override suspend fun deleteUser() {

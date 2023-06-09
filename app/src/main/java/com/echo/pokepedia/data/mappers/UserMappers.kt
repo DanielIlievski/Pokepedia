@@ -15,13 +15,13 @@ fun User.toUserEntity(): UserEntity {
     )
 }
 
-fun UserEntity.toUser(): User {
+fun UserEntity?.toUser(): User {
     return User(
-        fullName = this.fullName,
-        email = this.email,
-        date = this.date,
-        profilePicture = this.profilePicture,
-        firebaseId = this.firebaseId
+        fullName = this?.fullName,
+        email = this?.email,
+        date = this?.date,
+        profilePicture = this?.profilePicture,
+        firebaseId = this?.firebaseId
     )
 }
 

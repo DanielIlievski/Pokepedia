@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentSettingsBinding
@@ -63,9 +65,13 @@ class SettingsFragment : BaseFragment(), EditPhotoBottomSheetListener {
     // region initObservers
 
     // region observeCurrentUser
-    private fun observeCurrentUser() = lifecycleScope.launch {
-        viewModel.currentUser.collect { user ->
-            initUI(user)
+    private fun observeCurrentUser() = viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.currentUser.collect { user ->
+                if (user != null) {
+                    initUI(user)
+                }
+            }
         }
     }
 
