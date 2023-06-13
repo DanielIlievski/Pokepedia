@@ -7,7 +7,7 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.RequestManager
-import com.echo.pokepedia.data.database.LocalPokemonDataSource
+import com.echo.pokepedia.data.database.CachePokemonDataSource
 import com.echo.pokepedia.data.mappers.toPokemonDTO
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonEntity
@@ -23,7 +23,7 @@ import kotlin.math.ceil
 
 @OptIn(ExperimentalPagingApi::class)
 class PokemonRemoteMediator @Inject constructor(
-    private val localPokemonDataSource: LocalPokemonDataSource,
+    private val cachePokemonDataSource: CachePokemonDataSource,
     private val remotePokemonDataSource: RemotePokemonDataSource,
     private val dispatcher: CoroutineDispatcher,
     private val glide: RequestManager
@@ -70,9 +70,9 @@ class PokemonRemoteMediator @Inject constructor(
 
                         val pokemonEntities = pokemonDtos.map { it.toPokemonEntity() }
                         if (loadType == LoadType.REFRESH) {
-                            localPokemonDataSource.deleteAllAndInsertNew(pokemonEntities)
+                            cachePokemonDataSource.deleteAllAndInsertNew(pokemonEntities)
                         }
-                        localPokemonDataSource.insertAllPokemons(pokemonEntities)
+                        cachePokemonDataSource.insertAllPokemons(pokemonEntities)
                         MediatorResult.Success(endOfPaginationReached = endOfPagination)
                     }
                 }

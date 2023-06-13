@@ -3,7 +3,7 @@ package com.echo.pokepedia.data.repository
 import android.net.Uri
 import android.util.Log
 import com.echo.pokepedia.R
-import com.echo.pokepedia.data.database.LocalAuthenticationDataSource
+import com.echo.pokepedia.data.database.CacheUserDataSource
 import com.echo.pokepedia.data.mappers.toUser
 import com.echo.pokepedia.domain.authentication.model.User
 import com.echo.pokepedia.domain.authentication.repository.AuthRepository
@@ -27,14 +27,14 @@ import javax.inject.Named
 
 class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val localAuthenticationDataSource: LocalAuthenticationDataSource,
+    private val cacheUserDataSource: CacheUserDataSource,
     private val firebaseStorageReference: StorageReference,
     @Named(USERS_COLLECTION) private val users: CollectionReference
 ) : AuthRepository {
 
     override suspend fun getCurrentUser(): NetworkResult<Flow<User>> {
         return try {
-            NetworkResult.Success(localAuthenticationDataSource.getUser())
+            NetworkResult.Success(cacheUserDataSource.getUser())
         } catch (e: Exception) {
             e.printStackTrace()
             NetworkResult.Failure(UiText.DynamicString(e.localizedMessage))
@@ -176,7 +176,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun logout(): NetworkResult<Boolean> {
         return try {
             firebaseAuth.signOut()
-            localAuthenticationDataSource.deleteUser()
+            cacheUserDataSource.deleteUser()
             NetworkResult.Success(true)
         } catch (e: Exception) {
             NetworkResult.Failure(UiText.DynamicString(e.localizedMessage))
@@ -211,7 +211,7 @@ class AuthRepositoryImpl @Inject constructor(
         try {
             val user = users.document(firebaseUser.uid).get().await().toObject(User::class.java)
             if (user != null) {
-                localAuthenticationDataSource.insertUser(user)
+                cacheUserDataSource.insertUser(user)
             }
         } catch (e: Exception) {
             Log.d("HelloWorld", "addUserToDatabase: ${e.message}")
@@ -244,11 +244,11 @@ class AuthRepositoryImpl @Inject constructor(
 
     private suspend fun updateProfilePhotoInFirestoreAndDb(imgUrl: String) {
         try {
-            val user = localAuthenticationDataSource.getUser().firstOrNull()
+            val user = cacheUserDataSource.getUser().firstOrNull()
                 ?.copy(profilePicture = imgUrl)
             if (user != null) {
                 addUserToFirestore(user)
-                localAuthenticationDataSource.updateProfilePhoto(user)
+                cacheUserDataSource.updateProfilePhoto(user)
             }
         } catch (e: Exception) {
             Log.d("HelloWorld", "updateProfilePhotoInFirestoreAndDb: ${e.localizedMessage}")

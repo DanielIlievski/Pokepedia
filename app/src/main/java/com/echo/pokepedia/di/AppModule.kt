@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.echo.pokepedia.data.database.LocalAuthenticationDataSource
-import com.echo.pokepedia.data.database.LocalPokemonDataSource
+import com.echo.pokepedia.data.database.CacheUserDataSource
+import com.echo.pokepedia.data.database.CachePokemonDataSource
 import com.echo.pokepedia.data.database.room.*
-import com.echo.pokepedia.data.database.room.authentication.LocalAuthenticationDataSourceImpl
+import com.echo.pokepedia.data.database.room.authentication.CacheUserDataSourceImpl
 import com.echo.pokepedia.data.database.room.authentication.UserDao
 import com.echo.pokepedia.data.database.room.pokemon.*
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
@@ -104,12 +104,12 @@ object AppModule {
     @Singleton
     @Provides
     fun provideLocalPokemonDataSource(roomPokemonDataSource: RoomPokemonDataSource):
-            LocalPokemonDataSource = roomPokemonDataSource
+            CachePokemonDataSource = roomPokemonDataSource
 
     @Singleton
     @Provides
-    fun provideLocalAuthenticationDataSource(localAuthenticationDataSourceImpl: LocalAuthenticationDataSourceImpl):
-            LocalAuthenticationDataSource = localAuthenticationDataSourceImpl
+    fun provideLocalAuthenticationDataSource(localAuthenticationDataSourceImpl: CacheUserDataSourceImpl):
+            CacheUserDataSource = localAuthenticationDataSourceImpl
 
     @Singleton
     @Provides

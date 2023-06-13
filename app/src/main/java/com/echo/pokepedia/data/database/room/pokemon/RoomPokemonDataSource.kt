@@ -1,7 +1,7 @@
 package com.echo.pokepedia.data.database.room.pokemon
 
 import androidx.paging.PagingSource
-import com.echo.pokepedia.data.database.LocalPokemonDataSource
+import com.echo.pokepedia.data.database.CachePokemonDataSource
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonDetailsEntity
 import com.echo.pokepedia.domain.pokemon.model.database.PokemonEntity
 import com.echo.pokepedia.domain.pokemon.model.database.StatEntity
@@ -15,7 +15,7 @@ class RoomPokemonDataSource @Inject constructor(
     private val pokemonDao: PokemonDao,
     private val statDao: StatDao,
     private val teamMemberDao: TeamMemberDao
-) : LocalPokemonDataSource {
+) : CachePokemonDataSource {
 
     override suspend fun insertPokemon(pokemon: PokemonEntity) {
         pokemonDao.upsertPokemon(pokemon)

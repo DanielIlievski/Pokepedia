@@ -3,7 +3,7 @@ package com.echo.pokepedia.data.repository
 import androidx.paging.*
 import com.bumptech.glide.RequestManager
 import com.echo.pokepedia.R
-import com.echo.pokepedia.data.database.LocalPokemonDataSource
+import com.echo.pokepedia.data.database.CachePokemonDataSource
 import com.echo.pokepedia.data.mappers.toPokemonDTO
 import com.echo.pokepedia.data.mappers.toPokemonDetailsDTO
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
@@ -23,27 +23,27 @@ import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
     private val remotePokemonDataSource: RemotePokemonDataSource,
-    private val localPokemonDataSource: LocalPokemonDataSource,
+    private val cachePokemonDataSource: CachePokemonDataSource,
     private val dispatcher: CoroutineDispatcher,
     private val glide: RequestManager,
     private val networkConnectivity: NetworkConnectivity
 ) : PokemonRepository {
 
     override suspend fun getMyTeamList(): Flow<List<PokemonDTO>> {
-        val localTeamMembers = localPokemonDataSource.getAllTeamMembers().map { list ->
+        val localTeamMembers = cachePokemonDataSource.getAllTeamMembers().map { list ->
             list.filter { it.teamMember != null }.map { it.pokemon.toPokemonDTO() }
         }
         return localTeamMembers
     }
 
     override suspend fun addPokemonToMyTeam(pokemonId: Int) {
-        localPokemonDataSource.insertTeamMember(
+        cachePokemonDataSource.insertTeamMember(
             TeamMemberEntity(pokemonId)
         )
     }
 
     override suspend fun removePokemonFromMyTeam(pokemonId: Int) {
-        localPokemonDataSource.deleteTeamMember(pokemonId)
+        cachePokemonDataSource.deleteTeamMember(pokemonId)
     }
 
     @OptIn(ExperimentalPagingApi::class)
@@ -53,10 +53,10 @@ class PokemonRepositoryImpl @Inject constructor(
                 pageSize = PAGE_SIZE
             ),
             pagingSourceFactory = {
-                localPokemonDataSource.getAllPokemons()
+                cachePokemonDataSource.getAllPokemons()
             },
             remoteMediator = PokemonRemoteMediator(
-                localPokemonDataSource = localPokemonDataSource,
+                cachePokemonDataSource = cachePokemonDataSource,
                 remotePokemonDataSource = remotePokemonDataSource,
                 dispatcher = dispatcher,
                 glide = glide
@@ -71,7 +71,7 @@ class PokemonRepositoryImpl @Inject constructor(
     ): NetworkResult<PokemonDetailsDTO> {
 
         return if (!networkConnectivity.isNetworkAvailable) {
-            val localPokemonDetails = localPokemonDataSource.getPokemonDetails(name).firstOrNull()
+            val localPokemonDetails = cachePokemonDataSource.getPokemonDetails(name).firstOrNull()
             if (localPokemonDetails != null) {
                 NetworkResult.Success(localPokemonDetails.toPokemonDetailsDTO())
             } else {
@@ -97,9 +97,9 @@ class PokemonRepositoryImpl @Inject constructor(
     }
 
     private suspend fun writePokemonDetailsToDatabase(pokemonDetailsDto: PokemonDetailsDTO) {
-        localPokemonDataSource.insertPokemonDetails(pokemonDetailsDto.toPokemonDetailsEntity())
+        cachePokemonDataSource.insertPokemonDetails(pokemonDetailsDto.toPokemonDetailsEntity())
         pokemonDetailsDto.toStatEntityList().forEach { statEntity ->
-            localPokemonDataSource.insertStat(statEntity)
+            cachePokemonDataSource.insertStat(statEntity)
         }
     }
 }

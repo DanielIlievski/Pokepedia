@@ -3,7 +3,7 @@ package com.echo.pokepedia.data.database
 import com.echo.pokepedia.domain.authentication.model.User
 import kotlinx.coroutines.flow.Flow
 
-interface LocalAuthenticationDataSource {
+interface CacheUserDataSource {
 
     suspend fun insertUser(user: User)
 
