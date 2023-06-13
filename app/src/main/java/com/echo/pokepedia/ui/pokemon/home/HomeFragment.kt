@@ -162,7 +162,7 @@ class HomeFragment : BaseFragment() {
     // region initObservers
     private fun observePokemonList() = lifecycleScope.launch {
         viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.pokemonList.collectLatest { result ->
+            viewModel.pokemonList.collect { result ->
                 adapter?.submitData(result)
                 val currentState = viewModel.homeViewState.value
                 if (currentState is HomeViewState.ShowPokemonListPaginated && adapter?.itemCount == 0) {
@@ -201,7 +201,7 @@ class HomeFragment : BaseFragment() {
 
     private fun observeBuddyPokemonDetails() = lifecycleScope.launch {
         viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.buddyPokemonDetails.collect { pokemon ->
+            viewModel.buddyPokemonDetails.collectLatest { pokemon ->
                 if (pokemon != null) {
                     with(binding.buddyPokemonSection) {
                         loadImage(pokemon.imageDefault, imgPokemon)
@@ -235,10 +235,12 @@ class HomeFragment : BaseFragment() {
                     HomeViewState.ShowPokemonListPaginated -> {
                         binding.pokemonRecyclerView.visibility = View.VISIBLE
                         binding.queriedPokemonListRecyclerView.visibility = View.GONE
+                        binding.textEmptyState.visibility = View.GONE
                     }
                     HomeViewState.ShowQueriedPokemonList -> {
                         binding.pokemonRecyclerView.visibility = View.GONE
                         binding.queriedPokemonListRecyclerView.visibility = View.VISIBLE
+                        binding.textEmptyState.visibility = View.GONE
                     }
                     else -> {}
                 }
