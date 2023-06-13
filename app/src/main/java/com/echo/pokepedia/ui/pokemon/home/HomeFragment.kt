@@ -21,7 +21,6 @@ import com.echo.pokepedia.util.capitalizeFirstLetter
 import com.echo.pokepedia.util.onQueryTextChanged
 import com.echo.pokepedia.util.viewHideOnExpandShowOnCollapse
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -82,7 +81,6 @@ class HomeFragment : BaseFragment() {
         observeBuddyPokemonDetails()
         observeBuddyPokemonDominantColor()
         observeHomeViewState()
-        observeEmptyViewState()
     }
 
     private fun initListeners() {
@@ -166,10 +164,12 @@ class HomeFragment : BaseFragment() {
         viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.pokemonList.collectLatest { result ->
                 adapter?.submitData(result)
-                if (adapter?.itemCount == 0) {
-                    viewModel.setEmptyViewState(EmptyViewState.PokemonListEmptyState)
-                } else {
-                    viewModel.setEmptyViewState(EmptyViewState.HideEmptyState)
+                val currentState = viewModel.homeViewState.value
+                if (currentState is HomeViewState.ShowPokemonListPaginated && adapter?.itemCount == 0) {
+                    binding.textEmptyState.visibility = View.VISIBLE
+                    binding.textEmptyState.text = getString(R.string.empty_pokemon_list)
+                } else if (currentState is HomeViewState.ShowPokemonListPaginated) {
+                    binding.textEmptyState.visibility = View.GONE
                 }
             }
         }
@@ -179,10 +179,13 @@ class HomeFragment : BaseFragment() {
         viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.queriedPokemonList.collectLatest { result ->
                 queriedListAdapter?.submitList(result)
-                if (result.isEmpty()) {
-                    viewModel.setEmptyViewState(EmptyViewState.QueriedListEmptyState)
-                } else {
-                    viewModel.setEmptyViewState(EmptyViewState.HideEmptyState)
+                binding.queriedPokemonListRecyclerView.scrollToPosition(0)
+                val currentState = viewModel.homeViewState.value
+                if (currentState is HomeViewState.ShowQueriedPokemonList && result.isEmpty()) {
+                    binding.textEmptyState.visibility = View.VISIBLE
+                    binding.textEmptyState.text = getString(R.string.no_such_pokemon)
+                } else if (currentState is HomeViewState.ShowQueriedPokemonList) {
+                    binding.textEmptyState.visibility = View.GONE
                 }
             }
         }
@@ -230,47 +233,15 @@ class HomeFragment : BaseFragment() {
             viewModel.homeViewState.collectLatest { viewState ->
                 when (viewState) {
                     HomeViewState.ShowPokemonListPaginated -> {
-                        delay(300)
                         binding.pokemonRecyclerView.visibility = View.VISIBLE
                         binding.queriedPokemonListRecyclerView.visibility = View.GONE
                     }
                     HomeViewState.ShowQueriedPokemonList -> {
-                        delay(200)
                         binding.pokemonRecyclerView.visibility = View.GONE
                         binding.queriedPokemonListRecyclerView.visibility = View.VISIBLE
                     }
+                    else -> {}
                 }
-            }
-        }
-    }
-
-    private fun observeEmptyViewState() = lifecycleScope.launch {
-        viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.emptyViewState.collectLatest { viewState ->
-                when (viewState) {
-                    EmptyViewState.PokemonListEmptyState -> {
-                        delay(200)
-                        if (binding.pokemonRecyclerView.visibility == View.VISIBLE) {
-                            binding.textEmptyState.text = getString(R.string.empty_pokemon_list)
-                            binding.textEmptyState.visibility = View.VISIBLE
-                        } else {
-                            binding.textEmptyState.visibility = View.GONE
-                        }
-                    }
-                    EmptyViewState.QueriedListEmptyState -> {
-                        delay(200)
-                        if (binding.queriedPokemonListRecyclerView.visibility == View.VISIBLE) {
-                            binding.textEmptyState.text = getString(R.string.no_such_pokemon)
-                            binding.textEmptyState.visibility = View.VISIBLE
-                        } else {
-                            binding.textEmptyState.visibility = View.GONE
-                        }
-                    }
-                    EmptyViewState.HideEmptyState -> {
-                        binding.textEmptyState.visibility = View.GONE
-                    }
-                }
-
             }
         }
     }

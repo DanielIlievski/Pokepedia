@@ -44,14 +44,12 @@ class HomeViewModel @Inject constructor(
     private val _queriedPokemonList = MutableSharedFlow<List<PokemonDTO>>()
     val queriedPokemonList: SharedFlow<List<PokemonDTO>> get() = _queriedPokemonList
 
-    private val _homeViewState = MutableSharedFlow<HomeViewState>()
-    val homeViewState: SharedFlow<HomeViewState> get() = _homeViewState
-
-    private val _emptyViewState = MutableSharedFlow<EmptyViewState>()
-    val emptyViewState: SharedFlow<EmptyViewState> get() = _emptyViewState
+    private val _homeViewState = MutableStateFlow<HomeViewState?>(null)
+    val homeViewState: StateFlow<HomeViewState?> get() = _homeViewState
     // endregion
 
     fun getPokemonListPaginated() = viewModelScope.launch(Dispatchers.IO) {
+        _homeViewState.emit(HomeViewState.ShowPokemonListPaginated)
         getPokemonListFromApiUseCase.invoke()
             .cachedIn(viewModelScope)
             .collect {
@@ -60,6 +58,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getQueriedPokemonList(query: String) = viewModelScope.launch(Dispatchers.IO) {
+        _homeViewState.emit(HomeViewState.ShowQueriedPokemonList)
         searchPokemonsByNameOrIdUseCase.invoke(query).collect {
             _queriedPokemonList.emit(it)
         }
@@ -83,17 +82,9 @@ class HomeViewModel @Inject constructor(
 
     fun searchPokemonList(query: String) = viewModelScope.launch(Dispatchers.IO) {
         if (query.isEmpty()) {
-            _homeViewState.emit(HomeViewState.ShowPokemonListPaginated)
             getPokemonListPaginated()
         } else {
-            _homeViewState.emit(HomeViewState.ShowQueriedPokemonList)
             getQueriedPokemonList(query)
-        }
-    }
-
-    fun setEmptyViewState(viewState: EmptyViewState) {
-        viewModelScope.launch {
-            _emptyViewState.emit(viewState)
         }
     }
 }
@@ -101,10 +92,4 @@ class HomeViewModel @Inject constructor(
 sealed class HomeViewState {
     object ShowPokemonListPaginated : HomeViewState()
     object ShowQueriedPokemonList : HomeViewState()
-}
-
-sealed class EmptyViewState {
-    object PokemonListEmptyState : EmptyViewState()
-    object QueriedListEmptyState : EmptyViewState()
-    object HideEmptyState : EmptyViewState()
 }
