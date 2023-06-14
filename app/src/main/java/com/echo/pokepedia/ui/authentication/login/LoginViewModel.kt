@@ -30,14 +30,13 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
 
     // region viewModel variables
-    private var _viewState = MutableStateFlow<LoginViewState>(LoginViewState.EmptyViewState)
+    private val _viewState = MutableStateFlow<LoginViewState>(LoginViewState.EmptyViewState)
     val viewState: StateFlow<LoginViewState> get() = _viewState
 
-    private var _signInUser =
-        MutableSharedFlow<NetworkResult<FirebaseUser?>>()
+    private val _signInUser = MutableSharedFlow<NetworkResult<FirebaseUser?>>()
     val signInUser: SharedFlow<NetworkResult<FirebaseUser?>> = _signInUser
 
-    private var _resetPassword = MutableSharedFlow<NetworkResult<Boolean>>()
+    private val _resetPassword = MutableSharedFlow<NetworkResult<Boolean>>()
     val resetPassword: SharedFlow<NetworkResult<Boolean>> = _resetPassword
     // endregion
 

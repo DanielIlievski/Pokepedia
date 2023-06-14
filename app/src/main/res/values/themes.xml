@@ -112,6 +112,15 @@
         <item name="android:ellipsize">end</item>
     </style>
 
+    <style name="MaterialTextView.XLarge.Grey.Bold" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/text_size_xlarge</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:autoSizeTextType" tools:targetApi="o">uniform</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
     <style name="MaterialTextView.Normal.Grey.Center" parent="android:TextAppearance">
         <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:textColor">@color/grey</item>

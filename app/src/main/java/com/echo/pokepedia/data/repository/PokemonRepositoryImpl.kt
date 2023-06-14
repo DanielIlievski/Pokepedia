@@ -66,6 +66,12 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun searchPokemonsByNameOrId(query: String): Flow<List<PokemonDTO>> {
+        return localPokemonDataSource.getAllPokemonsByNameOrId(query).map { pokemonEntityList ->
+            pokemonEntityList.map { it.toPokemonDTO() }
+        }
+    }
+
     override suspend fun getPokemonDetails(
         name: String
     ): NetworkResult<PokemonDetailsDTO> {

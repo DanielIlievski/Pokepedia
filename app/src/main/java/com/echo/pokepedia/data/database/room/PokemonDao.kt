@@ -19,6 +19,10 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemon")
     fun getAllPokemons(): PagingSource<Int, PokemonEntity>
 
+    @Transaction
+    @Query("SELECT * FROM pokemon WHERE name LIKE '%' || :query || '%' OR CAST(id AS TEXT) LIKE '%' || :query || '%'")
+    fun getAllPokemonsByNameOrId(query: String): Flow<List<PokemonEntity>>
+
     @Query("DELETE FROM pokemon")
     fun deleteAllPokemon()
 
