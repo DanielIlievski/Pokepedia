@@ -1,8 +1,8 @@
 package com.echo.pokepedia.ui.authentication.login
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.domain.authentication.interactors.RegisterUserUseCase
+import com.echo.pokepedia.ui.BaseViewModel
 import com.echo.pokepedia.util.*
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase,
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _viewState = MutableStateFlow<RegisterViewState>(RegisterViewState.EmptyViewState)
     val viewState: StateFlow<RegisterViewState> get() = _viewState

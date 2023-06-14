@@ -119,6 +119,7 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="remove_photo">Remove photo</string>
+    <string name="app_logo">App logo</string>
     <!-- endregion -->
 
 </resources>

@@ -13,7 +13,9 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-    
+
+    <style name="Theme.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
+
     <!-- region bottom navigation view style -->
     <style name="BottomNavigationView.Custom" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         
@@ -266,8 +268,10 @@
     <!-- region AlertDialog -->
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowBackground">@drawable/rounded_shape</item>
-        <item name="android:buttonBarPositiveButtonStyle">@style/TextView.Small.Blue.Clickable</item>
-        <item name="android:buttonBarNegativeButtonStyle">@style/TextView.Small.Blue.Clickable</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/TextView.Small.Blue.Clickable
+        </item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/TextView.Small.Blue.Clickable
+        </item>
     </style>
     <!-- endregion -->
 
@@ -278,7 +282,8 @@
     <style name="MyTeam.ShapeableImageView" parent="">
         <item name="android:background">@color/grey_light</item>
         <item name="android:scaleType">fitCenter</item>
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.App.CornerSize10Percent</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.App.CornerSize10Percent
+        </item>
         <item name="android:src">@drawable/ic_add_pokemon</item>
     </style>
 

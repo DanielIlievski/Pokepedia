@@ -1,8 +1,8 @@
 package com.echo.pokepedia.ui.authentication.login
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.domain.authentication.interactors.*
+import com.echo.pokepedia.ui.BaseViewModel
 import com.echo.pokepedia.util.NetworkResult
 import com.echo.pokepedia.util.isEmailFieldEmpty
 import com.echo.pokepedia.util.isPasswordFieldEmpty
@@ -25,7 +25,7 @@ class LoginViewModel @Inject constructor(
     private val facebookSignInUseCase: FacebookSignInUseCase,
     private val resetPasswordUseCase: ResetPasswordUseCase,
     private val isUserAuthenticatedUseCase: IsUserAuthenticatedUseCase
-) : ViewModel() {
+) : BaseViewModel() {
 
     // region viewModel variables
     private val _viewState = MutableStateFlow<LoginViewState>(LoginViewState.EmptyViewState)
