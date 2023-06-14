@@ -6,5 +6,6 @@ data class User(
     val fullName: String? = null,
     val email: String? = null,
     val date: Date? = null,
-    val id: String? = null
+    val profilePicture: String? = null,
+    val firebaseId: String? = null
 )

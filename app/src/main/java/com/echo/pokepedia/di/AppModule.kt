@@ -4,8 +4,12 @@ import android.content.Context
 import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.echo.pokepedia.data.database.LocalPokemonDataSource
+import com.echo.pokepedia.data.database.CacheUserDataSource
+import com.echo.pokepedia.data.database.CachePokemonDataSource
 import com.echo.pokepedia.data.database.room.*
+import com.echo.pokepedia.data.database.room.authentication.CacheUserDataSourceImpl
+import com.echo.pokepedia.data.database.room.authentication.UserDao
+import com.echo.pokepedia.data.database.room.pokemon.*
 import com.echo.pokepedia.data.network.RemotePokemonDataSource
 import com.echo.pokepedia.data.network.retrofit.PokemonDbApi
 import com.echo.pokepedia.data.network.retrofit.RetrofitPokemonDataSource
@@ -18,6 +22,8 @@ import com.echo.pokepedia.util.USERS_COLLECTION
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,6 +46,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Singleton
+    @Provides
+    fun provideFirebaseStorageReference(): StorageReference = FirebaseStorage.getInstance().reference
 
     @Singleton
     @Provides
@@ -94,7 +104,12 @@ object AppModule {
     @Singleton
     @Provides
     fun provideLocalPokemonDataSource(roomPokemonDataSource: RoomPokemonDataSource):
-            LocalPokemonDataSource = roomPokemonDataSource
+            CachePokemonDataSource = roomPokemonDataSource
+
+    @Singleton
+    @Provides
+    fun provideLocalAuthenticationDataSource(localAuthenticationDataSourceImpl: CacheUserDataSourceImpl):
+            CacheUserDataSource = localAuthenticationDataSourceImpl
 
     @Singleton
     @Provides
@@ -107,6 +122,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideTeamMemberDao(database: PokepediaDatabase): TeamMemberDao = database.teamMemberDao()
+
+    @Singleton
+    @Provides
+    fun provideUserDao(database: PokepediaDatabase): UserDao = database.userDao()
 
     @Singleton
     @Provides

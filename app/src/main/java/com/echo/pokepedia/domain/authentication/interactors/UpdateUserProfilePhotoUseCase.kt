@@ -1,14 +1,15 @@
 package com.echo.pokepedia.domain.authentication.interactors
 
-import com.echo.pokepedia.domain.authentication.model.User
+import android.net.Uri
 import com.echo.pokepedia.domain.authentication.repository.AuthRepository
 import com.echo.pokepedia.util.NetworkResult
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetCurrentUserUseCase @Inject constructor(
+class UpdateUserProfilePhotoUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
 
-    suspend operator fun invoke(): NetworkResult<Flow<User>> = authRepository.getCurrentUser()
+    suspend operator fun invoke(imgUri: Uri?): NetworkResult<Boolean> {
+        return authRepository.updateUserProfilePhoto(imgUri)
+    }
 }

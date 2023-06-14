@@ -9,7 +9,7 @@ import com.echo.pokepedia.domain.pokemon.model.database.relation.PokemonAndTeamM
 import com.echo.pokepedia.domain.pokemon.model.database.relation.PokemonDetailsWithStats
 import kotlinx.coroutines.flow.Flow
 
-interface LocalPokemonDataSource {
+interface CachePokemonDataSource {
 
     suspend fun insertPokemon(pokemon: PokemonEntity)
 

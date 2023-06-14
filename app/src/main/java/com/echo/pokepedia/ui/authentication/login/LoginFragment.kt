@@ -70,9 +70,9 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // this is to avoid the Login every time
-        // ideally should check if the user is logged in and then navigate
-        navigateToHomeScreen()
+        if (viewModel.isUserAuthenticated()) {
+            navigateToHomeScreen()
+        }
 
         initObservers()
 

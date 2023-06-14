@@ -1,4 +1,4 @@
-package com.echo.pokepedia.data.database.room
+package com.echo.pokepedia.data.database.room.pokemon
 
 import androidx.room.Dao
 import androidx.room.Upsert

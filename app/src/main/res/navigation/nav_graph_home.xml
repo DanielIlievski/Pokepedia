@@ -48,7 +48,12 @@
         android:id="@+id/settingsFragment"
         android:name="com.echo.pokepedia.ui.pokemon.settings.SettingsFragment"
         android:label="@string/settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+
+        <action
+            android:id="@+id/settingsFragment_to_authActivity"
+            app:destination="@id/authActivity" />
+    </fragment>
 
     <fragment
         android:id="@+id/pokemonDetailsFragment"
@@ -74,4 +79,10 @@
             app:popUpTo="@id/nav_graph_home"
             app:popUpToInclusive="true" />
     </fragment>
+
+    <activity
+        android:id="@+id/authActivity"
+        android:name="com.echo.pokepedia.ui.authentication.AuthActivity"
+        android:label="activity_auth"
+        tools:layout="@layout/activity_auth" />
 </navigation>

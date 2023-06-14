@@ -55,10 +55,10 @@ open class BaseFragment : Fragment() {
         )
     }
 
-    fun loadImage(imgUrl: String?, imageView: ImageView) {
+    fun loadImage(imgUrl: String?, imageView: ImageView, placeholder: Int = R.drawable.progress_spinner_anim) {
         Glide.with(requireContext())
             .load(imgUrl)
-            .placeholder(R.drawable.progress_spinner_anim)
+            .placeholder(placeholder)
             .into(imageView)
     }
 
