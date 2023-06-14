@@ -18,11 +18,10 @@ class RegisterViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase,
 ) : ViewModel() {
 
-    private var _viewState = MutableStateFlow<RegisterViewState>(RegisterViewState.EmptyViewState)
+    private val _viewState = MutableStateFlow<RegisterViewState>(RegisterViewState.EmptyViewState)
     val viewState: StateFlow<RegisterViewState> get() = _viewState
 
-    private var _registerUser =
-        MutableSharedFlow<NetworkResult<FirebaseUser?>>()
+    private val _registerUser = MutableSharedFlow<NetworkResult<FirebaseUser?>>()
     val registerUser: SharedFlow<NetworkResult<FirebaseUser?>> get() = _registerUser
 
     fun register(

@@ -64,6 +64,8 @@
     <string name="my_team">My Team</string>
     <string name="remove_from_my_team_title">Remove from My Team</string>
     <string name="remove_from_my_team_message">Do you want to remove this pokemon from your team?</string>
+    <string name="pokemon_id">#%d</string>
+    <string name="pokemon_name">%s</string>
     <!-- endregion -->
 
     <!-- region HomeFragment -->
@@ -71,6 +73,8 @@
     <string name="search">Search</string>
     <string name="fetch_unsuccessful">Fetch unsuccessful</string>
     <string name="scroll_to_top">Scroll to top</string>
+    <string name="no_such_pokemon">There is no such Pokemon</string>
+    <string name="empty_pokemon_list">No Pokemon to be shown</string>
     <!-- endregion -->
 
     <!-- region SettingsFragment -->

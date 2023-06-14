@@ -10,6 +10,8 @@ interface PokemonRepository {
 
     suspend fun getPokemonList(): Flow<PagingData<PokemonDTO>>
 
+    fun searchPokemonsByNameOrId(query: String): Flow<List<PokemonDTO>>
+
     suspend fun getPokemonDetails(name: String): NetworkResult<PokemonDetailsDTO>
 
     suspend fun getMyTeamList(): Flow<List<PokemonDTO>>

@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
@@ -17,6 +18,8 @@ import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentHomeBinding
 import com.echo.pokepedia.ui.BaseFragment
 import com.echo.pokepedia.util.capitalizeFirstLetter
+import com.echo.pokepedia.util.onQueryTextChanged
+import com.echo.pokepedia.util.viewHideOnExpandShowOnCollapse
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -31,6 +34,8 @@ class HomeFragment : BaseFragment() {
     private val viewModel: HomeViewModel by viewModels()
 
     private var adapter: PokemonAdapter? = null
+
+    private var queriedListAdapter: QueriedPokemonListAdapter? = null
     // endregion
 
     // region fragment methods
@@ -46,6 +51,7 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.getPokemonListPaginated()
         viewModel.getPokemonInfo()
 
         initUI()
@@ -65,13 +71,16 @@ class HomeFragment : BaseFragment() {
     private fun initUI() {
         initOptionsMenu()
         setPokemonAdapter()
+        setQueriedListAdapter()
     }
 
     private fun initObservers() {
         observePokemonList()
+        observeQueriedPokemonList()
         observeBuddyPokemonNickname()
         observeBuddyPokemonDetails()
         observeBuddyPokemonDominantColor()
+        observeHomeViewState()
     }
 
     private fun initListeners() {
@@ -86,6 +95,13 @@ class HomeFragment : BaseFragment() {
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_fragment_home, menu)
+
+                val searchItem = menu.findItem(R.id.search)
+                val searchView = searchItem.actionView as SearchView
+                searchItem.viewHideOnExpandShowOnCollapse(binding.buddyPokemonSection.root)
+                searchView.onQueryTextChanged { query ->
+                    viewModel.searchPokemonList(query)
+                }
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -127,12 +143,51 @@ class HomeFragment : BaseFragment() {
                 }
         }
     }
+
+    private fun setQueriedListAdapter() {
+        queriedListAdapter = QueriedPokemonListAdapter { pokemon ->
+            val action = HomeFragmentDirections.homeFragmentToPokemonDetailsFragment(
+                pokemon.id ?: -1,
+                pokemon.name.orEmpty(),
+                pokemon.dominantColor ?: Color.WHITE,
+                pokemon.dominantColorShiny ?: Color.WHITE
+            )
+
+            findNavController().navigate(action)
+        }
+        binding.queriedPokemonListRecyclerView.adapter = queriedListAdapter
+    }
     // endregion
 
     // region initObservers
     private fun observePokemonList() = lifecycleScope.launch {
-        viewModel.pokemonList.collectLatest { result ->
-            adapter?.submitData(result)
+        viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.pokemonList.collect { result ->
+                adapter?.submitData(result)
+                val currentState = viewModel.homeViewState.value
+                if (currentState is HomeViewState.ShowPokemonListPaginated && adapter?.itemCount == 0) {
+                    binding.textEmptyState.visibility = View.VISIBLE
+                    binding.textEmptyState.text = getString(R.string.empty_pokemon_list)
+                } else if (currentState is HomeViewState.ShowPokemonListPaginated) {
+                    binding.textEmptyState.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    private fun observeQueriedPokemonList() = lifecycleScope.launch {
+        viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.queriedPokemonList.collectLatest { result ->
+                queriedListAdapter?.submitList(result)
+                binding.queriedPokemonListRecyclerView.scrollToPosition(0)
+                val currentState = viewModel.homeViewState.value
+                if (currentState is HomeViewState.ShowQueriedPokemonList && result.isEmpty()) {
+                    binding.textEmptyState.visibility = View.VISIBLE
+                    binding.textEmptyState.text = getString(R.string.no_such_pokemon)
+                } else if (currentState is HomeViewState.ShowQueriedPokemonList) {
+                    binding.textEmptyState.visibility = View.GONE
+                }
+            }
         }
     }
 
@@ -146,7 +201,7 @@ class HomeFragment : BaseFragment() {
 
     private fun observeBuddyPokemonDetails() = lifecycleScope.launch {
         viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.buddyPokemonDetails.collect { pokemon ->
+            viewModel.buddyPokemonDetails.collectLatest { pokemon ->
                 if (pokemon != null) {
                     with(binding.buddyPokemonSection) {
                         loadImage(pokemon.imageDefault, imgPokemon)
@@ -172,17 +227,46 @@ class HomeFragment : BaseFragment() {
             }
         }
     }
+
+    private fun observeHomeViewState() = lifecycleScope.launch {
+        viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.homeViewState.collectLatest { viewState ->
+                when (viewState) {
+                    HomeViewState.ShowPokemonListPaginated -> {
+                        binding.pokemonRecyclerView.visibility = View.VISIBLE
+                        binding.queriedPokemonListRecyclerView.visibility = View.GONE
+                        binding.textEmptyState.visibility = View.GONE
+                    }
+                    HomeViewState.ShowQueriedPokemonList -> {
+                        binding.pokemonRecyclerView.visibility = View.GONE
+                        binding.queriedPokemonListRecyclerView.visibility = View.VISIBLE
+                        binding.textEmptyState.visibility = View.GONE
+                    }
+                    else -> {}
+                }
+            }
+        }
+    }
     // endregion
 
     // region initListeners
     private fun onFabClickListener() {
         binding.fabScrollToTop.setOnClickListener {
             binding.pokemonRecyclerView.smoothScrollToPosition(0)
+            binding.queriedPokemonListRecyclerView.smoothScrollToPosition(0)
         }
     }
 
     private fun onRecyclerScrollListener() {
         binding.pokemonRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                binding.fabScrollToTop.visibility = if (dy >= 0) View.GONE else View.VISIBLE
+            }
+        })
+        binding.queriedPokemonListRecyclerView.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 

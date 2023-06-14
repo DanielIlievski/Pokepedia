@@ -6,12 +6,12 @@ import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.ListItemTeamMemberBinding
 import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
+import com.echo.pokepedia.util.capitalizeFirstLetter
 import com.echo.pokepedia.util.getColorRes
 
 class MyTeamAdapter(
@@ -25,26 +25,13 @@ class MyTeamAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(currentItem: PokemonDTO) {
-            with(binding) {
-                imgPokemon.background = currentItem.dominantColor?.let {
-                    getDrawableWhiteBottom(it)
-                }
-                Glide.with(root)
-                    .load(currentItem.url)
-                    .placeholder(R.drawable.progress_spinner_anim)
-                    .into(imgPokemon)
-                imgPokemon.animation =
-                    if (isTeamFull) AnimationUtils.loadAnimation(root.context, R.anim.shake)
-                    else null
-                btnDelete.visibility = View.VISIBLE
-                btnDelete.setOnClickListener {
-                    onDeleteClick(currentItem)
-                }
-            }
+            initFrontView(binding, currentItem)
+            initBack(binding, currentItem)
         }
 
         fun bindDefault() {
-            with(binding) {
+            with(binding.listItemFront) {
+                binding.root.isFlipEnabled = false
                 imgPokemon.animation = null
                 btnDelete.visibility = View.GONE
                 imgPokemon.setImageResource(R.drawable.ic_add_pokemon)
@@ -52,16 +39,63 @@ class MyTeamAdapter(
                     ColorStateList.valueOf(root.context.getColorRes(R.color.grey_light))
             }
         }
+    }
 
-        private fun getDrawableWhiteBottom(color: Int): GradientDrawable {
-            return GradientDrawable(
-                GradientDrawable.Orientation.TOP_BOTTOM,
-                intArrayOf(
-                    color,
-                    Color.WHITE
-                )
-            )
+    private fun initFrontView(
+        binding: ListItemTeamMemberBinding,
+        currentItem: PokemonDTO
+    ) {
+        with(binding.listItemFront) {
+            imgPokemon.background = currentItem.dominantColor?.let {
+                getDrawableWhiteBottomRounded(it)
+            }
+            Glide.with(root)
+                .load(currentItem.url)
+                .placeholder(R.drawable.progress_spinner_anim)
+                .into(imgPokemon)
+            imgPokemon.animation =
+                if (isTeamFull)
+                    android.view.animation.AnimationUtils.loadAnimation(root.context, R.anim.shake)
+                else null
+            root.setOnClickListener {
+                binding.root.flipTheView()
+            }
+            btnDelete.visibility = View.VISIBLE
+            btnDelete.setOnClickListener {
+                onDeleteClick(currentItem)
+            }
         }
+    }
+
+    private fun initBack(
+        binding: ListItemTeamMemberBinding,
+        currentItem: PokemonDTO
+    ) {
+        with(binding.listItemBack) {
+            pokemonId.text =
+                root.context.getString(R.string.pokemon_id, currentItem.id)
+            pokemonName.text =
+                root.context.getString(
+                    R.string.pokemon_name,
+                    currentItem.name?.capitalizeFirstLetter()
+                )
+            root.background = currentItem.dominantColor?.let {
+                getDrawableWhiteBottomRounded(it)
+            }
+            root.setOnClickListener {
+                binding.root.flipTheView()
+            }
+        }
+    }
+
+    private fun getDrawableWhiteBottomRounded(color: Int): GradientDrawable {
+        return GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                color,
+                Color.WHITE
+            )
+        ).apply { cornerRadii = floatArrayOf(60f, 60f, 60f, 60f, 60f, 60f, 60f, 60f) }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyTeamViewHolder {

@@ -29,6 +29,10 @@ class RoomPokemonDataSource @Inject constructor(
         return pokemonDao.getAllPokemons()
     }
 
+    override fun getAllPokemonsByNameOrId(query: String): Flow<List<PokemonEntity>> {
+        return pokemonDao.getAllPokemonsByNameOrId(query)
+    }
+
     override suspend fun deleteAll() {
         pokemonDao.deleteAllPokemon()
     }
