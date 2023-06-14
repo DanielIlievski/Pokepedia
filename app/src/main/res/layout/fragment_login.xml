@@ -64,22 +64,13 @@
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <CheckBox
-            android:id="@+id/rememberMeCheckBox"
-            style="@style/CheckBox.SmallText.Blue.Custom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/remember_me"
-            app:layout_constraintStart_toStartOf="@id/textPassword"
-            app:layout_constraintTop_toBottomOf="@+id/textPassword" />
-
         <TextView
             android:id="@+id/buttonForgotPassword"
             style="@style/TextView.Small.Grey.Clickable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_normal"
             android:text="@string/forgot_password"
-            app:layout_constraintBottom_toBottomOf="@id/rememberMeCheckBox"
             app:layout_constraintEnd_toEndOf="@id/textPassword"
             app:layout_constraintTop_toBottomOf="@id/textPassword" />
 
@@ -98,7 +89,7 @@
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rememberMeCheckBox" />
+            app:layout_constraintTop_toBottomOf="@id/buttonForgotPassword" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonGoogle"
@@ -157,7 +148,5 @@
             app:layout_constraintBottom_toBottomOf="@id/textRegister"
             app:layout_constraintEnd_toEndOf="@id/buttonLogin"
             app:layout_constraintTop_toBottomOf="@id/buttonLogin" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
