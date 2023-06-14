@@ -1,152 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/cream"
-    tools:context=".ui.authentication.login.LoginFragment">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@color/cream"
+        tools:context=".ui.authentication.login.LoginFragment">
 
-        <ImageView
-            android:id="@+id/image_login"
-            android:layout_width="@dimen/width_image_fragment_login"
-            android:layout_height="@dimen/height_image_fragment_login"
-            android:layout_marginTop="@dimen/margin_padding_xlarge"
-            android:contentDescription="@string/pokepedia"
-            android:src="@drawable/branding_image_pokepedia"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textEmail"
-            style="@style/TextInputLayout.OutlinedBox.Custom"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_padding_medium"
-            android:layout_marginTop="@dimen/margin_padding_normal"
-            android:hint="@string/email"
-            app:endIconMode="clear_text"
-            app:errorContentDescription="@string/invalid_email"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_login">
+            android:layout_height="wrap_content">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <ImageView
+                android:id="@+id/image_login"
+                android:layout_width="@dimen/width_image_fragment_login"
+                android:layout_height="@dimen/height_image_fragment_login"
+                android:layout_marginTop="@dimen/margin_padding_xlarge"
+                android:contentDescription="@string/pokepedia"
+                android:src="@drawable/branding_image_pokepedia"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textEmail"
+                style="@style/TextInputLayout.OutlinedBox.Custom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginHorizontal="@dimen/margin_padding_medium"
+                android:layout_marginTop="@dimen/margin_padding_normal"
+                android:hint="@string/email"
+                app:endIconMode="clear_text"
+                app:errorContentDescription="@string/invalid_email"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_login">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textPassword"
-            style="@style/TextInputLayout.OutlinedBox.Custom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_padding_medium"
-            android:layout_marginTop="@dimen/margin_padding_medium"
-            android:hint="@string/password"
-            app:endIconMode="password_toggle"
-            app:errorContentDescription="@string/invalid_password"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textEmail">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textPassword"
+                style="@style/TextInputLayout.OutlinedBox.Custom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginHorizontal="@dimen/margin_padding_medium"
+                android:layout_marginTop="@dimen/margin_padding_medium"
+                android:hint="@string/password"
+                app:endIconMode="password_toggle"
+                app:errorContentDescription="@string/invalid_password"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textEmail">
 
-        <TextView
-            android:id="@+id/buttonForgotPassword"
-            style="@style/TextView.Small.Grey.Clickable"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/buttonForgotPassword"
+                style="@style/TextView.Small.Grey.Clickable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_normal"
+                android:text="@string/forgot_password"
+                app:layout_constraintEnd_toEndOf="@id/textPassword"
+                app:layout_constraintTop_toBottomOf="@id/textPassword" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonFacebook"
+                style="@style/MaterialButton.SmallText.Radius.Clickable.NoCaps.Bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_padding_medium"
+                android:layout_marginTop="@dimen/margin_padding_normal"
+                android:gravity="start|center_vertical"
+                android:text="@string/sign_in_with_facebook"
+                app:backgroundTint="@color/facebook"
+                app:icon="@drawable/ic_facebook"
+                app:iconPadding="@dimen/margin_padding_normal"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buttonForgotPassword" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonGoogle"
+                style="@style/MaterialButton.SmallText.Radius.Clickable.NoCaps.Bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_padding_medium"
+                android:layout_marginTop="@dimen/margin_padding_normal"
+                android:backgroundTint="@color/white"
+                android:gravity="start|center_vertical"
+                android:text="@string/sign_in_with_google"
+                android:textColor="@color/black"
+                app:icon="@drawable/ic_google"
+                app:iconPadding="@dimen/margin_padding_normal"
+                app:iconSize="@dimen/size_large"
+                app:iconTintMode="multiply"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buttonFacebook" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonLogin"
+                style="@style/MaterialButton.NormalText.Radius.Clickable.NoCaps.Bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_padding_medium"
+                android:layout_marginTop="@dimen/margin_padding_normal"
+                android:backgroundTint="@color/blue_pokemon"
+                android:text="@string/login"
+                android:textColor="@color/yellow_pokemon"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buttonGoogle" />
+
+            <TextView
+                android:id="@+id/textRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_padding_xxtiny"
+                android:text="@string/dont_have_an_account"
+                app:layout_constraintBottom_toBottomOf="@id/buttonGoToSignUp"
+                app:layout_constraintEnd_toStartOf="@id/buttonGoToSignUp"
+                app:layout_constraintTop_toBottomOf="@id/buttonLogin" />
+
+            <TextView
+                android:id="@+id/buttonGoToSignUp"
+                style="@style/TextView.Normal.Clickable.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_padding_normal"
+                android:text="@string/sign_up"
+                android:textColor="@color/blue_pokemon"
+                app:layout_constraintBottom_toBottomOf="@id/textRegister"
+                app:layout_constraintEnd_toEndOf="@id/buttonLogin"
+                app:layout_constraintTop_toBottomOf="@id/buttonLogin" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/maskProgressCircular"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.5"
+        android:background="@color/grey"
+        android:gravity="center">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_padding_normal"
-            android:text="@string/forgot_password"
-            app:layout_constraintEnd_toEndOf="@id/textPassword"
-            app:layout_constraintTop_toBottomOf="@id/textPassword" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonFacebook"
-            style="@style/MaterialButton.SmallText.Radius.Clickable.NoCaps.Bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_padding_medium"
-            android:layout_marginTop="@dimen/margin_padding_normal"
-            android:gravity="start|center_vertical"
-            android:text="@string/sign_in_with_facebook"
-            app:backgroundTint="@color/facebook"
-            app:icon="@drawable/ic_facebook"
-            app:iconPadding="@dimen/margin_padding_normal"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/buttonForgotPassword" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonGoogle"
-            style="@style/MaterialButton.SmallText.Radius.Clickable.NoCaps.Bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_padding_medium"
-            android:layout_marginTop="@dimen/margin_padding_normal"
-            android:backgroundTint="@color/white"
-            android:gravity="start|center_vertical"
-            android:text="@string/sign_in_with_google"
-            android:textColor="@color/black"
-            app:icon="@drawable/ic_google"
-            app:iconPadding="@dimen/margin_padding_normal"
-            app:iconSize="@dimen/size_large"
-            app:iconTintMode="multiply"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/buttonFacebook" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonLogin"
-            style="@style/MaterialButton.NormalText.Radius.Clickable.NoCaps.Bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_padding_medium"
-            android:layout_marginTop="@dimen/margin_padding_normal"
-            android:backgroundTint="@color/blue_pokemon"
-            android:text="@string/login"
-            android:textColor="@color/yellow_pokemon"
-            android:textSize="@dimen/text_size_normal"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/buttonGoogle" />
-
-        <TextView
-            android:id="@+id/textRegister"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_padding_xxtiny"
-            android:text="@string/dont_have_an_account"
-            app:layout_constraintBottom_toBottomOf="@id/buttonGoToSignUp"
-            app:layout_constraintEnd_toStartOf="@id/buttonGoToSignUp"
-            app:layout_constraintTop_toBottomOf="@id/buttonLogin" />
-
-        <TextView
-            android:id="@+id/buttonGoToSignUp"
-            style="@style/TextView.Normal.Clickable.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_padding_normal"
-            android:text="@string/sign_up"
-            android:textColor="@color/blue_pokemon"
-            app:layout_constraintBottom_toBottomOf="@id/textRegister"
-            app:layout_constraintEnd_toEndOf="@id/buttonLogin"
-            app:layout_constraintTop_toBottomOf="@id/buttonLogin" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            android:indeterminate="true" />
+    </LinearLayout>
+</RelativeLayout>
