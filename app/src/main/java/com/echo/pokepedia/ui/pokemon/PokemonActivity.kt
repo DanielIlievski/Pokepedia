@@ -2,10 +2,7 @@ package com.echo.pokepedia.ui.pokemon
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -14,18 +11,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.ActivityPokemonBinding
 import com.echo.pokepedia.ui.BaseActivity
-import com.echo.pokepedia.ui.BaseViewModel
 import com.echo.pokepedia.util.appBarConfigDestinations
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PokemonActivity : BaseActivity() {
 
     // region activity variables
     private lateinit var binding: ActivityPokemonBinding
-
-    private val viewModel: BaseViewModel by viewModels()
 
     private lateinit var navHostFragment: NavHostFragment
 
@@ -42,8 +35,6 @@ class PokemonActivity : BaseActivity() {
         initNavController()
 
         initBottomNavigationView()
-
-        observeErrorObservable()
 
         handleControllerOnBackPressed()
     }
@@ -80,15 +71,6 @@ class PokemonActivity : BaseActivity() {
 
     fun showToolbar() {
         this.supportActionBar?.show()
-    }
-
-    private fun observeErrorObservable() = lifecycleScope.launch {
-        viewModel.errorObservable.collect { exceptionMessage ->
-            val msg = exceptionMessage.asString(this@PokemonActivity)
-            if (msg.isNotEmpty()) {
-                showToastMessage(msg, Toast.LENGTH_LONG)
-            }
-        }
     }
 
     private fun handleControllerOnBackPressed() {

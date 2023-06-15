@@ -70,7 +70,7 @@ class LoginViewModel @Inject constructor(
         val response = resetPasswordUseCase.invoke(email)
         when (response) {
             is NetworkResult.Success -> _resetPassword.emit(response.result)
-            is NetworkResult.Failure -> _errorObservable.value = response.exception
+            is NetworkResult.Failure -> _errorObservable.emit(response.exception)
         }
     }
 
@@ -85,7 +85,8 @@ class LoginViewModel @Inject constructor(
                 _signInUser.emit(response.result)
             }
             is NetworkResult.Failure -> {
-                _errorObservable.value = response.exception
+                _viewState.value = LoginViewState.EmptyViewState
+                _errorObservable.emit(response.exception)
             }
         }
     }

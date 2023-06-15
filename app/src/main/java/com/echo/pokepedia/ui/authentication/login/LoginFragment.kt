@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.echo.pokepedia.BottomSheetListener
@@ -29,13 +28,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LoginFragment : BaseFragment(), BottomSheetListener {
+class LoginFragment : BaseFragment<LoginViewModel>(), BottomSheetListener {
 
     // region fragment variables
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: LoginViewModel by viewModels()
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -80,12 +77,15 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun getViewModelClass(): Class<LoginViewModel> = LoginViewModel::class.java
     // endregion
 
     private fun initObservers() {
         observeViewState()
         observeSignInUser()
         observeResetPassword()
+        observeErrorObservable()
     }
 
     private fun initListeners() {

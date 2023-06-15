@@ -40,7 +40,7 @@ class SettingsViewModel @Inject constructor(
         val result = getCurrentUserUseCase.invoke()
         when (result) {
             is NetworkResult.Success -> result.result.collectLatest { _currentUser.value = it }
-            is NetworkResult.Failure -> _errorObservable.value = result.exception
+            is NetworkResult.Failure -> _errorObservable.emit(result.exception)
         }
 
     }
@@ -52,7 +52,7 @@ class SettingsViewModel @Inject constructor(
                 _settingsViewState.value = SettingsViewState.LogoutSuccessful
             }
             is NetworkResult.Failure -> {
-                _errorObservable.value = logoutResult.exception
+                _errorObservable.emit(logoutResult.exception)
             }
         }
     }
@@ -63,7 +63,10 @@ class SettingsViewModel @Inject constructor(
         when (updatePhotoResult) {
             is NetworkResult.Success -> _settingsViewState.value =
                 SettingsViewState.UpdatePhotoSuccessful
-            is NetworkResult.Failure -> _errorObservable.value = updatePhotoResult.exception
+            is NetworkResult.Failure -> {
+                _errorObservable.emit(updatePhotoResult.exception)
+                _settingsViewState.value = SettingsViewState.EmptyViewState
+            }
         }
     }
 }

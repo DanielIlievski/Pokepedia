@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.echo.pokepedia.R
@@ -19,13 +18,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RegisterFragment : BaseFragment() {
+class RegisterFragment : BaseFragment<RegisterViewModel>() {
 
     // region fragment variables
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: RegisterViewModel by viewModels()
 
     // endregion
 
@@ -51,6 +48,8 @@ class RegisterFragment : BaseFragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun getViewModelClass(): Class<RegisterViewModel> = RegisterViewModel::class.java
     // endregion
 
     private fun initObservers() {

@@ -42,7 +42,7 @@ class PokemonDetailsViewModel @Inject constructor(
                 _pokemonDetailsInfo.value = response.result
                 _pokemonStats.value = response.result.stats
             }
-            is NetworkResult.Failure -> _errorObservable.value = response.exception
+            is NetworkResult.Failure -> _errorObservable.emit(response.exception)
         }
     }
 

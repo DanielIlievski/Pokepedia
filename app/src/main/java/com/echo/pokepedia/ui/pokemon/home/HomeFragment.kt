@@ -7,7 +7,6 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -25,13 +24,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment<HomeViewModel>() {
 
     // region fragment variables
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: HomeViewModel by viewModels()
 
     private var adapter: PokemonAdapter? = null
 
@@ -66,6 +63,8 @@ class HomeFragment : BaseFragment() {
         _binding = null
         viewModel.clearBuddyPokemonDetails()
     }
+
+    override fun getViewModelClass(): Class<HomeViewModel> = HomeViewModel::class.java
     // endregion
 
     private fun initUI() {
