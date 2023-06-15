@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.echo.pokepedia.data.preferences.SettingsDataStore
-import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonInfoFromApiUseCase
+import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonInfoUseCase
 import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonListFromApiUseCase
 import com.echo.pokepedia.domain.pokemon.interactors.SearchPokemonsByNameOrIdUseCase
 import com.echo.pokepedia.domain.pokemon.model.PokemonDTO
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getPokemonListFromApiUseCase: GetPokemonListFromApiUseCase,
-    private val getPokemonInfoFromApiUseCase: GetPokemonInfoFromApiUseCase,
+    private val getPokemonInfoUseCase: GetPokemonInfoUseCase,
     private val searchPokemonsByNameOrIdUseCase: SearchPokemonsByNameOrIdUseCase,
     settingsDataStore: SettingsDataStore
 ) : BaseViewModel() {
@@ -67,10 +67,10 @@ class HomeViewModel @Inject constructor(
     fun getPokemonInfo() = viewModelScope.launch(Dispatchers.IO) {
         _buddyPokemonName.collect {
             if (it.isNotEmpty()) {
-                val response = getPokemonInfoFromApiUseCase.invoke(_buddyPokemonName.first())
-                when (response) {
-                    is NetworkResult.Success -> _buddyPokemonDetails.value = response.result
-                    is NetworkResult.Failure -> _errorObservable.emit(response.exception)
+                val pokemonNameResponse = getPokemonInfoUseCase.invoke(_buddyPokemonName.first())
+                when (pokemonNameResponse) {
+                    is NetworkResult.Success -> _buddyPokemonDetails.value = pokemonNameResponse.result
+                    is NetworkResult.Failure -> _errorObservable.emit(pokemonNameResponse.exception)
                 }
             }
         }
@@ -82,7 +82,7 @@ class HomeViewModel @Inject constructor(
 
     fun searchPokemonList(query: String) = viewModelScope.launch(Dispatchers.IO) {
         if (query.isEmpty()) {
-            getPokemonListPaginated()
+            _homeViewState.emit(HomeViewState.ShowPokemonListPaginated)
         } else {
             getQueriedPokemonList(query)
         }

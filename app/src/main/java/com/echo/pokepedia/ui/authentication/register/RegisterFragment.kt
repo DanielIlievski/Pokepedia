@@ -12,8 +12,6 @@ import com.echo.pokepedia.databinding.FragmentRegisterBinding
 import com.echo.pokepedia.ui.BaseFragment
 import com.echo.pokepedia.ui.authentication.login.RegisterViewModel
 import com.echo.pokepedia.ui.authentication.login.RegisterViewState
-import com.echo.pokepedia.util.NetworkResult
-import com.echo.pokepedia.util.UiText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -136,27 +134,14 @@ class RegisterFragment : BaseFragment<RegisterViewModel>() {
     }
     // endregion
 
-    // region observeRegisterUser
     private fun observeRegisterUser() = lifecycleScope.launch {
-        viewModel.registerUser.collect { result ->
-            when (result) {
-                is NetworkResult.Success -> onSuccessfulRegistration()
-                is NetworkResult.Failure -> onFailedRegistration(result.exception)
-            }
+        viewModel.registerUser.collect {
+            showToastMessageShort(getString(R.string.successful_registration))
+
+            val action = RegisterFragmentDirections.registerFragmentToLoginFragment()
+            findNavController().navigate(action)
         }
     }
-
-    private fun onSuccessfulRegistration() {
-        showToastMessageShort(getString(R.string.successful_registration))
-
-        val action = RegisterFragmentDirections.registerFragmentToLoginFragment()
-        findNavController().navigate(action)
-    }
-
-    private fun onFailedRegistration(e: UiText?) {
-        showToastMessageLong(e?.asString(requireContext()))
-    }
-    // endregion
     // endregion
 
     // region initListeners

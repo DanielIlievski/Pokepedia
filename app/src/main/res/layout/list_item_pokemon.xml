@@ -31,7 +31,7 @@
             <TextView
                 android:id="@+id/textPokemonName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/text_pokemon_name_height"
                 android:layout_marginTop="@dimen/margin_padding_normal"
                 android:gravity="center"
                 android:maxLines="1"

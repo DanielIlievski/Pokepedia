@@ -89,6 +89,7 @@
     <dimen name="img_splash_width">220dp</dimen>
     <dimen name="anim_splash_height">250dp</dimen>
     <dimen name="anim_splash_width">250dp</dimen>
+    <dimen name="text_pokemon_name_height">50dp</dimen>
     <!-- endregion -->
 
     <!-- region elevation -->

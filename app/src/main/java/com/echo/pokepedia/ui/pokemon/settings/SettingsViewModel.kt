@@ -46,25 +46,27 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun logout() = viewModelScope.launch(Dispatchers.IO) {
-        val logoutResult = logoutUserUseCase.invoke()
-        when (logoutResult) {
+        val logoutResponse = logoutUserUseCase.invoke()
+        when (logoutResponse) {
             is NetworkResult.Success -> {
                 _settingsViewState.value = SettingsViewState.LogoutSuccessful
             }
             is NetworkResult.Failure -> {
-                _errorObservable.emit(logoutResult.exception)
+                _errorObservable.emit(logoutResponse.exception)
             }
         }
     }
 
     fun updateProfilePhoto(imgUri: Uri?) = viewModelScope.launch(Dispatchers.IO) {
         _settingsViewState.value = SettingsViewState.LoadingState
-        val updatePhotoResult = updateUserProfilePhotoUseCase.invoke(imgUri)
-        when (updatePhotoResult) {
-            is NetworkResult.Success -> _settingsViewState.value =
-                SettingsViewState.UpdatePhotoSuccessful
+        val updatePhotoResponse = updateUserProfilePhotoUseCase.invoke(imgUri)
+        when (updatePhotoResponse) {
+            is NetworkResult.Success -> {
+                _settingsViewState.value = SettingsViewState.UpdatePhotoSuccessful
+                _settingsViewState.value = SettingsViewState.EmptyViewState
+            }
             is NetworkResult.Failure -> {
-                _errorObservable.emit(updatePhotoResult.exception)
+                _errorObservable.emit(updatePhotoResponse.exception)
                 _settingsViewState.value = SettingsViewState.EmptyViewState
             }
         }

@@ -21,8 +21,8 @@ class RegisterViewModel @Inject constructor(
     private val _viewState = MutableStateFlow<RegisterViewState>(RegisterViewState.EmptyViewState)
     val viewState: StateFlow<RegisterViewState> get() = _viewState
 
-    private val _registerUser = MutableSharedFlow<NetworkResult<FirebaseUser?>>()
-    val registerUser: SharedFlow<NetworkResult<FirebaseUser?>> get() = _registerUser
+    private val _registerUser = MutableSharedFlow<FirebaseUser?>()
+    val registerUser: SharedFlow<FirebaseUser?> get() = _registerUser
 
     fun register(
         firstName: String,
@@ -58,7 +58,12 @@ class RegisterViewModel @Inject constructor(
             isPasswordStrong(password) &&
             doPasswordsMatch(password, repeatPassword)
         ) {
-            _registerUser.emit(registerUserUseCase.invoke(firstName, lastName, email, password))
+            val registerUserResponse =
+                registerUserUseCase.invoke(firstName, lastName, email, password)
+            when (registerUserResponse) {
+                is NetworkResult.Success -> _registerUser.emit(registerUserResponse.result)
+                is NetworkResult.Failure -> _errorObservable.emit(registerUserResponse.exception)
+            }
         }
     }
 

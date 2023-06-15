@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -16,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.echo.pokepedia.R
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 abstract class BaseFragment<VModel: BaseViewModel> : Fragment() {
@@ -108,11 +108,7 @@ abstract class BaseFragment<VModel: BaseViewModel> : Fragment() {
 
     fun observeErrorObservable() = lifecycleScope.launch {
         viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.errorObservable.collect { exceptionMessage ->
-                Log.d(
-                    "HelloWorld",
-                    "observeErrorObservable: ${exceptionMessage.asString(requireContext())}"
-                )
+            viewModel.errorObservable.collectLatest { exceptionMessage ->
                 val msg = exceptionMessage.asString(requireContext())
                 if (msg.isNotEmpty()) {
                     showToastMessageLong(msg)

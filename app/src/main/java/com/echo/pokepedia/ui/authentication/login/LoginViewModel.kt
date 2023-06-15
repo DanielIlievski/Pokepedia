@@ -48,29 +48,29 @@ class LoginViewModel @Inject constructor(
         if (!isEmailFieldEmpty(email) && !isPasswordFieldEmpty(password)) {
             viewModelScope.launch {
                 _viewState.value = LoginViewState.LoadingState
-                val response = loginUserUseCase.invoke(email, password)
-                handleUseCaseResponse(response)
+                val loginUserResponse = loginUserUseCase.invoke(email, password)
+                handleUseCaseResponse(loginUserResponse)
             }
         }
     }
 
     fun googleSignIn(task: Task<GoogleSignInAccount>) = viewModelScope.launch {
         _viewState.value = LoginViewState.LoadingState
-        val response = googleSignInUseCase.invoke(task)
-        handleUseCaseResponse(response)
+        val googleSignInResponse = googleSignInUseCase.invoke(task)
+        handleUseCaseResponse(googleSignInResponse)
     }
 
     fun facebookSignIn(token: AccessToken) = viewModelScope.launch {
         _viewState.value = LoginViewState.LoadingState
-        val response = facebookSignInUseCase.invoke(token)
-        handleUseCaseResponse(response)
+        val facebookSignInResponse = facebookSignInUseCase.invoke(token)
+        handleUseCaseResponse(facebookSignInResponse)
     }
 
     fun resetPassword(email: String) = viewModelScope.launch {
-        val response = resetPasswordUseCase.invoke(email)
-        when (response) {
-            is NetworkResult.Success -> _resetPassword.emit(response.result)
-            is NetworkResult.Failure -> _errorObservable.emit(response.exception)
+        val resetPasswordResponse = resetPasswordUseCase.invoke(email)
+        when (resetPasswordResponse) {
+            is NetworkResult.Success -> _resetPassword.emit(resetPasswordResponse.result)
+            is NetworkResult.Failure -> _errorObservable.emit(resetPasswordResponse.exception)
         }
     }
 
