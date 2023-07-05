@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -31,13 +30,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PokemonDetailsFragment : BaseFragment() {
+class PokemonDetailsFragment : BaseFragment<PokemonDetailsViewModel>() {
 
     // region fragment variables
     private var _binding: FragmentPokemonDetailsBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: PokemonDetailsViewModel by viewModels()
 
     private val args by navArgs<PokemonDetailsFragmentArgs>()
 
@@ -81,6 +78,9 @@ class PokemonDetailsFragment : BaseFragment() {
             requireContext().getColorRes(R.color.blue_pokemon_variant)
         _binding = null
     }
+
+    override fun getViewModelClass(): Class<PokemonDetailsViewModel> =
+        PokemonDetailsViewModel::class.java
     // endregion
 
     private fun initObservers() {

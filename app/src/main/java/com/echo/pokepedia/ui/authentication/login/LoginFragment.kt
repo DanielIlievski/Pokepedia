@@ -7,15 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.echo.pokepedia.BottomSheetListener
 import com.echo.pokepedia.R
 import com.echo.pokepedia.databinding.FragmentLoginBinding
 import com.echo.pokepedia.ui.BaseFragment
-import com.echo.pokepedia.util.NetworkResult
-import com.echo.pokepedia.util.UiText
 import com.echo.pokepedia.util.facebookPermissionsList
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -27,18 +24,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LoginFragment : BaseFragment(), BottomSheetListener {
+class LoginFragment : BaseFragment<LoginViewModel>(), BottomSheetListener {
 
     // region fragment variables
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: LoginViewModel by viewModels()
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -83,12 +77,15 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun getViewModelClass(): Class<LoginViewModel> = LoginViewModel::class.java
     // endregion
 
     private fun initObservers() {
         observeViewState()
         observeSignInUser()
         observeResetPassword()
+        observeErrorObservable()
     }
 
     private fun initListeners() {
@@ -108,7 +105,8 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
             when (viewState) {
                 LoginViewState.EmptyEmailField -> onEmptyEmailField()
                 LoginViewState.EmptyPasswordField -> onEmptyPasswordField()
-                LoginViewState.EmptyViewState -> {}
+                LoginViewState.LoadingState -> onLoadingState()
+                LoginViewState.EmptyViewState -> onEmptyState()
             }
         }
     }
@@ -126,46 +124,30 @@ class LoginFragment : BaseFragment(), BottomSheetListener {
             errorIconDrawable = null
         }
     }
+
+    private fun onLoadingState() {
+        binding.maskProgressCircular.visibility = View.VISIBLE
+        binding.maskProgressCircular.isClickable = true
+    }
+
+    private fun onEmptyState() {
+        binding.maskProgressCircular.visibility = View.GONE
+        binding.maskProgressCircular.isClickable = false
+    }
     // endregion
 
-    // region observeSignInUser
     private fun observeSignInUser() = lifecycleScope.launch {
-        viewModel.signInUser.collect { result ->
-            when (result) {
-                is NetworkResult.Success -> onSuccessfulLogin(result.result)
-                is NetworkResult.Failure -> onFailedLogin(result.exception)
-            }
+        viewModel.signInUser.collect { user ->
+            showToastMessageShort(getString(R.string.sign_in_successful, user?.displayName))
+            navigateToHomeScreen()
         }
     }
 
-    private fun onSuccessfulLogin(user: FirebaseUser?) {
-        showToastMessageShort(getString(R.string.sign_in_successful, user?.displayName))
-        navigateToHomeScreen()
-    }
-
-    private fun onFailedLogin(e: UiText?) {
-        showToastMessageLong(e?.asString(requireContext()))
-    }
-    // endregion
-
-    // region observeResetPassword
     private fun observeResetPassword() = lifecycleScope.launch {
-        viewModel.resetPassword.collect { result ->
-            when (result) {
-                is NetworkResult.Success -> onSuccessfulPasswordReset()
-                is NetworkResult.Failure -> onFailedPasswordReset(result.exception)
-            }
+        viewModel.resetPassword.collect {
+            showToastMessageShort(getString(R.string.password_reset_successful))
         }
     }
-
-    private fun onSuccessfulPasswordReset() {
-        showToastMessageShort(getString(R.string.password_reset_successful))
-    }
-
-    private fun onFailedPasswordReset(e: UiText?) {
-        showToastMessageLong(e?.asString(requireContext()))
-    }
-    // endregion
     // endregion
 
     // region initListeners

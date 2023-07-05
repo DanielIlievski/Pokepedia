@@ -40,30 +40,35 @@ class SettingsViewModel @Inject constructor(
         val result = getCurrentUserUseCase.invoke()
         when (result) {
             is NetworkResult.Success -> result.result.collectLatest { _currentUser.value = it }
-            is NetworkResult.Failure -> _errorObservable.value = result.exception
+            is NetworkResult.Failure -> _errorObservable.emit(result.exception)
         }
 
     }
 
     fun logout() = viewModelScope.launch(Dispatchers.IO) {
-        val logoutResult = logoutUserUseCase.invoke()
-        when (logoutResult) {
+        val logoutResponse = logoutUserUseCase.invoke()
+        when (logoutResponse) {
             is NetworkResult.Success -> {
                 _settingsViewState.value = SettingsViewState.LogoutSuccessful
             }
             is NetworkResult.Failure -> {
-                _errorObservable.value = logoutResult.exception
+                _errorObservable.emit(logoutResponse.exception)
             }
         }
     }
 
     fun updateProfilePhoto(imgUri: Uri?) = viewModelScope.launch(Dispatchers.IO) {
         _settingsViewState.value = SettingsViewState.LoadingState
-        val updatePhotoResult = updateUserProfilePhotoUseCase.invoke(imgUri)
-        when (updatePhotoResult) {
-            is NetworkResult.Success -> _settingsViewState.value =
-                SettingsViewState.UpdatePhotoSuccessful
-            is NetworkResult.Failure -> _errorObservable.value = updatePhotoResult.exception
+        val updatePhotoResponse = updateUserProfilePhotoUseCase.invoke(imgUri)
+        when (updatePhotoResponse) {
+            is NetworkResult.Success -> {
+                _settingsViewState.value = SettingsViewState.UpdatePhotoSuccessful
+                _settingsViewState.value = SettingsViewState.EmptyViewState
+            }
+            is NetworkResult.Failure -> {
+                _errorObservable.emit(updatePhotoResponse.exception)
+                _settingsViewState.value = SettingsViewState.EmptyViewState
+            }
         }
     }
 }

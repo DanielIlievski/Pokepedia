@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.echo.pokepedia.data.preferences.SettingsDataStore
 import com.echo.pokepedia.domain.pokemon.interactors.AddPokemonToMyTeamUseCase
 import com.echo.pokepedia.domain.pokemon.interactors.GetMyTeamListUseCase
-import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonInfoFromApiUseCase
+import com.echo.pokepedia.domain.pokemon.interactors.GetPokemonInfoUseCase
 import com.echo.pokepedia.domain.pokemon.model.PokemonDetailsDTO
 import com.echo.pokepedia.ui.BaseViewModel
 import com.echo.pokepedia.util.NetworkResult
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PokemonDetailsViewModel @Inject constructor(
-    private val getPokemonInfoFromApiUseCase: GetPokemonInfoFromApiUseCase,
+    private val getPokemonInfoUseCase: GetPokemonInfoUseCase,
     private val addPokemonToMyTeamUseCase: AddPokemonToMyTeamUseCase,
     private val getMyTeamListUseCase: GetMyTeamListUseCase,
     private val settingsDataStore: SettingsDataStore
@@ -36,13 +36,13 @@ class PokemonDetailsViewModel @Inject constructor(
     // endregion
 
     fun getPokemonDetails(name: String) = viewModelScope.launch(Dispatchers.IO) {
-        val response = getPokemonInfoFromApiUseCase.invoke(name)
-        when (response) {
+        val pokemonInfoResponse = getPokemonInfoUseCase.invoke(name)
+        when (pokemonInfoResponse) {
             is NetworkResult.Success -> {
-                _pokemonDetailsInfo.value = response.result
-                _pokemonStats.value = response.result.stats
+                _pokemonDetailsInfo.value = pokemonInfoResponse.result
+                _pokemonStats.value = pokemonInfoResponse.result.stats
             }
-            is NetworkResult.Failure -> _errorObservable.value = response.exception
+            is NetworkResult.Failure -> _errorObservable.emit(pokemonInfoResponse.exception)
         }
     }
 

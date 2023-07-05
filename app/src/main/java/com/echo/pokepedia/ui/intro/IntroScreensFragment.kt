@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.echo.pokepedia.R
@@ -14,13 +13,11 @@ import com.echo.pokepedia.util.getColorRes
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class IntroScreensFragment : BaseFragment() {
+class IntroScreensFragment : BaseFragment<IntroScreensViewModel>() {
 
     // region fragment variables
     private var _binding: FragmentIntroScreensBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: IntroScreensViewModel by viewModels()
 
     private val introScreensAdapter = IntroScreensAdapter()
     //endregion
@@ -49,6 +46,9 @@ class IntroScreensFragment : BaseFragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun getViewModelClass(): Class<IntroScreensViewModel> =
+        IntroScreensViewModel::class.java
     //endregion
 
     private fun initObservers() {

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -19,13 +18,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SettingsFragment : BaseFragment(), EditPhotoBottomSheetListener {
+class SettingsFragment : BaseFragment<SettingsViewModel>(), EditPhotoBottomSheetListener {
 
     // region fragment variables
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: SettingsViewModel by viewModels()
     // endregion
 
     // region fragment methods
@@ -50,6 +47,8 @@ class SettingsFragment : BaseFragment(), EditPhotoBottomSheetListener {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun getViewModelClass(): Class<SettingsViewModel> = SettingsViewModel::class.java
     // endregion
 
     private fun initObservers() {
@@ -102,7 +101,9 @@ class SettingsFragment : BaseFragment(), EditPhotoBottomSheetListener {
                 SettingsViewState.LoadingState -> {
                     binding.progressCircular.visibility = View.VISIBLE
                 }
-                SettingsViewState.EmptyViewState -> {}
+                SettingsViewState.EmptyViewState -> {
+                    binding.progressCircular.visibility = View.GONE
+                }
             }
         }
     }

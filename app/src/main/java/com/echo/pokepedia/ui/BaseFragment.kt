@@ -5,13 +5,32 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.echo.pokepedia.R
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-open class BaseFragment : Fragment() {
+abstract class BaseFragment<VModel: BaseViewModel> : Fragment() {
+
+    protected lateinit var viewModel: VModel
+    protected abstract fun getViewModelClass(): Class<VModel>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        init()
+    }
+
+    private fun init() {
+        viewModel = ViewModelProvider(this)[getViewModelClass()]
+    }
 
     fun showToastMessageShort(message: String?) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -85,5 +104,16 @@ open class BaseFragment : Fragment() {
             )
             .create()
             .show()
+    }
+
+    fun observeErrorObservable() = lifecycleScope.launch {
+        viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.errorObservable.collectLatest { exceptionMessage ->
+                val msg = exceptionMessage.asString(requireContext())
+                if (msg.isNotEmpty()) {
+                    showToastMessageLong(msg)
+                }
+            }
+        }
     }
 }

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.echo.pokepedia.R
@@ -13,19 +12,15 @@ import com.echo.pokepedia.databinding.FragmentRegisterBinding
 import com.echo.pokepedia.ui.BaseFragment
 import com.echo.pokepedia.ui.authentication.login.RegisterViewModel
 import com.echo.pokepedia.ui.authentication.login.RegisterViewState
-import com.echo.pokepedia.util.NetworkResult
-import com.echo.pokepedia.util.UiText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RegisterFragment : BaseFragment() {
+class RegisterFragment : BaseFragment<RegisterViewModel>() {
 
     // region fragment variables
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: RegisterViewModel by viewModels()
 
     // endregion
 
@@ -51,6 +46,8 @@ class RegisterFragment : BaseFragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun getViewModelClass(): Class<RegisterViewModel> = RegisterViewModel::class.java
     // endregion
 
     private fun initObservers() {
@@ -137,27 +134,14 @@ class RegisterFragment : BaseFragment() {
     }
     // endregion
 
-    // region observeRegisterUser
     private fun observeRegisterUser() = lifecycleScope.launch {
-        viewModel.registerUser.collect { result ->
-            when (result) {
-                is NetworkResult.Success -> onSuccessfulRegistration()
-                is NetworkResult.Failure -> onFailedRegistration(result.exception)
-            }
+        viewModel.registerUser.collect {
+            showToastMessageShort(getString(R.string.successful_registration))
+
+            val action = RegisterFragmentDirections.registerFragmentToLoginFragment()
+            findNavController().navigate(action)
         }
     }
-
-    private fun onSuccessfulRegistration() {
-        showToastMessageShort(getString(R.string.successful_registration))
-
-        val action = RegisterFragmentDirections.registerFragmentToLoginFragment()
-        findNavController().navigate(action)
-    }
-
-    private fun onFailedRegistration(e: UiText?) {
-        showToastMessageLong(e?.asString(requireContext()))
-    }
-    // endregion
     // endregion
 
     // region initListeners

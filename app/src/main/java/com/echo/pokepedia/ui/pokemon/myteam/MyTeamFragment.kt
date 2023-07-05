@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentContainerView
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -19,13 +18,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MyTeamFragment : BaseFragment() {
+class MyTeamFragment : BaseFragment<MyTeamViewModel>() {
 
     // region fragment variables
     private var _binding: FragmentMyTeamBinding? = null
     private val binding get() = _binding!!
-
-    private val viewModel: MyTeamViewModel by viewModels()
 
     private lateinit var adapter: MyTeamAdapter
 
@@ -57,6 +54,8 @@ class MyTeamFragment : BaseFragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun getViewModelClass(): Class<MyTeamViewModel> = MyTeamViewModel::class.java
     // endregion
 
     private fun initObservers() {

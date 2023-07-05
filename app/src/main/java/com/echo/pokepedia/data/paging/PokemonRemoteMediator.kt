@@ -45,7 +45,11 @@ class PokemonRemoteMediator @Inject constructor(
                         if (lastItem == null) {
                             0
                         } else {
-                            ceil((lastItem.id * 1.0 / state.config.pageSize)).toInt() * state.config.pageSize
+                            if (lastItem.id < 10000) {
+                                ceil((lastItem.id * 1.0 / state.config.pageSize)).toInt() * state.config.pageSize
+                            } else {
+                                ceil(((lastItem.id - 8990) * 1.0 / state.config.pageSize)).toInt() * state.config.pageSize
+                            }
                         }
                     }
                 }
@@ -58,7 +62,8 @@ class PokemonRemoteMediator @Inject constructor(
                         Exception(pokemonListResponse.exception.toString())
                     )
                     is NetworkResult.Success -> {
-                        val endOfPagination = pokemonListResponse.result.results.isEmpty()
+                        val endOfPagination =
+                            pokemonListResponse.result.results.size < state.config.pageSize
 
                         val pokemonDtos =
                             pokemonListResponse.result.results.map { it.toPokemonDTO() }.map {
@@ -69,9 +74,6 @@ class PokemonRemoteMediator @Inject constructor(
                             }
 
                         val pokemonEntities = pokemonDtos.map { it.toPokemonEntity() }
-                        if (loadType == LoadType.REFRESH) {
-                            cachePokemonDataSource.deleteAllAndInsertNew(pokemonEntities)
-                        }
                         cachePokemonDataSource.insertAllPokemons(pokemonEntities)
                         MediatorResult.Success(endOfPaginationReached = endOfPagination)
                     }
@@ -93,11 +95,11 @@ class PokemonRemoteMediator @Inject constructor(
                     .submit()
                     .get()
                 val palette = Palette.from(bitmap).generate()
-                palette.getDominantColor(Color.WHITE)
+                palette.getDominantColor(Color.GRAY)
             } catch (e: ExecutionException) {
-                Color.WHITE
+                Color.GRAY
             } catch (e: HttpException) {
-                Color.WHITE
+                Color.GRAY
             }
         }
     }
