@@ -66,8 +66,6 @@ dependencies {
     // Hilt
     implementation Hilt.hilt
     kapt Hilt.hiltCompiler
-    // Splash Screen
-    implementation SplashScreen.splashScreen
     // ViewPager2
     implementation ViewPager2.viewPager2
     // Dots indicator
@@ -78,35 +76,24 @@ dependencies {
     implementation LiveData.lifecycleLdKtx
     // Circle Image View
     implementation CircleImageView.circleImageView
-
     // Retrofit
     implementation Retrofit.retrofit
     implementation Retrofit.gsonConverter
     implementation Retrofit.okhttp
     implementation Retrofit.loggingInterceptor
-
     // Room
     implementation Room.room
     kapt Room.annotationProcessor
     implementation Room.roomPaging
     implementation Room.roomKtx
-
-    // Chucker
-    debugImplementation Chucker.chuckerDebugImplementation
-    releaseImplementation Chucker.chuckerReleaseImplementation
-
     // Glide
     implementation Glide.glide
-
     // Palette
     implementation Palette.palette
-
     // Paging 3
     implementation Paging.paging3
-
     // Xplosion anim
     implementation Xplosion.xplosion
-
     // EasyFlipView
     implementation EasyFlipView.easyFlipView
 }
