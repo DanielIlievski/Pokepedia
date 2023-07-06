@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.pokemon.settings.SettingsFragment">
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/margin_padding_xxmedium"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:id="@+id/profileImgContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgProfile"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/profile_placeholder"
+                app:civ_border_color="@color/blue_pokemon_translucent"
+                app:civ_border_width="2dp" />
+
+            <ImageView
+                android:id="@+id/imgProfileEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="@dimen/margin_padding_xxtiny"
+                android:layout_marginEnd="@dimen/margin_padding_xxtiny"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="@string/edit_image"
+                android:focusable="true"
+                android:src="@drawable/ic_edit" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/textNameSurname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_padding_normal"
+            android:textColor="@color/blue_pokemon"
+            android:textSize="@dimen/text_size_xlarge"
+            tools:text="Daniel Ilievski" />
+
+        <TextView
+            android:id="@+id/textEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            tools:text="daniel.ilievski@echo.com.mk" />
+
+        <TextView
+            android:id="@+id/textStartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_padding_normal"
+            android:drawablePadding="@dimen/margin_padding_xxsmall"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/text_size_xnormal"
+            app:drawableStartCompat="@drawable/ic_time"
+            tools:text="@string/start_date" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            style="@style/MaterialButton.Logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="@dimen/margin_padding_large"
+            android:layout_marginTop="@dimen/margin_padding_normal" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

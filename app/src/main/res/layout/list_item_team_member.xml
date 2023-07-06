@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wajahatkarim3.easyflipview.EasyFlipView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:layout_margin="@dimen/margin_padding_tiny"
+    app:autoFlipBack="true"
+    app:autoFlipBackTime="1000"
+    app:flipDuration="400"
+    app:flipEnabled="true"
+    app:flipFrom="right"
+    app:flipOnTouch="false"
+    app:flipType="horizontal">
+
+    <include
+        android:id="@+id/listItemBack"
+        layout="@layout/list_item_team_member_back" />
+
+    <include
+        android:id="@+id/listItemFront"
+        layout="@layout/list_item_team_member_front" />
+</com.wajahatkarim3.easyflipview.EasyFlipView>

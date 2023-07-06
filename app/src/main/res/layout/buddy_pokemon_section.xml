@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layoutDescription="@xml/buddy_pokemon_section_scene"
+    tools:context=".ui.pokemon.home.HomeFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buddy_pokemon_container"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/buddy_pokemon_container_height"
+        android:background="@drawable/bottom_rounded_gradient"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgPokemon"
+        android:layout_width="@dimen/buddy_pokemon_image_width"
+        android:layout_height="@dimen/buddy_pokemon_image_height"
+        android:layout_marginHorizontal="@dimen/margin_padding_xxsmall"
+        android:layout_marginTop="@dimen/margin_padding_normal"
+        android:layout_marginBottom="@dimen/margin_padding_normal"
+        android:contentDescription="@string/buddy_pokemon"
+        android:src="@drawable/ic_pikachu_confused"
+        app:layout_constraintBottom_toTopOf="@id/expand_collapse"
+        app:layout_constraintStart_toStartOf="@id/buddy_pokemon_container"
+        app:layout_constraintTop_toTopOf="@id/buddy_pokemon_container" />
+
+    <TextView
+        android:id="@+id/textPokemonName"
+        style="@style/TextView.Medium.Grey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_padding_tiny"
+        android:layout_marginVertical="@dimen/margin_padding_normal"
+        android:text="@string/pikachu"
+        app:layout_constraintEnd_toEndOf="@id/buddy_pokemon_container"
+        app:layout_constraintStart_toEndOf="@id/imgPokemon"
+        app:layout_constraintTop_toTopOf="@id/buddy_pokemon_container" />
+
+    <TextView
+        android:id="@+id/textPokemonNickname"
+        style="@style/MaterialTextView.XLarge.Grey.Caps.Bold"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_padding_tiny"
+        android:layout_marginVertical="@dimen/margin_padding_normal"
+        android:gravity="center_horizontal"
+        android:text="@string/pika"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="@id/buddy_pokemon_container"
+        app:layout_constraintStart_toEndOf="@id/imgPokemon"
+        app:layout_constraintTop_toBottomOf="@id/textPokemonName" />
+
+    <com.echo.pokepedia.ui.pokemon.PokemonTypesView
+        android:id="@+id/groupPokemonTypes"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgPokemon"
+        app:layout_constraintTop_toBottomOf="@id/textPokemonNickname" />
+
+    <include
+        android:id="@+id/expand_collapse"
+        layout="@layout/expand_collapse_decoration"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/expand_collapse_decoration_height"
+        app:layout_constraintBottom_toBottomOf="@id/buddy_pokemon_container"
+        app:layout_constraintEnd_toEndOf="@id/buddy_pokemon_container"
+        app:layout_constraintStart_toStartOf="@id/buddy_pokemon_container" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

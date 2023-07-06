@@ -2,19 +2,23 @@ plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
     namespace 'com.echo.pokepedia'
-    compileSdk 33
+    compileSdk Android.compileSdk
 
     defaultConfig {
-        applicationId "com.echo.pokepedia"
-        minSdk 24
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        applicationId Android.appId
+        minSdk Android.minSdk
+        targetSdk Android.targetSdk
+        versionCode Android.versionCode
+        versionName Android.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -32,18 +36,68 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
+    implementation AndroidX.coreKtx
+    implementation AndroidX.appCompat
+    implementation Google.material
+    implementation ConstraintLayout.constraintLayout
+    // Firebase
+    implementation Firebase.crashlyticsKtx
+    implementation Firebase.analyticsKtx
+    implementation Firebase.firebaseAuth
+    implementation Firebase.firebaseFirestore
+    implementation Firebase.firebaseStorage
+    // ViewModel
+    implementation ViewModel.lifecycleVmKtx
+    implementation Google.googlePlayServices
+    implementation Facebook.facebookSdk
+    // Tests
+    testImplementation Junit.junit4
+    androidTestImplementation JunitTest.junitTest
+    androidTestImplementation Espresso.espressoCore
+    // Navigation Component
+    implementation NavigationComponent.navigationFragmentKtx
+    implementation NavigationComponent.navigationUiKtx
+    // Hilt
+    implementation Hilt.hilt
+    kapt Hilt.hiltCompiler
+    // ViewPager2
+    implementation ViewPager2.viewPager2
+    // Dots indicator
+    implementation ViewPagerDotsIndicator.dotsIndicator
+    // Preferences DataStore
+    implementation PreferencesDataStore.preferencesDataStore
+    // Live Data
+    implementation LiveData.lifecycleLdKtx
+    // Circle Image View
+    implementation CircleImageView.circleImageView
+    // Retrofit
+    implementation Retrofit.retrofit
+    implementation Retrofit.gsonConverter
+    implementation Retrofit.okhttp
+    implementation Retrofit.loggingInterceptor
+    // Room
+    implementation Room.room
+    kapt Room.annotationProcessor
+    implementation Room.roomPaging
+    implementation Room.roomKtx
+    // Glide
+    implementation Glide.glide
+    // Palette
+    implementation Palette.palette
+    // Paging 3
+    implementation Paging.paging3
+    // Xplosion anim
+    implementation Xplosion.xplosion
+    // EasyFlipView
+    implementation EasyFlipView.easyFlipView
+}
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation platform('com.google.firebase:firebase-bom:31.2.3')
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+kapt {
+    correctErrorTypes true
 }

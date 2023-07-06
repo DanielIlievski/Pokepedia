@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_home"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.echo.pokepedia.ui.pokemon.home.HomeFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/homeFragment_to_pokemonDetailsFragment"
+            app:destination="@id/pokemonDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/myTeamFragment"
+        android:name="com.echo.pokepedia.ui.pokemon.myteam.MyTeamFragment"
+        android:label="@string/my_team"
+        tools:layout="@layout/fragment_my_team">
+
+        <argument
+            android:name="pokemonId"
+            app:argType="integer"
+            android:defaultValue="-1"/>
+
+        <argument
+            android:name="isTeamFull"
+            android:defaultValue="false"
+            app:argType="boolean" />
+
+        <argument
+            android:name="imgUrl"
+            android:defaultValue=""
+            app:argType="string"
+            app:nullable="true" />
+
+        <argument
+            android:name="dominantColor"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.echo.pokepedia.ui.pokemon.settings.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" >
+
+        <action
+            android:id="@+id/settingsFragment_to_authActivity"
+            app:destination="@id/authActivity" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/pokemonDetailsFragment"
+        android:name="com.echo.pokepedia.ui.pokemon.details.PokemonDetailsFragment"
+        tools:layout="@layout/fragment_pokemon_details">
+
+        <argument
+            android:name="pokemonId"
+            app:argType="integer" />
+        <argument
+            android:name="pokemonName"
+            app:argType="string" />
+        <argument
+            android:name="dominantColor"
+            app:argType="integer" />
+        <argument
+            android:name="dominantColorShiny"
+            app:argType="integer" />
+
+        <action
+            android:id="@+id/pokemonDetailsFragment_to_myTeamFragment"
+            app:destination="@id/myTeamFragment"
+            app:popUpTo="@id/nav_graph_home"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <activity
+        android:id="@+id/authActivity"
+        android:name="com.echo.pokepedia.ui.authentication.AuthActivity"
+        android:label="activity_auth"
+        tools:layout="@layout/activity_auth" />
+</navigation>
