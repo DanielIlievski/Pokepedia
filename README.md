@@ -3,9 +3,9 @@
 </p>
 
 ## Description
-**Pokepedia** is an app that serves as your ultimate Pokemon reference guide. With a complete Pokedex, you can quickly find any Pokemon and learn all about their stats, moves, and abilities. 
-Filter by type, generation, or ability to easily find the Pokemon you need. You can also create your own custom team and add Pokemon to your favourites list for easy access.<br> 
-It demonstrates modern Android development with Hilt, Coroutines, Flow, Jetpack (Room, ViewModel), and Material Design based on MVVM architecture.
+**Pokepedia** is an app that serves as your ultimate Pokemon reference guide. With a complete Pokedex, you can quickly find any Pokemon and learn all about their types, stats and abilities. 
+Search by name or Pokedex to easily find the Pokemon you need. You can also choose a buddy Pokemon and assemble your very own custom team, providing you with a personalized and unique Pokemon experience.<br> 
+The app demonstrates modern Android development utilizing Hilt, Coroutines, Flow, Jetpack (Room, ViewModel), and Material Design based on MVVM architecture.
 
 ![description](previews/screenshot.png)
 
